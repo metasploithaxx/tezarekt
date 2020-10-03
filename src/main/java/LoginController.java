@@ -22,8 +22,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
-public class MainController implements Initializable {
-
+public class LoginController implements Initializable {
+    public static String curr_username;
     @FXML
     private Label status_id;
     @FXML
@@ -61,12 +61,19 @@ public class MainController implements Initializable {
                 if(sha3Hex.equals(val)){
                     status_id.setText("Login Successful");
                     System.out.println("correct login");
+                    curr_username=username_id.getText();
                      preferences = Preferences.userRoot();
                     if(check_id.isSelected()){
                         preferences.put("username",username_id.getText().toString());
                         preferences.put("password",password_id.getText().toString());
                     }
                     status_id.setText("Login Successful");
+                    Parent root= FXMLLoader.load(getClass().getResource("Home.fxml"));
+                    Scene scene = new Scene(root,358,310);
+                    Stage primaryStage = new Stage();
+                    primaryStage.setScene(scene);
+                    primaryStage.setTitle("Home page");
+                    primaryStage.show();
                 }
                 else{
                     status_id.setText("Incorrect Login");
