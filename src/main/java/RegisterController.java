@@ -58,6 +58,7 @@ public class RegisterController {
                         collection.insertOne(root);
                         status_id.setText("Successfully Registered");
                         status_id.setTextFill(Color.GREEN);
+
                     }
 
                 } catch (Exception e) {
