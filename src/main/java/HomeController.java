@@ -19,4 +19,12 @@ public class HomeController {
         primaryStage.setTitle("Profile page");
         primaryStage.show();
     }
+    public void LoginAsViewer(ActionEvent actionEvent) throws IOException {
+        Parent root= FXMLLoader.load(getClass().getResource("MainPage.fxml"));
+        Scene scene = new Scene(root,600,400);
+        Stage primaryStage = new Stage();
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Main page");
+        primaryStage.show();
+    }
 }

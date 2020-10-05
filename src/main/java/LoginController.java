@@ -1,13 +1,11 @@
 import com.mongodb.client.*;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.bson.Document;
 
@@ -32,6 +30,8 @@ public class LoginController implements Initializable {
     private TextField username_id,password_id;
     @FXML
     private CheckBox check_id;
+    @FXML
+    private ProgressIndicator loader_id;
     public static Preferences preferences;
     public void Register() throws IOException {
         Parent root= FXMLLoader.load(getClass().getResource("Register.fxml"));
@@ -44,50 +44,84 @@ public class LoginController implements Initializable {
 
     public void Login(javafx.event.ActionEvent actionEvent) {
         Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+        String message =new String();
+        Task<Boolean> task =new Task<Boolean>() {
+            @Override
+            protected Boolean call() throws Exception {
+                try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
+                    MongoDatabase database = mongoClient.getDatabase("Softa");
+                    MongoCollection<Document> collection = database.getCollection("users");
+                    Document query = new Document("username", username_id.getText().toString());
+                    FindIterable<Document> cursor = collection.find(query);
+                    Iterator it = cursor.iterator();
+                    if (it.hasNext()) {
+                        Document found = collection.find(query).first();
+                        String val = found.get("password").toString();
+                        final MessageDigest digest = MessageDigest.getInstance("SHA3-256");
+                        final byte[] hashbytes = digest.digest(
+                                password_id.getText().getBytes(StandardCharsets.UTF_8));
+                        String sha3Hex = Base64.getEncoder().encodeToString(hashbytes);
+                        if (sha3Hex.equals(val)) {
 
-        try(MongoClient mongoClient = MongoClients.create(Main.MongodbId)){
-            MongoDatabase database = mongoClient.getDatabase("Softa");
-            MongoCollection<Document> collection = database.getCollection("users");
-            Document query =new Document("username",username_id.getText().toString());
-            FindIterable<Document> cursor=collection.find(query);
-            Iterator it = cursor.iterator();
-            if(it.hasNext()){
-                Document found = collection.find(query).first();
-                String val= found.get("password").toString();
-                final MessageDigest digest = MessageDigest.getInstance("SHA3-256");
-                final byte[] hashbytes = digest.digest(
-                        password_id.getText().getBytes(StandardCharsets.UTF_8));
-                String sha3Hex = Base64.getEncoder().encodeToString(hashbytes);
-                if(sha3Hex.equals(val)){
-                    status_id.setText("Login Successful");
-                    System.out.println("correct login");
-                    curr_username=username_id.getText();
-                     preferences = Preferences.userRoot();
-                    if(check_id.isSelected()){
-                        preferences.put("username",username_id.getText().toString());
-                        preferences.put("password",password_id.getText().toString());
+                            System.out.println("correct login");
+                            curr_username = username_id.getText();
+                            preferences = Preferences.userRoot();
+                            if (check_id.isSelected()) {
+                                preferences.put("username", username_id.getText().toString());
+                                preferences.put("password", password_id.getText().toString());
+                            }
+                            message.concat("Login Successful");
+                            status_id.setText("Login Successful");
+                            return true;
+//                            loader_id.setVisible(false);
+
+                        } else {
+                            message.concat("Incorrect Password");
+                            System.out.println("Incorrect Login");
+                            return false;
+                        }
+                    } else {
+                        message.concat("No such Username Exits");
+                        System.out.println("No such user exits");
+                        return false;
                     }
-                    status_id.setText("Login Successful");
-                    Parent root= FXMLLoader.load(getClass().getResource("Home.fxml"));
-                    Scene scene = new Scene(root,358,310);
-                    Stage primaryStage = new Stage();
-                    primaryStage.setScene(scene);
-                    primaryStage.setTitle("Home page");
-                    primaryStage.show();
+                } catch (Exception e) {
+                    message.concat(e.getMessage());
+                    System.out.println(e.getMessage());
+                    return false;
                 }
-                else{
-                    status_id.setText("Incorrect Login");
-                    System.out.println("Incorrect Login");
+
+            }
+
+        };
+        Thread thread = new Thread(task);
+        thread.start();
+        loader_id.setVisible(true);
+        task.setOnSucceeded(res-> {
+            loader_id.setVisible(false);
+            if(task.getValue()==true){
+                Parent root = null;
+                try {
+                    Stage stage = (Stage) login_btn.getScene().getWindow();
+                    stage.close();
+
+                    root = FXMLLoader.load(getClass().getResource("Home.fxml"));
+                } catch (IOException e) {
+                    message.concat(e.getMessage());
+                    System.out.println(e.getMessage());
                 }
+                Scene scene = new Scene(root, 358, 310);
+                Stage primaryStage = new Stage();
+                primaryStage.setScene(scene);
+                primaryStage.setTitle("Home page");
+                primaryStage.show();
             }
             else{
-                status_id.setText("No such username Exits");
-                System.out.println("No such user exits");
+                status_id.setText(message);
             }
-        }
-        catch(Exception e){
-            System.out.println(e.getMessage());
-        }
+        });
+        thread.getUncaughtExceptionHandler();
+
     }
 
     @Override

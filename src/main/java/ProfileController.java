@@ -49,6 +49,7 @@ public class ProfileController implements Initializable {
             collection.updateOne(Filters.eq("username",username_id.getText()),Updates.set("twitter_id",twitter_id.getText()));
             status_id.setText("Updated Successfully");
             status_id.setTextFill(Color.GREEN);
+            update_btn.setDisable(true);
         }
         catch (Exception e){
             status_id.setText(e.getMessage());

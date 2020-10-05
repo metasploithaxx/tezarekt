@@ -4,6 +4,7 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
@@ -37,5 +38,6 @@
       </Button>
       <Label fx:id="status_id" layoutX="100.0" layoutY="274.0" prefHeight="35.0" prefWidth="300.0" text="Label" />
       <CheckBox fx:id="check_id" layoutX="100.0" layoutY="201.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="118.0" text="Remember me" />
+      <ProgressIndicator fx:id="loader_id" layoutX="224.0" layoutY="146.0" visible="false" />
    </children>
 </Pane>
