@@ -21,7 +21,7 @@ public class HomeController {
     }
     public void LoginAsViewer(ActionEvent actionEvent) throws IOException {
         Parent root= FXMLLoader.load(getClass().getResource("MainPage.fxml"));
-        Scene scene = new Scene(root,600,400);
+        Scene scene = new Scene(root,900,650);
         Stage primaryStage = new Stage();
         primaryStage.setScene(scene);
         primaryStage.setTitle("Main page");

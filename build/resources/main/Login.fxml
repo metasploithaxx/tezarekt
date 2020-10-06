@@ -36,7 +36,7 @@
             <Font size="20.0" />
          </font>
       </Button>
-      <Label fx:id="status_id" layoutX="100.0" layoutY="274.0" prefHeight="35.0" prefWidth="300.0" text="Label" />
+      <Label fx:id="status_id" layoutX="100.0" layoutY="274.0" prefHeight="35.0" prefWidth="300.0" />
       <CheckBox fx:id="check_id" layoutX="100.0" layoutY="201.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="118.0" text="Remember me" />
       <ProgressIndicator fx:id="loader_id" layoutX="224.0" layoutY="146.0" visible="false" />
    </children>

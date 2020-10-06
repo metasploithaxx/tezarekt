@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.bson.Document;
 
@@ -44,8 +45,8 @@ public class LoginController implements Initializable {
 
     public void Login(javafx.event.ActionEvent actionEvent) {
         Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
-        String message =new String();
-        Task<Boolean> task =new Task<Boolean>() {
+        loader_id.setVisible(true);
+        Task<Boolean> task =new Task<>() {
             @Override
             protected Boolean call() throws Exception {
                 try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
@@ -62,7 +63,6 @@ public class LoginController implements Initializable {
                                 password_id.getText().getBytes(StandardCharsets.UTF_8));
                         String sha3Hex = Base64.getEncoder().encodeToString(hashbytes);
                         if (sha3Hex.equals(val)) {
-
                             System.out.println("correct login");
                             curr_username = username_id.getText();
                             preferences = Preferences.userRoot();
@@ -70,33 +70,24 @@ public class LoginController implements Initializable {
                                 preferences.put("username", username_id.getText().toString());
                                 preferences.put("password", password_id.getText().toString());
                             }
-                            message.concat("Login Successful");
-                            status_id.setText("Login Successful");
                             return true;
-//                            loader_id.setVisible(false);
-
                         } else {
-                            message.concat("Incorrect Password");
-                            System.out.println("Incorrect Login");
+                            System.out.println("Incorrect Password");
                             return false;
                         }
                     } else {
-                        message.concat("No such Username Exits");
-                        System.out.println("No such user exits");
+                        System.out.println("Incorrect Username");
                         return false;
                     }
                 } catch (Exception e) {
-                    message.concat(e.getMessage());
                     System.out.println(e.getMessage());
                     return false;
                 }
-
             }
-
         };
         Thread thread = new Thread(task);
         thread.start();
-        loader_id.setVisible(true);
+
         task.setOnSucceeded(res-> {
             loader_id.setVisible(false);
             if(task.getValue()==true){
@@ -104,24 +95,22 @@ public class LoginController implements Initializable {
                 try {
                     Stage stage = (Stage) login_btn.getScene().getWindow();
                     stage.close();
-
-                    root = FXMLLoader.load(getClass().getResource("Home.fxml"));
+                    root = FXMLLoader.load(getClass().getResource("MainPage.fxml"));
                 } catch (IOException e) {
-                    message.concat(e.getMessage());
                     System.out.println(e.getMessage());
                 }
-                Scene scene = new Scene(root, 358, 310);
+                Scene scene = new Scene(root, 1050, 750);
                 Stage primaryStage = new Stage();
                 primaryStage.setScene(scene);
                 primaryStage.setTitle("Home page");
                 primaryStage.show();
             }
             else{
-                status_id.setText(message);
+                System.out.println("@@");
+                status_id.setText("Incorrect username or Password");
+                status_id.setTextFill(Color.RED);
             }
         });
-        thread.getUncaughtExceptionHandler();
-
     }
 
     @Override

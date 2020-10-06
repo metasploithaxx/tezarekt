@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="310.0" prefWidth="358.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HomeController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="180.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HomeController">
    <children>
-      <Button layoutX="138.0" layoutY="80.0" mnemonicParsing="false" text="Start Stream" />
-      <Button fx:id="log_viewer_btn" layoutX="127.0" layoutY="142.0" mnemonicParsing="false" onAction="#LoginAsViewer" text="Log in as Viewer" />
-      <Button fx:id="profilepage_id" layoutX="139.0" layoutY="199.0" mnemonicParsing="false" onAction="#ProfilePage" text="Profile Page" />
+      <Button fx:id="log_viewer_btn" mnemonicParsing="false" onAction="#LoginAsViewer" text="Log in as Viewer" />
+      <Button layoutX="50.0" mnemonicParsing="false" text="Start Stream" />
+      <Button fx:id="profilepage_id" mnemonicParsing="false" onAction="#ProfilePage" text="Profile Page" />
    </children>
-</AnchorPane>
+</VBox>
