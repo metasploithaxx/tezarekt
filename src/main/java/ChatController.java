@@ -15,8 +15,10 @@ public class ChatController implements Initializable {
         ObservableList<Chat> list= FXCollections.observableArrayList();
         Chat a=new Chat("Aritra","Hi");
         Chat b=new Chat("Manish","Hello");
+        Chat c=new Chat("Chinmay","what's upp");
         list.add(a);
         list.add(b);
+        list.add(c);
         chatList.setItems(list);
         chatList.setCellFactory(chat-> new ChatCellController());
     }

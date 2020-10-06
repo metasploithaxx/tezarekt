@@ -49,7 +49,7 @@ public class MainPage implements Initializable {
 
             if(!chat_btn.isSelected()){
                 chatdrawer_id.open();
-                chatdrawer_id.setMinWidth(200);
+                chatdrawer_id.setMinWidth(225);
             }
             else{
                 chatdrawer_id.close();
