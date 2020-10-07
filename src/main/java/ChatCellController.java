@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class ChatCellController extends JFXListCell<Chat> {
     @FXML
-    Label name,msg;
+    Label name,msg,date_id,time_id;
     @FXML
     VBox rootPane;
 
@@ -32,6 +32,8 @@ public class ChatCellController extends JFXListCell<Chat> {
             }
             name.setText(item.getSender());
             msg.setText(item.getMsg());
+            date_id.setText(item.getDate());
+            time_id.setText(item.getTime());
             setText(null);
             setGraphic(rootPane);
         }

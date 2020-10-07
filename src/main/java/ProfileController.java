@@ -1,3 +1,4 @@
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoClient;
@@ -10,7 +11,10 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import org.bson.Document;
 
@@ -25,16 +29,14 @@ public class ProfileController implements Initializable {
     @FXML
     private JFXTextArea intro_id;
     @FXML
-    private Button update_btn;
+    private JFXButton update_btn;
     @FXML
     private Label followers_id,status_id;
     @FXML
     private CheckBox instagram_check,twitter_check;
     @FXML
     private ProgressIndicator progress_id;
-    public void InputChange(ActionEvent actionEvent){
-        System.out.println(actionEvent.getEventType().getName());
-    }
+
 
     public void UpdateData(ActionEvent actionEvent){
         Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
@@ -98,6 +100,7 @@ public class ProfileController implements Initializable {
         Thread th=new Thread(task);
         th.start();
         task.setOnSucceeded(res->{
+            update_btn.setDisable(true);
             progress_id.setVisible(false);
             if(task.getValue()!=null){
                 Document curr_info=task.getValue();
@@ -149,14 +152,14 @@ public class ProfileController implements Initializable {
                 status_id.setText("Some Error Occurred");
                 status_id.setTextFill(Color.RED);
             }
+            update_btn.setDisable(true);
         });
-
-
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         update_btn.setDisable(true);
+        init();
 
         firstname_id.textProperty().addListener((observable, oldValue, newValue) -> {
             update_btn.setDisable(false);
@@ -176,7 +179,7 @@ public class ProfileController implements Initializable {
         country_id.textProperty().addListener((observable, oldValue, newValue) -> {
             update_btn.setDisable(false);
         });
-        init();
+        update_btn.setDisable(true);
 
     }
 }
