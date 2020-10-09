@@ -77,6 +77,4 @@ public class RegisterController {
             status_id.setText("You have miss something");
         }
     }
-
-
 }

@@ -1,4 +1,5 @@
 import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextArea;
 import com.mongodb.client.*;
 import javafx.animation.KeyFrame;
@@ -10,31 +11,45 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ProgressIndicator;
 import javafx.util.Duration;
 import org.bson.Document;
 
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+class Sortbyroll implements Comparator<Chat>
+{
+
+    @Override
+    public int compare(Chat o1, Chat o2) {
+        if(o1.getDate().compareTo(o2.getDate())==0){
+            return o1.getTime().compareTo(o2.getTime());
+        }
+        else{
+            return o1.getDate().compareTo(o2.getDate());
+        }
+    }
+}
 public class ChatController implements Initializable {
 
     public JFXListView<Chat> chatList;
     @FXML
     private JFXTextArea textarea_id;
     @FXML
-    private ProgressIndicator progress_id;
+    private JFXSpinner progress_id;
     public int count=0;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+        progress_id.setVisible(true);
         Timeline fiveSecondsWonder = new Timeline(
-                new KeyFrame(Duration.seconds(4),
+                new KeyFrame(Duration.seconds(4.5),
                         (EventHandler<ActionEvent>) event -> {init();}));
         fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
         fiveSecondsWonder.play();
@@ -42,45 +57,32 @@ public class ChatController implements Initializable {
     }
 
     private void init() {
-//        while (true) {
-//            Task<ObservableList<Chat>> task = new Task<>() {
-//                @Override
-//                protected ObservableList<Chat> call() throws Exception {
-                    ObservableList<Chat> list= FXCollections.observableArrayList();
+                progress_id.setVisible(true);
+                ObservableList<Chat> list= FXCollections.observableArrayList();
+                try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
+                    MongoDatabase database = mongoClient.getDatabase("Softa");
+                    MongoCollection<Document> collection = database.getCollection("global_chat");
+                    MongoCursor<Document> cursor=collection.find().cursor();
 
-                    try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
-                        MongoDatabase database = mongoClient.getDatabase("Softa");
-                        MongoCollection<Document> collection = database.getCollection("global_chat");
-                        MongoCursor<Document> cursor=collection.find().cursor();
-                        while(cursor.hasNext()==true){
-                            Document db=cursor.next();
-                            Chat temp=new Chat(db.getString("username"),db.getString("msg"),db.getString("date"),db.getString("time"));
-//                            System.out.println(db.getString("username")+"  "+db.getString("msg"));
-                            list.add(temp);
-                        }
+                    while(cursor.hasNext()==true){
 
-//                        System.out.println("&&&&");
-                        chatList.setItems(list);
-                        chatList.setCellFactory(chat-> new ChatCellController());
-                        if(count!=list.size()) {
-                            chatList.scrollTo(list.size() - 1);
-                            count=list.size();
-                        }
-//                        return list;
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage()+"^^");
-//                        return null;
+                        Document db=cursor.next();
+                        Chat temp=new Chat(db.getString("username"),db.getString("msg"),db.getString("date"),db.getString("time"));
+
+                        list.add(temp);
                     }
-//                }
-//            };
-//            Thread th = new Thread(task);
-//            th.start();
-//            task.setOnSucceeded(res -> {
-//                System.out.println("###");
-//                if (task.getValue()!=null) {
-//
-//                }
-//            });
+                    list.sort(new Sortbyroll());
+                    chatList.setItems(list);
+                    chatList.setCellFactory(chat-> new ChatCellController());
+                    if(count!=list.size()) {
+                        chatList.scrollTo(list.size() - 1);
+                        count=list.size();
+                    }
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    progress_id.setVisible(false);
+
     }
 
     public void send() {

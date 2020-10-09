@@ -1,3 +1,4 @@
+import com.jfoenix.controls.JFXSpinner;
 import com.mongodb.client.*;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -5,7 +6,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.bson.Document;
@@ -32,7 +36,7 @@ public class LoginController implements Initializable {
     @FXML
     private CheckBox check_id;
     @FXML
-    private ProgressIndicator loader_id;
+    private JFXSpinner loader_id;
     public static Preferences preferences;
     public void Register() throws IOException {
         Parent root= FXMLLoader.load(getClass().getResource("Register.fxml"));
@@ -42,8 +46,7 @@ public class LoginController implements Initializable {
         primaryStage.setTitle("Register page");
         primaryStage.show();
     }
-
-    public void Login(javafx.event.ActionEvent actionEvent) {
+    public void Signin(){
         Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
         loader_id.setVisible(true);
         Task<Boolean> task =new Task<>() {
@@ -112,11 +115,16 @@ public class LoginController implements Initializable {
             }
         });
     }
+    public void Login(javafx.event.ActionEvent actionEvent) {
+        Signin();
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         preferences = Preferences.userRoot();
         username_id.setText(preferences.get("username",""));
         password_id.setText(preferences.get("password",""));
+        if(preferences.get("username","").length()>0 && preferences.get("password","").length()>0)
+            Signin();
     }
 }
