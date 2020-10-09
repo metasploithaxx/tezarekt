@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LoginController">
+   <children>
+      <Label fx:id="lblOutput" alignment="CENTER" layoutX="175.0" layoutY="14.0" prefHeight="35.0" prefWidth="150.0" text="Login Page" textAlignment="CENTER" wrapText="true">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <TextField fx:id="username_id" layoutX="100.0" layoutY="89.0" prefHeight="25.0" prefWidth="300.0" promptText="Username">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </TextField>
+      <PasswordField fx:id="password_id" layoutX="100.0" layoutY="150.0" prefHeight="25.0" prefWidth="300.0" promptText="Password">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </PasswordField>
+      <Label fx:id="status_id" layoutX="100.0" layoutY="274.0" prefHeight="35.0" prefWidth="300.0" />
+      <CheckBox fx:id="check_id" layoutX="100.0" layoutY="201.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="118.0" text="Remember me" />
+      <ProgressIndicator fx:id="loader_id" layoutX="224.0" layoutY="146.0" visible="false" />
+      <JFXButton fx:id="login_btn" buttonType="RAISED" layoutX="100.0" layoutY="230.0" onAction="#Login" prefHeight="44.0" prefWidth="100.0" ripplerFill="#272acf" text="Login" textFill="#2c2b2b">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </JFXButton>
+      <JFXButton fx:id="register_btn" buttonType="RAISED" layoutX="300.0" layoutY="230.0" onAction="#Register" prefHeight="44.0" prefWidth="100.0" ripplerFill="#272acf" text="Register">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </JFXButton>
+   </children>
+</Pane>
