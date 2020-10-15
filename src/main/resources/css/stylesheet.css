@@ -1,0 +1,10 @@
+/*Raised button example */
+.jfx-button {
+     -jfx-button-type: RAISED;
+     -fx-background-color:rgb(29,98,245);
+     -fx-text-fill: white;
+}
+.root{
+    -fx-font-family : "serief";
+    -fx-background1 : rgb(218,232,240);
+}
