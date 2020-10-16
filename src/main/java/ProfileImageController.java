@@ -1,6 +1,13 @@
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextField;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.gridfs.GridFSBucket;
+import com.mongodb.client.gridfs.GridFSBuckets;
+import com.mongodb.client.gridfs.model.GridFSUploadOptions;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,11 +16,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import org.bson.Document;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ProfileImageController {
     @FXML
@@ -61,45 +71,47 @@ public class ProfileImageController {
         }
     }
     public void UploadPic(ActionEvent actionEvent){
-//        load_id.setVisible(true);
-//        Task<Boolean> task =new Task<Boolean>() {
-//
-//            @Override
-//            protected Boolean call() throws Exception {
-//                try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
-//                    MongoDatabase database = mongoClient.getDatabase("Photos");
-//                    MongoCollection<Document> collection = database.getCollection("fs.files");
-//                    MongoCollection<Document> collectionchunks = database.getCollection("fs.chunks");
-//
-//                    for(Document i:collection.find()){
-//                        if(i.get("filename").equals(LoginController.curr_username)){
-//                            collectionchunks.deleteMany(new Document("files_id",i.get("filename")));
-//                        }
-//                    }
-//                    collection.deleteMany(new Document("filename",LoginController.curr_username));
-//                    GridFSBucket gridBucket = GridFSBuckets.create(database);
-//                    InputStream inStream = new FileInputStream(selectedImage);
-//                    GridFSUploadOptions uploadOptions = new GridFSUploadOptions().chunkSizeBytes(1024).metadata(new Document("type", "image").append("content_type", "image/png"));
-//                    gridBucket.uploadFromStream(LoginController.curr_username, inStream, uploadOptions);
-//                    return true;
-//                }
-//                catch (Exception e){
-//                    System.out.println(e.getMessage()+"&&&&");
-//                    return false;
-//                }
-//            }
-//        };
-//        Thread th=new Thread(task);
-//        th.start();
-//        task.setOnSucceeded(res->{
-//            load_id.setVisible(false);
-//            if(task.getValue()){
-//                status_id.setText("Profile Pic Uploaded successfully");
-//                text_id.setText("");
-//            }
-//            else{
-//                status_id.setText("Some error Occurred while uploading");
-//            }
-//        });
+        load_id.setVisible(true);
+        Logger.getLogger("com.mongodb.driver").setLevel(Level.WARNING);
+        Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+        Task<Boolean> task =new Task<Boolean>() {
+
+            @Override
+            protected Boolean call() throws Exception {
+                try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
+                    MongoDatabase database = mongoClient.getDatabase("Photos");
+                    MongoCollection<Document> collection = database.getCollection("fs.files");
+                    MongoCollection<Document> collectionchunks = database.getCollection("fs.chunks");
+
+                    for(Document i:collection.find()){
+                        if(i.get("filename").equals(LoginController.curr_username)){
+                            collectionchunks.deleteMany(new Document("files_id",i.get("filename")));
+                        }
+                    }
+                    collection.deleteMany(new Document("filename",LoginController.curr_username));
+                    GridFSBucket gridBucket = GridFSBuckets.create(database);
+                    InputStream inStream = new FileInputStream(selectedImage);
+                    GridFSUploadOptions uploadOptions = new GridFSUploadOptions().chunkSizeBytes(1024).metadata(new Document("type", "image").append("content_type", "image/png"));
+                    gridBucket.uploadFromStream(LoginController.curr_username, inStream, uploadOptions);
+                    return true;
+                }
+                catch (Exception e){
+                    System.out.println(e.getMessage()+"&&&&");
+                    return false;
+                }
+            }
+        };
+        Thread th=new Thread(task);
+        th.start();
+        task.setOnSucceeded(res->{
+            load_id.setVisible(false);
+            if(task.getValue()){
+                status_id.setText("Profile Pic Uploaded successfully");
+                text_id.setText("");
+            }
+            else{
+                status_id.setText("Some error Occurred while uploading");
+            }
+        });
     }
 }

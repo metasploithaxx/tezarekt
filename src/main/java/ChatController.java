@@ -13,26 +13,11 @@ import javafx.fxml.Initializable;
 import javafx.util.Duration;
 
 import java.net.URL;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class Sortbyroll implements Comparator<Chat>
-{
 
-    @Override
-    public int compare(Chat o1, Chat o2) {
-        if(o1.getDate().compareTo(o2.getDate())==0){
-            return o1.getTime().compareTo(o2.getTime());
-        }
-        else{
-            return o1.getDate().compareTo(o2.getDate());
-        }
-    }
-}
 public class ChatController implements Initializable {
 
     public JFXListView<Chat> chatList;
@@ -43,8 +28,8 @@ public class ChatController implements Initializable {
     public int count=0;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+        Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
+        mongoLogger.setLevel(Level.SEVERE);
         progress_id.setVisible(true);
         Timeline fiveSecondsWonder = new Timeline(
                 new KeyFrame(Duration.seconds(4.5),
@@ -55,6 +40,7 @@ public class ChatController implements Initializable {
     }
 
     private void init() {
+        
 //                progress_id.setVisible(true);
 //                ObservableList<Chat> list= FXCollections.observableArrayList();
 //                try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {

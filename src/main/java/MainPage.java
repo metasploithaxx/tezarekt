@@ -28,8 +28,8 @@ public class MainPage implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        load_id.setVisible(false);
-        Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+        load_id.setVisible(false);Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
+        mongoLogger.setLevel(Level.SEVERE);
         chatdrawer_id.open();
 
         try {

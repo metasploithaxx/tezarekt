@@ -15,6 +15,7 @@ javafx {
     modules = [ 'javafx.controls','javafx.fxml' ,'javafx.swing']
 }
 dependencies {
+    compile 'org.mongodb:mongo-java-driver:3.12.3'
     compile group: 'com.jfoenix', name: 'jfoenix', version: '9.0.9'
     testCompile group: 'junit', name: 'junit', version: '4.12'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.9'

@@ -79,6 +79,7 @@ public class RegisterController {
                     if (task.get().getStatusLine().getStatusCode() == 200) {
                         status_id.setText("Successfully Registered");
                         status_id.setTextFill(Color.GREEN);
+
                     } else {
 
                         System.out.println(myResponse.getString("detail"));

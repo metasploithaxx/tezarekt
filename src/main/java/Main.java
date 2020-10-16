@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class Main extends Application {
     public static String Connectingurl="http://[::1]:3000";
-//    public static String MongodbId="mongodb+srv://manishkumar13899:manu@cluster0.xjkfy.mongodb.net/test?retryWrites=true&w=majority";
+    public static String MongodbId="mongodb+srv://manishkumar13899:manu@cluster0.xjkfy.mongodb.net/test?retryWrites=true&w=majority";
     public static void main(String[] args) {
         launch(args);
     }

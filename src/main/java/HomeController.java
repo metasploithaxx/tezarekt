@@ -1,4 +1,10 @@
 import com.jfoenix.controls.JFXSpinner;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.gridfs.GridFSBucket;
+import com.mongodb.client.gridfs.GridFSBuckets;
+import com.mongodb.client.gridfs.GridFSDownloadStream;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -18,6 +24,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
@@ -60,27 +67,28 @@ public class HomeController implements Initializable {
         primaryStage.show();
     }
     public void init(){
-//        Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
-//        Platform.runLater(new Runnable() {
-//            @Override
-//            public void run() {
-////
-////                try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
-////                    MongoDatabase database = mongoClient.getDatabase("Photos");
-////                    GridFSBucket gridBucket = GridFSBuckets.create(database);
-////                    GridFSDownloadStream gdifs = gridBucket.openDownloadStream(LoginController.curr_username);
-////                    byte[] data = gdifs.readAllBytes();
-////                    ByteArrayInputStream input = new ByteArrayInputStream(data);
-////                    BufferedImage image1 = ImageIO.read(input);
-////                    Image image = SwingFXUtils.toFXImage(image1, null);
-////                    image_id.setImage(image);
-////                }
-////                catch (Exception e){
-////                    System.out.println(e.getMessage());
-////                }
+        Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
+        mongoLogger.setLevel(Level.SEVERE);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
 //
-//            }
-//        });
+                try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
+                    MongoDatabase database = mongoClient.getDatabase("Photos");
+                    GridFSBucket gridBucket = GridFSBuckets.create(database);
+                    GridFSDownloadStream gdifs = gridBucket.openDownloadStream(LoginController.curr_username);
+                    byte[] data = gdifs.readAllBytes();
+                    ByteArrayInputStream input = new ByteArrayInputStream(data);
+                    BufferedImage image1 = ImageIO.read(input);
+                    Image image = SwingFXUtils.toFXImage(image1, null);
+                    image_id.setImage(image);
+                }
+                catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
+
+            }
+        });
     }
     public void Logout(ActionEvent actionEvent) throws IOException {
         Preferences preferences ;
@@ -99,8 +107,8 @@ public class HomeController implements Initializable {
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+        Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
+        mongoLogger.setLevel(Level.SEVERE);
         init();
     }
 }

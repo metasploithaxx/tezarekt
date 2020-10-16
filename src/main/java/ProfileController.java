@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
@@ -45,7 +46,7 @@ public class ProfileController implements Initializable {
 
     public void UpdateData(ActionEvent actionEvent){
 
-        if(! (username_id.getText().length()>0 && firstname_id.getText().length()>0 && lastname_id.getText().length()>0 && instagram_id.getText().length()>0 && twitter_id.getText().length()>0 && subsrate_id.getText().length()>0 )){
+        if(! (username_id.getText().length()>0 && firstname_id.getText().length()>0 && lastname_id.getText().length()>0 && subsrate_id.getText().length()>0 )){
             status_id.setText("Fill all Details");
             status_id.setTextFill(Color.RED);
             return ;
@@ -110,22 +111,10 @@ public class ProfileController implements Initializable {
         Task<HttpResponse> task =new Task<>() {
             @Override
             protected HttpResponse call() throws Exception {
-                var values = new HashMap<String, String>() {{
-                    put("uname", LoginController.curr_username);
-                }};
-
-                var objectMapper = new ObjectMapper();
-                String payload =
-                        objectMapper.writeValueAsString(values);
-
-                StringEntity entity = new StringEntity(payload,
-                        ContentType.APPLICATION_JSON);
 
                 CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
                 client.start();
-                HttpPost request = new HttpPost(Main.Connectingurl+"/profileViewBySelf");
-                request.setEntity(entity);
-                request.setHeader("Content-Type", "application/json; charset=UTF-8");
+                HttpGet request = new HttpGet(Main.Connectingurl+"/profile/self/"+LoginController.curr_username);
                 Future<HttpResponse> future = client.execute(request, null);
                 while(!future.isDone());
                 return future.get();
@@ -172,7 +161,6 @@ public class ProfileController implements Initializable {
                         else{
                             twitter_check.setSelected(false);
                         }
-
                     } else {
 
                         System.out.println(myResponse.getString("detail"));
