@@ -34,28 +34,6 @@ public class ChatCellController extends JFXListCell<Chat> {
             }
 
 
-//                    Platform.runLater(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            Image image = null;
-//                            try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
-//                                MongoDatabase database1 = mongoClient.getDatabase("Photos");
-//                                GridFSBucket gridBucket = GridFSBuckets.create(database1);
-//                                GridFSDownloadStream gdifs = gridBucket.openDownloadStream(item.getSender());
-//                                if (!gdifs.equals(null)) {
-//                                    byte[] data = gdifs.readAllBytes();
-//                                    ByteArrayInputStream input = new ByteArrayInputStream(data);
-//                                    BufferedImage image1 = ImageIO.read(input);
-//                                    image = SwingFXUtils.toFXImage(image1, null);
-//
-//                                    image_id.setImage(image);
-//                                }
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    });
-
             name.setText(item.getSender());
                     msg.setText(item.getMsg());
                     date_id.setText(item.getDate());

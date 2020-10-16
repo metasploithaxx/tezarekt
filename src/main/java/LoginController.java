@@ -1,5 +1,6 @@
+import at.favre.lib.crypto.bcrypt.BCrypt;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jfoenix.controls.JFXSpinner;
-import com.mongodb.client.*;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,15 +13,22 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.bson.Document;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.util.Base64;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
@@ -30,7 +38,7 @@ public class LoginController implements Initializable {
     @FXML
     private Label status_id;
     @FXML
-    private Button login_btn,register_btn;
+    private Button login_btn;
     @FXML
     private TextField username_id,password_id;
     @FXML
@@ -49,43 +57,30 @@ public class LoginController implements Initializable {
     public void Signin(){
         Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
         loader_id.setVisible(true);
-        Task<Boolean> task =new Task<>() {
+        Task<HttpResponse> task =new Task<>() {
             @Override
-            protected Boolean call() throws Exception {
-                try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
-                    MongoDatabase database = mongoClient.getDatabase("Softa");
-                    MongoCollection<Document> collection = database.getCollection("users");
-                    Document query = new Document("username", username_id.getText().toString());
-                    FindIterable<Document> cursor = collection.find(query);
-                    Iterator it = cursor.iterator();
-                    if (it.hasNext()) {
-                        Document found = collection.find(query).first();
-                        String val = found.get("password").toString();
-                        final MessageDigest digest = MessageDigest.getInstance("SHA3-256");
-                        final byte[] hashbytes = digest.digest(
-                                password_id.getText().getBytes(StandardCharsets.UTF_8));
-                        String sha3Hex = Base64.getEncoder().encodeToString(hashbytes);
-                        if (sha3Hex.equals(val)) {
-                            System.out.println("correct login");
-                            curr_username = username_id.getText();
-                            preferences = Preferences.userRoot();
-                            if (check_id.isSelected()) {
-                                preferences.put("username", username_id.getText().toString());
-                                preferences.put("password", password_id.getText().toString());
-                            }
-                            return true;
-                        } else {
-                            System.out.println("Incorrect Password");
-                            return false;
-                        }
-                    } else {
-                        System.out.println("Incorrect Username");
-                        return false;
-                    }
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    return false;
-                }
+            protected HttpResponse call() throws Exception {
+                var values = new HashMap<String, String>() {{
+                    put("passhash", password_id.getText());
+                    put("uname", username_id.getText());
+                }};
+
+                var objectMapper = new ObjectMapper();
+                String payload =
+                        objectMapper.writeValueAsString(values);
+
+                StringEntity entity = new StringEntity(payload,
+                        ContentType.APPLICATION_JSON);
+
+                CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                client.start();
+                HttpPost request = new HttpPost(Main.Connectingurl+"/signin");
+                request.setEntity(entity);
+                request.setHeader("Content-Type", "application/json; charset=UTF-8");
+                Future<HttpResponse> future = client.execute(request, null);
+
+                while(!future.isDone());
+                return future.get();
             }
         };
         Thread thread = new Thread(task);
@@ -93,20 +88,41 @@ public class LoginController implements Initializable {
 
         task.setOnSucceeded(res-> {
             loader_id.setVisible(false);
-            if(task.getValue()==true){
-                Parent root = null;
+            if(task.isDone()){
                 try {
-                    Stage stage = (Stage) login_btn.getScene().getWindow();
-                    stage.close();
-                    root = FXMLLoader.load(getClass().getResource("MainPage.fxml"));
-                } catch (IOException e) {
+                    if (task.get().getStatusLine().getStatusCode() == 200) {
+                        status_id.setText("Successfully Login");
+                        status_id.setTextFill(Color.GREEN);
+                        curr_username=username_id.getText();
+                        preferences = Preferences.userRoot();
+                        if (check_id.isSelected()) {
+                            preferences.put("username", username_id.getText());
+                            preferences.put("password", password_id.getText());
+                        }
+                        Parent root = null;
+                        try {
+                            Stage stage = (Stage) login_btn.getScene().getWindow();
+                            stage.close();
+                            root = FXMLLoader.load(getClass().getResource("MainPage.fxml"));
+                        } catch (IOException e) {
+                            System.out.println(e.getMessage());
+                        }
+                        Scene scene = new Scene(root, 1050, 750);
+                        scene.getStylesheets().add(getClass().getResource("css/stylesheet.css").toString());
+                        Stage primaryStage = new Stage();
+                        primaryStage.setScene(scene);
+                        primaryStage.setTitle("Home page");
+                        primaryStage.show();
+                    } else {
+                        String jsonString = EntityUtils.toString(task.get().getEntity());
+
+                        status_id.setText(jsonString);
+                        status_id.setTextFill(Color.RED);
+                    }
+                } catch (InterruptedException | ExecutionException | IOException e) {
                     System.out.println(e.getMessage());
                 }
-                Scene scene = new Scene(root, 1050, 750);
-                Stage primaryStage = new Stage();
-                primaryStage.setScene(scene);
-                primaryStage.setTitle("Home page");
-                primaryStage.show();
+
             }
             else{
                 System.out.println("@@");
@@ -121,6 +137,7 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
         preferences = Preferences.userRoot();
         username_id.setText(preferences.get("username",""));
         password_id.setText(preferences.get("password",""));

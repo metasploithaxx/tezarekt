@@ -13,6 +13,8 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MainPage implements Initializable {
     @FXML
@@ -27,6 +29,7 @@ public class MainPage implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         load_id.setVisible(false);
+        Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
         chatdrawer_id.open();
 
         try {
