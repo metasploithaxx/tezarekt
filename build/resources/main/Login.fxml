@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXSpinner?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -25,17 +26,20 @@
             <Font size="20.0" />
          </font>
       </PasswordField>
-      <Button fx:id="login_btn" layoutX="100.0" layoutY="230.0" mnemonicParsing="false" onAction="#Login" prefHeight="25.0" prefWidth="100.0" text="Login">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Button>
-      <Button fx:id="register_btn" layoutX="300.0" layoutY="230.0" mnemonicParsing="false" onAction="#Register" prefWidth="100.0" text="Register">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Button>
-      <Label fx:id="status_id" layoutX="100.0" layoutY="274.0" prefHeight="35.0" prefWidth="300.0" text="Label" />
+      <Label fx:id="status_id" layoutX="100.0" layoutY="274.0" prefHeight="35.0" prefWidth="300.0" />
       <CheckBox fx:id="check_id" layoutX="100.0" layoutY="201.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="118.0" text="Remember me" />
+      <JFXButton fx:id="login_btn" buttonType="RAISED" layoutX="100.0" layoutY="230.0" onAction="#Login" prefHeight="44.0" prefWidth="100.0" ripplerFill="#272acf" text="Login" textFill="#2c2b2b">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </JFXButton>
+      <JFXButton fx:id="register_btn" buttonType="RAISED" layoutX="300.0" layoutY="230.0" onAction="#Register" prefHeight="44.0" prefWidth="100.0" ripplerFill="#272acf" text="Register">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </JFXButton>
+
+      <JFXSpinner fx:id="loader_id" layoutX="218.0" layoutY="147.0" visible="false" />
+
    </children>
 </Pane>

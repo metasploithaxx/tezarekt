@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXSpinner?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane prefHeight="310.0" prefWidth="358.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HomeController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="165.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HomeController">
    <children>
-      <Button layoutX="138.0" layoutY="80.0" mnemonicParsing="false" text="Start Stream" />
-      <Button layoutX="135.0" layoutY="142.0" mnemonicParsing="false" text="Log in Viewer" />
-      <Button fx:id="profilepage_id" layoutX="139.0" layoutY="199.0" mnemonicParsing="false" onAction="#ProfilePage" text="Profile Page" />
+      <AnchorPane prefHeight="400.0" prefWidth="0.0">
+         <children>
+            <ImageView fx:id="image_id" fitHeight="172.0" fitWidth="159.0" layoutX="2.0" onMouseClicked="#ProfilePic" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@noimage.jpg" />
+               </image></ImageView>
+            <JFXSpinner fx:id="load_id" layoutX="60.0" layoutY="175.0" visible="false" />
+            <JFXButton layoutY="213.0" prefHeight="35.0" prefWidth="165.0" text="Log in as Viewer" />
+            <JFXButton layoutY="248.0" prefHeight="35.0" prefWidth="165.0" text="Start Stream" />
+            <JFXButton fx:id="profile_btn" layoutY="283.0" onAction="#ProfilePage" prefHeight="35.0" prefWidth="165.0" text="Profile Page" />
+            <JFXButton fx:id="change_profile_pic_btn" layoutY="313.0" onAction="#ProfilePic1" prefHeight="35.0" prefWidth="165.0" text="Change Upload Profile Pic" />
+            <JFXButton fx:id="logout_btn" buttonType="RAISED" layoutY="348.0" onAction="#Logout" prefHeight="35.0" prefWidth="165.0" ripplerFill="#1d38ad" text="LogOut" />
+         </children>
+      </AnchorPane>
    </children>
-</AnchorPane>
+</VBox>
