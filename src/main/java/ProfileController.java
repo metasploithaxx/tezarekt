@@ -1,31 +1,37 @@
+import at.favre.lib.crypto.bcrypt.BCrypt;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextArea;
-import com.mongodb.MongoException;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Updates;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
-import org.bson.Document;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class ProfileController implements Initializable {
     @FXML
-    private TextField username_id,firstname_id,lastname_id,country_id,instagram_id,twitter_id;
+    private TextField username_id,firstname_id,lastname_id,instagram_id,twitter_id,subsrate_id;
     @FXML
     private JFXTextArea intro_id;
     @FXML
@@ -35,131 +41,141 @@ public class ProfileController implements Initializable {
     @FXML
     private CheckBox instagram_check,twitter_check;
     @FXML
-    private ProgressIndicator progress_id;
+    private JFXSpinner loader_id;
 
 
     public void UpdateData(ActionEvent actionEvent){
-        Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
-        progress_id.setVisible(true);
-        Task<Boolean>task =new Task<Boolean>() {
-            @Override
-            protected Boolean call() throws Exception {
-                try(MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
-                    MongoDatabase database = mongoClient.getDatabase("Softa");
-                    MongoCollection<Document> collection = database.getCollection("users");
-                    collection.updateOne(Filters.eq("username",username_id.getText()), Updates.set("firstname",firstname_id.getText()));
-                    collection.updateOne(Filters.eq("username",username_id.getText()),Updates.set("lastname",lastname_id.getText()));
-                    collection.updateOne(Filters.eq("username",username_id.getText()),Updates.set("country_of_origin",country_id.getText()));
-                    collection.updateOne(Filters.eq("username",username_id.getText()),Updates.set("insta_sub_only",instagram_check.isSelected()));
-                    collection.updateOne(Filters.eq("username",username_id.getText()),Updates.set("twitter_sub_only",twitter_check.isSelected()));
-                    collection.updateOne(Filters.eq("username",username_id.getText()),Updates.set("intro",intro_id.getText()));
-                    collection.updateOne(Filters.eq("username",username_id.getText()),Updates.set("insta_id",instagram_id.getText()));
-                    collection.updateOne(Filters.eq("username",username_id.getText()),Updates.set("twitter_id",twitter_id.getText()));
-                    return true;
-                }
-                catch (Exception e){
-                    return false;
-                }
-            }
-        };
-        Thread th=new Thread(task);
-        th.start();
-        task.setOnSucceeded(res->{
-            progress_id.setVisible(false);
-            if(task.getValue()==true){
-                status_id.setText("Updated Successfully");
-                status_id.setTextFill(Color.GREEN);
-                update_btn.setDisable(true);
-            }
-            else{
-                status_id.setText("Updation Unsuccessfull");
-                status_id.setTextFill(Color.RED);
-            }
-        });
 
-    }
-    private void init(){
-        Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
-        progress_id.setVisible(true);
-        Task<Document> task=new Task<Document>() {
+        if(! (username_id.getText().length()>0 && firstname_id.getText().length()>0 && lastname_id.getText().length()>0 && subsrate_id.getText().length()>0 )){
+            status_id.setText("Fill all Details");
+            status_id.setTextFill(Color.RED);
+            return ;
+        }
+        loader_id.setVisible(true);
+        Task<HttpResponse> task =new Task<>() {
             @Override
-            protected Document call() throws Exception {
-                try(MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
-                    MongoDatabase database = mongoClient.getDatabase("Softa");
-                    MongoCollection<Document> collection = database.getCollection("users");
-                    Document query = new Document("username",LoginController.curr_username);
-                    System.out.println(LoginController.curr_username);
-                    Document curr_info=collection.find(query).first();
-                    return curr_info;
-                }
-                catch (MongoException e){
-                    return null;
-                }
+            protected HttpResponse call() throws Exception {
+                var values = new HashMap<String, String>() {{
+                    put("uname", LoginController.curr_username);
+                    put("fname",firstname_id.getText());
+                    put("lname",lastname_id.getText());
+                    put("instaid",instagram_id.getText());
+                    put("twitterid",twitter_id.getText());
+                    put("subsrate",subsrate_id.getText());
+                    put("bio",intro_id.getText());
+                    put("isinstaidpublic", String.valueOf(instagram_check.isSelected()));
+                    put("istwitteridpublic",String.valueOf(twitter_check.isSelected()));
+                }};
+
+                var objectMapper = new ObjectMapper();
+                String payload =
+                        objectMapper.writeValueAsString(values);
+
+                StringEntity entity = new StringEntity(payload,
+                        ContentType.APPLICATION_JSON);
+
+                CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                client.start();
+                HttpPost request = new HttpPost(Main.Connectingurl+"/updateUserProfile");
+                request.setEntity(entity);
+                request.setHeader("Content-Type", "application/json; charset=UTF-8");
+                Future<HttpResponse> future = client.execute(request, null);
+                while(!future.isDone());
+                return future.get();
             }
         };
         Thread th=new Thread(task);
         th.start();
         task.setOnSucceeded(res->{
-            update_btn.setDisable(true);
-            progress_id.setVisible(false);
-            if(task.getValue()!=null){
-                Document curr_info=task.getValue();
-                username_id.setText(LoginController.curr_username);
-                firstname_id.setText(curr_info.getString("firstname"));
-                lastname_id.setText(curr_info.getString("lastname"));
-                if(curr_info.containsKey("intro")){
-                    intro_id.setText(curr_info.getString("intro"));
-                }
-                if(curr_info.containsKey("insta_id")){
-                    instagram_id.setText(curr_info.getString("insta_id"));
-                }
-                if(curr_info.containsKey("twitter_id")){
-                    twitter_id.setText(curr_info.getString("twitter_id"));
-                }
-                if(curr_info.containsKey("followers")){
-                    followers_id.setText(curr_info.getString("followers")+" followers");
-                }
-                else{
-                    followers_id.setText("0 followers");
-                }
-                if(curr_info.containsKey("country_of_origin")){
-                    country_id.setText(curr_info.getString("country_of_origin"));
-                }
-                if(curr_info.containsKey("insta_sub_only")){
-                    if(curr_info.getBoolean("insta_sub_only")){
-                        instagram_check.setSelected(true);
-                    }
-                    else{
-                        instagram_check.setSelected(false);
-                    }
-                }
-                else{
-                    instagram_check.setSelected(false);
-                }
-                if(curr_info.containsKey("twitter_sub_only")){
-                    if(curr_info.getBoolean("twitter_sub_only")){
-                        twitter_check.setSelected(true);
-                    }
-                    else{
-                        twitter_check.setSelected(false);
-                    }
-                }
-                else{
-                    twitter_check.setSelected(false);
+            loader_id.setVisible(false);
+            if(task.isDone()) {
+                try {
+                    String jsonString = EntityUtils.toString(task.get().getEntity());
+                    status_id.setText(jsonString);
+                } catch (InterruptedException | ExecutionException | IOException e) {
+                    e.printStackTrace();
                 }
             }
             else{
-                status_id.setText("Some Error Occurred");
+                status_id.setText("UnSuccesfull Attempt");
                 status_id.setTextFill(Color.RED);
             }
-            update_btn.setDisable(true);
         });
     }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         update_btn.setDisable(true);
-        init();
+        loader_id.setVisible(true);
+        Task<HttpResponse> task =new Task<>() {
+            @Override
+            protected HttpResponse call() throws Exception {
+
+                CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                client.start();
+                HttpGet request = new HttpGet(Main.Connectingurl+"/profile/self/"+LoginController.curr_username);
+                Future<HttpResponse> future = client.execute(request, null);
+                while(!future.isDone());
+                return future.get();
+            }
+        };
+        Thread th=new Thread(task);
+        th.start();
+        task.setOnSucceeded(res->{
+            loader_id.setVisible(false);
+            if(task.isDone()) {
+                try {
+                    String jsonString = EntityUtils.toString(task.get().getEntity());
+                    JSONObject myResponse = new JSONObject(jsonString);
+                    System.out.println(jsonString);
+                    if (task.get().getStatusLine().getStatusCode() == 200) {
+                        status_id.setText("Successfully Loaded");
+                        status_id.setTextFill(Color.GREEN);
+                        username_id.setText(myResponse.getString("uname"));
+                        firstname_id.setText(myResponse.getString("fname"));
+                        lastname_id.setText(myResponse.getString("lname"));
+                        instagram_id.setText(myResponse.getString("instaid"));
+                        twitter_id.setText(myResponse.getString("twitterid"));
+                        subsrate_id.setText(myResponse.getString("subsrate"));
+                        intro_id.setText(myResponse.getString("bio"));
+                        if(!myResponse.getString("isinstaidpublic").equals("null")){
+                            if(myResponse.getString("isinstaidpublic").equals("true")){
+                                instagram_check.setSelected(true);
+                            }
+                            else{
+                                instagram_check.setSelected(false);
+                            }
+                        }
+                        else{
+                            instagram_check.setSelected(false);
+                        }
+                        if(!myResponse.getString("istwitteridpublic").equals("null")){
+                            if(myResponse.getString("istwitteridpublic").equals("true")){
+                                twitter_check.setSelected(true);
+                            }
+                            else{
+                                twitter_check.setSelected(false);
+                            }
+                        }
+                        else{
+                            twitter_check.setSelected(false);
+                        }
+                    } else {
+
+                        System.out.println(myResponse.getString("detail"));
+                        status_id.setText("statusCode- "+myResponse.getString("detail"));
+                        status_id.setTextFill(Color.RED);
+                    }
+                } catch (InterruptedException | ExecutionException | IOException | JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            else{
+                status_id.setText("Unsuccesfull Attempt");
+                status_id.setTextFill(Color.RED);
+            }
+        });
 
         firstname_id.textProperty().addListener((observable, oldValue, newValue) -> {
             update_btn.setDisable(false);
@@ -176,7 +192,7 @@ public class ProfileController implements Initializable {
         intro_id.textProperty().addListener((observable, oldValue, newValue) -> {
             update_btn.setDisable(false);
         });
-        country_id.textProperty().addListener((observable, oldValue, newValue) -> {
+        subsrate_id.textProperty().addListener((observable, oldValue, newValue) -> {
             update_btn.setDisable(false);
         });
         update_btn.setDisable(true);

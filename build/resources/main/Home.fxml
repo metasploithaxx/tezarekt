@@ -1,38 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXSpinner?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.paint.RadialGradient?>
-<?import javafx.scene.paint.Stop?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="180.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HomeController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="165.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HomeController">
    <children>
-      <JFXButton fx:id="log_viewer_btn" buttonType="RAISED" prefHeight="50.0" prefWidth="180.0" text="Log in as Viewer">
-         <ripplerFill>
-            <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
-               <stops>
-                  <Stop color="#2e4a9c" />
-                  <Stop color="WHITE" offset="1.0" />
-               </stops>
-            </RadialGradient>
-         </ripplerFill></JFXButton>
-      <JFXButton fx:id="profilepage_id" buttonType="RAISED" onAction="#ProfilePage" prefHeight="50.0" prefWidth="180.0" text="Profile page">
-         <ripplerFill>
-            <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
-               <stops>
-                  <Stop color="#2e4a9c" />
-                  <Stop color="WHITE" offset="1.0" />
-               </stops>
-            </RadialGradient>
-         </ripplerFill></JFXButton>
-      <JFXButton buttonType="RAISED" prefHeight="50.0" prefWidth="180.0" text="Start Stream">
-         <ripplerFill>
-            <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
-               <stops>
-                  <Stop color="#2e4a9c" />
-                  <Stop color="WHITE" offset="1.0" />
-               </stops>
-            </RadialGradient>
-         </ripplerFill></JFXButton>
+      <AnchorPane prefHeight="400.0" prefWidth="0.0">
+         <children>
+            <ImageView fx:id="image_id" fitHeight="172.0" fitWidth="159.0" layoutX="2.0" onMouseClicked="#ProfilePic" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@noimage.jpg" />
+               </image></ImageView>
+            <JFXSpinner fx:id="load_id" layoutX="60.0" layoutY="175.0" visible="false" />
+            <JFXButton layoutY="213.0" prefHeight="35.0" prefWidth="165.0" text="Log in as Viewer" />
+            <JFXButton layoutY="248.0" prefHeight="35.0" prefWidth="165.0" text="Start Stream" />
+            <JFXButton fx:id="profile_btn" layoutY="283.0" onAction="#ProfilePage" prefHeight="35.0" prefWidth="165.0" text="Profile Page" />
+            <JFXButton fx:id="change_profile_pic_btn" layoutY="313.0" onAction="#ProfilePic1" prefHeight="35.0" prefWidth="165.0" text="Change Upload Profile Pic" />
+            <JFXButton fx:id="logout_btn" buttonType="RAISED" layoutY="348.0" onAction="#Logout" prefHeight="35.0" prefWidth="165.0" ripplerFill="#1d38ad" text="LogOut" />
+         </children>
+      </AnchorPane>
    </children>
 </VBox>

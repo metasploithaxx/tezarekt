@@ -1,82 +1,116 @@
-import com.mongodb.client.*;
+import at.favre.lib.crypto.bcrypt.BCrypt;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jfoenix.controls.JFXSpinner;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
-import org.bson.Document;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.util.Base64;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 public class RegisterController {
     @FXML
     private TextField username_id,password_id,confirmpd_id,firstname_id,lastname_id,briefinfo_id;
     @FXML
-    private Button register_btn;
-    @FXML
     private Label status_id;
+    @FXML
+    private JFXSpinner loader_id;
+    public void server_reg(){
+        Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+        loader_id.setVisible(true);
+        Task<HttpResponse> task =new Task<>() {
+            @Override
+            protected HttpResponse call() throws Exception {
+                var values = new HashMap<String, String>() {{
+                    put("passHash", BCrypt.withDefaults().hashToString(4, password_id.getText().toCharArray()));
+                    put("username", username_id.getText());
+                    put("firstname", firstname_id.getText());
+                    put("lastname", lastname_id.getText());
+                    put("subsrate", "0");
+                    put("info",(briefinfo_id.getText().length()>0)?briefinfo_id.getText():"");
+                }};
 
-    public void Register(ActionEvent event) throws Exception {
-        System.out.println("enter Register");
-        if(!username_id.getText().isEmpty() && !firstname_id.getText().isEmpty() && !lastname_id.getText().isEmpty() && !password_id.getText().isEmpty()){
-            Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
-            status_id.setText("Starting the registration process");
-            status_id.setTextFill(Color.GREEN);
-            if(password_id.getText().equals(confirmpd_id.getText())) {
-                final MessageDigest digest = MessageDigest.getInstance("SHA3-256");
-                final byte[] hashbytes = digest.digest(
-                        password_id.getText().getBytes(StandardCharsets.UTF_8));
-                String sha3Hex = Base64.getEncoder().encodeToString(hashbytes);
+                var objectMapper = new ObjectMapper();
+                String payload =
+                        objectMapper.writeValueAsString(values);
 
-                try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
-                    status_id.setText("Please wait while registering");
-                    status_id.setTextFill(Color.GREEN);
-                    MongoDatabase database = mongoClient.getDatabase("Softa");
-                    MongoCollection<Document> collection = database.getCollection("users");
-                    Document query =new Document("username",username_id.getText().toString());
-                    FindIterable<Document> cursor=collection.find(query);
-                    Iterator it = cursor.iterator();
-                    if(it.hasNext()){
-                        status_id.setText("Username already taken");
-                        status_id.setTextFill(Color.RED);
-                    }
-                    else {
-                        Document root = new Document();
-                        root.append("username", username_id.getText().toString())
-                                .append("firstname", firstname_id.getText().toString())
-                                .append("lastname", lastname_id.getText().toString())
-                                .append("password", sha3Hex);
-                        if(!briefinfo_id.getText().isEmpty()){
-                            root.append("intro",briefinfo_id.getText().toString());
-                        }
-                        collection.insertOne(root);
+                StringEntity entity = new StringEntity(payload,
+                        ContentType.APPLICATION_JSON);
+
+                CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                client.start();
+                HttpPost request = new HttpPost("http://[::1]:3000/register");
+                request.setEntity(entity);
+                request.setHeader("Content-Type", "application/json; charset=UTF-8");
+                Future<HttpResponse> future = client.execute(request, null);
+
+                while(!future.isDone());
+                return future.get();
+            }
+        };
+        Thread th=new Thread(task);
+        th.start();
+        task.setOnSucceeded(res->{
+            loader_id.setVisible(false);
+            if(task.isDone()) {
+                try {
+                    String jsonString = EntityUtils.toString(task.get().getEntity());
+                    JSONObject myResponse = new JSONObject(jsonString);
+                    System.out.println(jsonString);
+                    if (task.get().getStatusLine().getStatusCode() == 200) {
                         status_id.setText("Successfully Registered");
                         status_id.setTextFill(Color.GREEN);
 
-                    }
+                    } else {
 
-                } catch (Exception e) {
-                    status_id.setText(e.getMessage());
-                    status_id.setTextFill(Color.RED);
-                    System.out.println("somet@@!!");
+                        System.out.println(myResponse.getString("detail"));
+                        status_id.setText("statusCode- "+myResponse.getString("detail"));
+                        status_id.setTextFill(Color.RED);
+                    }
+                } catch (InterruptedException | ExecutionException | IOException | JSONException e) {
+                    e.printStackTrace();
                 }
             }
             else{
-                System.out.println("somethi!!");
-                status_id.setText("You have entered wrong confirmed password");
+                status_id.setText("Unsuccesfull Attempt");
+                status_id.setTextFill(Color.RED);
+            }
+        });
+    }
+    public void Register(ActionEvent event)  {
+        Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+        System.out.println("enter Register");
+        if(username_id.getText().length()>0 && password_id.getText().length()>0 && confirmpd_id.getText().length()>0 && firstname_id.getText().length()>0 && lastname_id.getText().length()>0 ){
+            if(!confirmpd_id.getText().equals(password_id.getText())){
+                status_id.setText("Confirm Password and Password don't match");
+                status_id.setTextFill(Color.RED);
+            }
+            else{
+                server_reg();
             }
         }
         else{
-            System.out.println("something missing");
-            status_id.setText("You have miss something");
+            status_id.setText("Fill all the Details");
+            status_id.setTextFill(Color.RED);
         }
     }
-
-
 }

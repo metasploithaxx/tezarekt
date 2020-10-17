@@ -1,8 +1,11 @@
+import javafx.scene.image.Image;
+
 public class Chat {
     private String sender;
     private String msg;
     private String date;
     private String time;
+    private Image image;
 
     Chat(String sender,String msg,String date,String time){
         this.sender=sender;
@@ -27,4 +30,5 @@ public class Chat {
     public String getTime() {
         return time;
     }
+
 }

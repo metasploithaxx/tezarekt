@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXSpinner?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
@@ -28,7 +28,6 @@
       </PasswordField>
       <Label fx:id="status_id" layoutX="100.0" layoutY="274.0" prefHeight="35.0" prefWidth="300.0" />
       <CheckBox fx:id="check_id" layoutX="100.0" layoutY="201.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="118.0" text="Remember me" />
-      <ProgressIndicator fx:id="loader_id" layoutX="224.0" layoutY="146.0" visible="false" />
       <JFXButton fx:id="login_btn" buttonType="RAISED" layoutX="100.0" layoutY="230.0" onAction="#Login" prefHeight="44.0" prefWidth="100.0" ripplerFill="#272acf" text="Login" textFill="#2c2b2b">
          <font>
             <Font size="20.0" />
@@ -39,5 +38,6 @@
             <Font size="20.0" />
          </font>
       </JFXButton>
+      <JFXSpinner fx:id="loader_id" layoutX="218.0" layoutY="147.0" visible="false" />
    </children>
 </Pane>
