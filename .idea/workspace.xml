@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f37619f9-b80b-4093-8c7b-7017c864d705" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/HomeController$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/ProfileImageController$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/ProfileImageController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/Sortbyroll.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/resources/main/ProfileImage.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/resources/main/face.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/resources/main/noimage.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ProfileImageController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/ProfileImage.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/face.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/noimage.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/softa1_jar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/JavaFX.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/JavaFX.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/jfoenix_9_0_9.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/Chat.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/Chat.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/ChatCellController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/ChatCellController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/ChatController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/ChatController$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/ChatController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/ChatController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/HomeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/HomeController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/LoginController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/LoginController$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/LoginController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/LoginController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/MainPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/MainPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/Chat.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/Chat.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/ChatCell.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/ChatCell.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/Home.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/Home.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/Login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/Login.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/MainPage.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/MainPage.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/softa1_jar/softa1.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/softa1_main_jar/softa1.main.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/resources/Chat.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/resources/ChatCell.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/resources/Home.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/resources/Login.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/resources/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/resources/MainPage.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/resources/Profile.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/resources/Register.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Chat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Chat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ChatCellController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ChatCellController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ChatController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ChatController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/HomeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/MainPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MainPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/RegisterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/RegisterController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Chat.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Chat.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/ChatCell.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/ChatCell.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Home.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Home.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Login.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/MainPage.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/MainPage.fxml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1iggKeRayWJ5BtXOLbE698IbuxM" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+  </component>
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="softa1.main" />
+      <option name="VM_PARAMETERS" value="--module-path $USER_HOME$/javafx-11 --add-modules=javafx.controls,javafx.fxml,javafx.base,javafx.media,javafx.graphics,javafx.swing,javafx.web --add-opens javafx.base/com.sun.javafx.runtime=ALL-UNNAMED --add-opens javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED --add-opens javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED --add-opens javafx.base/com.sun.javafx.binding=ALL-UNNAMED --add-opens javafx.base/com.sun.javafx.event=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Main2" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main2" />
+      <module name="softa1.main" />
+      <option name="VM_PARAMETERS" value="--module-path $USER_HOME$/javafx-11 --add-modules=javafx.controls,javafx.fxml,javafx.base,javafx.media,javafx.graphics,javafx.swing,javafx.web --add-opens javafx.base/com.sun.javafx.runtime=ALL-UNNAMED --add-opens javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED --add-opens javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED --add-opens javafx.base/com.sun.javafx.binding=ALL-UNNAMED --add-opens javafx.base/com.sun.javafx.event=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ServerStart" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ServerStart" />
+      <module name="softa1.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Main" />
+      <item itemvalue="Application.Main2" />
+      <item itemvalue="Application.ServerStart" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main2" />
+        <item itemvalue="Application.ServerStart" />
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f37619f9-b80b-4093-8c7b-7017c864d705" name="Default Changelist" comment="" />
+      <created>1602334587658</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1602334587658</updated>
+      <workItem from="1602334592491" duration="5998000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="418" y="217" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1602338360406">
+      <screen x="0" y="38" width="1920" height="1042" />
+    </state>
+    <state x="418" y="217" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.38.1920.1042@0.38.1920.1042" timestamp="1602338360406" />
+    <state width="1872" height="273" key="GridCell.Tab.0.bottom" timestamp="1602352318737">
+      <screen x="0" y="38" width="1920" height="1042" />
+    </state>
+    <state width="1872" height="273" key="GridCell.Tab.0.bottom/0.38.1920.1042@0.38.1920.1042" timestamp="1602352318737" />
+    <state width="1872" height="273" key="GridCell.Tab.0.center" timestamp="1602352318737">
+      <screen x="0" y="38" width="1920" height="1042" />
+    </state>
+    <state width="1872" height="273" key="GridCell.Tab.0.center/0.38.1920.1042@0.38.1920.1042" timestamp="1602352318737" />
+    <state width="1872" height="273" key="GridCell.Tab.0.left" timestamp="1602352318736">
+      <screen x="0" y="38" width="1920" height="1042" />
+    </state>
+    <state width="1872" height="273" key="GridCell.Tab.0.left/0.38.1920.1042@0.38.1920.1042" timestamp="1602352318736" />
+    <state width="1872" height="273" key="GridCell.Tab.0.right" timestamp="1602352318737">
+      <screen x="0" y="38" width="1920" height="1042" />
+    </state>
+    <state width="1872" height="273" key="GridCell.Tab.0.right/0.38.1920.1042@0.38.1920.1042" timestamp="1602352318737" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/softa1$Main.ic" NAME="Main Coverage Results" MODIFIED="1601747689255" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+</project>

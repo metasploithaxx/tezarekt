@@ -223,10 +223,10 @@ public class Server implements Runnable{
                                 0,
                                 FRAME_PERIOD,
                                 TimeUnit.MILLISECONDS);
-//                        audioGrabFuture=timeWorker.scheduleWithFixedDelay(new AudioGrabTask(),
-//                                0,
-//                                FRAME_PERIOD,
-//                                TimeUnit.MILLISECONDS);
+                        audioGrabFuture=timeWorker.scheduleWithFixedDelay(new AudioGrabTask(),
+                                0,
+                                FRAME_PERIOD,
+                                TimeUnit.MILLISECONDS);
 
                         rtcpReceiver.startRcv();
                         //update state

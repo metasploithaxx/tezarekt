@@ -38,6 +38,8 @@
             <Font size="20.0" />
          </font>
       </JFXButton>
-      <JFXSpinner fx:id="loader_id" layoutX="225.0" layoutY="145.0" />
+
+      <JFXSpinner fx:id="loader_id" layoutX="218.0" layoutY="147.0" visible="false" />
+
    </children>
 </Pane>
