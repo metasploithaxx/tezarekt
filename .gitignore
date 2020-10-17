@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 .gradle
 .idea
 .settings
 .
+=======
+/.gradle/
+
+/.idea/
+
+>>>>>>> aritra

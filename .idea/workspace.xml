@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f37619f9-b80b-4093-8c7b-7017c864d705" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/JavaFX.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/ClientVideo$FrameSynchronizer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/ClientVideo$RtcpSender.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/ClientVideo$pauseButtonListener.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/ClientVideo$playButtonListener.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/ClientVideo$stopButtonListener.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/ClientVideo$timerListener.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/ClientVideo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/FrameType.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/H264StreamEncoder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/ImageUtils.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/Main2.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/RTCPpacket.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/RTPpacket.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/Server$AudioGrabTask.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/Server$EncodeAudioTask.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/Server$EncodeTask.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/Server$ImageGrabTask.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/Server$ImageTranslator.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/Server$Listener.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/Server$RtcpReceiver.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/Server.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/ServerFactory.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/ServerStart.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/resources/main/VideoPlayer.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ClientVideo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/H264StreamEncoder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ImageUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Main2.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/RTCPpacket.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/RTPpacket.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Server.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ServerFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ServerStart.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/VideoPlayer.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/Login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/Login.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Login.fxml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1iggKeRayWJ5BtXOLbE698IbuxM" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
+  </component>
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="11" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="softa1.main" />
+      <option name="VM_PARAMETERS" value="--module-path $USER_HOME$/javafx-11 --add-modules=javafx.controls,javafx.fxml,javafx.base,javafx.media,javafx.graphics,javafx.swing,javafx.web --add-opens javafx.base/com.sun.javafx.runtime=ALL-UNNAMED --add-opens javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED --add-opens javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED --add-opens javafx.base/com.sun.javafx.binding=ALL-UNNAMED --add-opens javafx.base/com.sun.javafx.event=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Main2" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main2" />
+      <module name="softa1.main" />
+      <option name="VM_PARAMETERS" value="--module-path $USER_HOME$/javafx-11 --add-modules=javafx.controls,javafx.fxml,javafx.base,javafx.media,javafx.graphics,javafx.swing,javafx.web --add-opens javafx.base/com.sun.javafx.runtime=ALL-UNNAMED --add-opens javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED --add-opens javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED --add-opens javafx.base/com.sun.javafx.binding=ALL-UNNAMED --add-opens javafx.base/com.sun.javafx.event=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ServerStart" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ServerStart" />
+      <module name="softa1.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Main" />
+      <item itemvalue="Application.Main2" />
+      <item itemvalue="Application.ServerStart" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+        <item itemvalue="Application.Main2" />
+        <item itemvalue="Application.ServerStart" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f37619f9-b80b-4093-8c7b-7017c864d705" name="Default Changelist" comment="" />
+      <created>1602334587658</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1602334587658</updated>
+      <workItem from="1602334592491" duration="5998000" />
+      <workItem from="1602915369974" duration="479000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="418" y="217" width="1084" height="711" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1602917002607">
+      <screen x="0" y="38" width="1920" height="1042" />
+    </state>
+    <state x="418" y="217" width="1084" height="711" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.38.1920.1042@0.38.1920.1042" timestamp="1602917002607" />
+    <state width="1872" height="332" key="GridCell.Tab.0.bottom" timestamp="1602917861593">
+      <screen x="0" y="38" width="1920" height="1042" />
+    </state>
+    <state width="1872" height="332" key="GridCell.Tab.0.bottom/0.38.1920.1042@0.38.1920.1042" timestamp="1602917861593" />
+    <state width="1872" height="332" key="GridCell.Tab.0.center" timestamp="1602917861591">
+      <screen x="0" y="38" width="1920" height="1042" />
+    </state>
+    <state width="1872" height="332" key="GridCell.Tab.0.center/0.38.1920.1042@0.38.1920.1042" timestamp="1602917861591" />
+    <state width="1872" height="332" key="GridCell.Tab.0.left" timestamp="1602917861589">
+      <screen x="0" y="38" width="1920" height="1042" />
+    </state>
+    <state width="1872" height="332" key="GridCell.Tab.0.left/0.38.1920.1042@0.38.1920.1042" timestamp="1602917861589" />
+    <state width="1872" height="332" key="GridCell.Tab.0.right" timestamp="1602917861592">
+      <screen x="0" y="38" width="1920" height="1042" />
+    </state>
+    <state width="1872" height="332" key="GridCell.Tab.0.right/0.38.1920.1042@0.38.1920.1042" timestamp="1602917861592" />
+    <state x="543" y="305" width="824" height="510" key="IDE.errors.dialog" timestamp="1602917349833">
+      <screen x="0" y="38" width="1920" height="1042" />
+    </state>
+    <state x="543" y="305" width="824" height="510" key="IDE.errors.dialog/0.38.1920.1042@0.38.1920.1042" timestamp="1602917349833" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/softa1$Main.ic" NAME="Main Coverage Results" MODIFIED="1601747689255" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+</project>
