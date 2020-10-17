@@ -30,6 +30,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Timestamp;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
@@ -53,7 +56,7 @@ public class ChatController implements Initializable {
         progress_id.setVisible(true);
         Timeline fiveSecondsWonder = new Timeline(
                 new KeyFrame(Duration.seconds(4.5),
-                        (EventHandler<ActionEvent>) event -> {init();}));
+                        event -> {init();}));
         fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
         fiveSecondsWonder.play();
 
@@ -88,7 +91,16 @@ public class ChatController implements Initializable {
         for(int i=0;i< ResponseList.length();i++) {
             Chat chat = null;
             try {
-                chat = new Chat(ResponseList.getJSONObject(i).getString("uname"),ResponseList.getJSONObject(i).getString("message"),"","");
+                String time = ResponseList.getJSONObject(i).getString("timestamp");
+                String  finaltime = time.substring(0,10) +" "+ time.substring(11,time.length()-1);
+                System.out.println(finaltime);
+                Timestamp timei=Timestamp.valueOf(finaltime);
+//                LocalDateTime.ofInstant(timei.toInstant(), ZoneId.of("Europe/London"))
+//                long t=timei.ge
+                String date = timei.toLocalDateTime().ofInstant(timei.toInstant(), ZoneId.of("Asia/Kolkata")).format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
+//                        .oformat;
+                String timeshow = timei.toLocalDateTime().ofInstant(timei.toInstant(), ZoneId.of("Asia/Kolkata")).format(DateTimeFormatter.ofPattern("HH:mm"));
+                chat = new Chat(ResponseList.getJSONObject(i).getString("uname"),ResponseList.getJSONObject(i).getString("message"),date,timeshow);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

@@ -12,13 +12,11 @@ public class ServerStart {
         AudioFormat format = new AudioFormat(
                 AudioFormat.Encoding.PCM_SIGNED,
                 44100.0F, 16, 2, 4, 44100, false);
-        // format is an AudioFormat object
         DataLine.Info info = new DataLine.Info(TargetDataLine.class,
                 format);
         if (!AudioSystem.isLineSupported(info)) {
             System.out.println("Error, line not supported");
         }
-        // Obtain and open the line.
         TargetDataLine line=null;
         try {
 

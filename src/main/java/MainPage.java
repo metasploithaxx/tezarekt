@@ -28,9 +28,10 @@ public class MainPage implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        chatdrawer_id.open();
         load_id.setVisible(false);Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
         mongoLogger.setLevel(Level.SEVERE);
-        chatdrawer_id.open();
+
 
         try {
             VBox toolbar = FXMLLoader.load(getClass().getResource("Home.fxml"));
