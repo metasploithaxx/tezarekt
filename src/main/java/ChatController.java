@@ -31,9 +31,13 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -92,14 +96,12 @@ public class ChatController implements Initializable {
             Chat chat = null;
             try {
                 String time = ResponseList.getJSONObject(i).getString("timestamp");
-                String  finaltime = time.substring(0,10) +" "+ time.substring(11,time.length()-1);
-                System.out.println(finaltime);
-                Timestamp timei=Timestamp.valueOf(finaltime);
-//                LocalDateTime.ofInstant(timei.toInstant(), ZoneId.of("Europe/London"))
-//                long t=timei.ge
-                String date = timei.toLocalDateTime().ofInstant(timei.toInstant(), ZoneId.of("Asia/Kolkata")).format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
-//                        .oformat;
-                String timeshow = timei.toLocalDateTime().ofInstant(timei.toInstant(), ZoneId.of("Asia/Kolkata")).format(DateTimeFormatter.ofPattern("HH:mm"));
+                Instant timestamp = Instant.parse(time);
+                ZonedDateTime indiaTime = timestamp.atZone(ZoneId.of("Asia/Kolkata"));
+
+                String date = indiaTime.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
+                System.out.println(date);
+                String timeshow = indiaTime.format(DateTimeFormatter.ofPattern("HH:mm"));
                 chat = new Chat(ResponseList.getJSONObject(i).getString("uname"),ResponseList.getJSONObject(i).getString("message"),date,timeshow);
             } catch (JSONException e) {
                 e.printStackTrace();
