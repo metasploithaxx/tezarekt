@@ -41,7 +41,6 @@ public class Server implements Runnable{
 
     Timer timer;    //timer used to send the images at the video frame rate
 //    byte[] buf;
-    FrameType fbuf;                // buffer used to store the images to send to the client
     int sendDelay;  //the delay to send images over the wire. Ideally should be
                     //equal to the frame rate of the video file, but may be
                     //adjusted when congestion is detected.
@@ -103,7 +102,7 @@ public class Server implements Runnable{
         sendDelay = FRAME_PERIOD;
 
         imagenb=0;
-        fbuf=new FrameType();
+
 
 
         //init the RTCP packet receiver
@@ -146,17 +145,7 @@ public class Server implements Runnable{
 
         @Override
         public void run() {
-//            stream.Server server = new stream.Server();
-//            System.out.println("Listening on port 1051...");
-//            //get RTSP socket port from the command line
-//            int RTSPport = 1051;
-//            RTSP_dest_port = RTSPport;
             try {
-            //Initiate TCP connection with the client for the RTSP session
-//            ServerSocket listenSocket = new ServerSocket(RTSPport);
-//            RTSPsocket = listenSocket.accept();
-//            listenSocket.close();
-
             //Get ClientVideo IP address
             ClientIPAddr = RTSPsocket.getInetAddress();
 
@@ -297,14 +286,10 @@ public class Server implements Runnable{
 
     private class EncodeTask implements Runnable{
         private final BufferedImage image;
-//			private final byte[] audioData;
-//			private final int audioBytesRead;
 
         public EncodeTask(BufferedImage image) {
             super();
             this.image = image;
-//				this.audioData = audioData;
-//				this.audioBytesRead = audioBytesRead;
         }
 
         @Override
@@ -388,32 +373,6 @@ public class Server implements Runnable{
         }
     }
 
-    //------------------------
-    //Controls RTP sending rate based on traffic
-    //------------------------
-//    class CongestionController extends TimerTask {
-//        private Timer ccTimer;
-//        int interval;   //interval to check traffic stats
-//        int prevLevel;  //previously sampled congestion level
-//
-//        public CongestionController(int interval) {
-//            this.interval = interval;
-//            ccTimer =new Timer(true);
-//            ccTimer.schedule(this,0,interval);
-//        }
-//        @Override
-//        public void run() {
-//
-//            //adjust the send rate
-//            if (prevLevel != congestionLevel) {
-//                sendDelay = FRAME_PERIOD + congestionLevel * (int)(FRAME_PERIOD * 0.1);
-//                timer.setRate(FRAME_PERIOD/(double)sendDelay);
-//                timer.setDelay(Duration.millis(sendDelay));
-//                prevLevel = congestionLevel;
-//                System.out.println("Send delay changed to: " + sendDelay);
-//            }
-//        }
-//    }
 
     //------------------------
     //Listener for RTCP packets sent from client
@@ -662,48 +621,3 @@ public class Server implements Runnable{
     }
 }
 
-class FrameType{
-    public byte[] videoBuffer,soundBuffer;
-    private int videoSize,audioSize;
-    private boolean gotVideo,gotAudio;
-    public FrameType(){
-        videoBuffer=new byte[63800];
-        soundBuffer=new byte[63800];
-        gotVideo=gotAudio=false;
-    }
-    public void setVideoBuffer(byte buf[]){
-        System.arraycopy(buf,0,videoBuffer,0,buf.length>63800?63800:buf.length);
-        videoSize=buf.length>63800?63800:buf.length;
-        gotVideo=true;
-    }
-
-    public void setSoundBuffer(byte[] buf) {
-        System.arraycopy(buf,0,soundBuffer,0,buf.length>63800?63800:buf.length);
-        audioSize=buf.length>63800?63800:buf.length;
-        gotAudio=true;
-    }
-    public void unsetVideoBuffer(){
-        videoSize=0;
-        gotVideo=false;
-    }
-    public void unsetAudioBuffer(){
-        audioSize=0;
-        gotAudio=false;
-    }
-
-    public boolean isGotVideo() {
-        return gotVideo;
-    }
-
-    public boolean isGotAudio() {
-        return gotAudio;
-    }
-
-    public int getVideoSize() {
-        return videoSize;
-    }
-
-    public int getAudioSize() {
-        return audioSize;
-    }
-}

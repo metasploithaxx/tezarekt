@@ -123,8 +123,8 @@ public class ClientVideoController implements Initializable {
 //            pauseBtn.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("src/Graphics/pause.png"))));
 //            stopBtn.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("src/Graphics/stop.png"))));
             playBtn.setOnAction(new playButtonListener());
-            pauseBtn.setOnAction(new pauseButtonListener());
-            stopBtn.setOnAction(new stopButtonListener());
+//            pauseBtn.setOnAction(new pauseButtonListener());
+//            stopBtn.setOnAction(new stopButtonListener());
             timer=new Timeline(
                     new KeyFrame(
                             Duration.millis(20),
