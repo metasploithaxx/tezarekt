@@ -1,3 +1,5 @@
+package stream;
+
 import java.util.*;
 
 public class RTPpacket{
@@ -25,7 +27,7 @@ public class RTPpacket{
     public byte[] payload;
     
     //--------------------------
-    //Constructor of an RTPpacket object from header fields and payload bitstream
+    //Constructor of an stream.RTPpacket object from header fields and payload bitstream
     //--------------------------
     public RTPpacket(int PType, int Framenb, int Time, byte[] data, int data_length){
         //fill by default header fields:
@@ -67,7 +69,7 @@ public class RTPpacket{
     }
       
     //--------------------------
-    //Constructor of an RTPpacket object from the packet bistream 
+    //Constructor of an stream.RTPpacket object from the packet bistream
     //--------------------------
     public RTPpacket(byte[] packet, int packet_size)
     {
@@ -102,7 +104,7 @@ public class RTPpacket{
     }
 
     //--------------------------
-    //getpayload: return the payload bistream of the RTPpacket and its size
+    //getpayload: return the payload bistream of the stream.RTPpacket and its size
     //--------------------------
     public int getpayload(byte[] data) {
 

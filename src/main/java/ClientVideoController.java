@@ -16,6 +16,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
+import stream.RTCPpacket;
+import stream.RTPpacket;
+import stream.Server;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
@@ -27,8 +30,8 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-
-public class ClientVideo implements Initializable {
+import stream.*;
+public class ClientVideoController implements Initializable {
     public AnchorPane rootPane;
     //GUI
     //----
@@ -68,7 +71,7 @@ public class ClientVideo implements Initializable {
     BufferedWriter RTSPBufferedWriter;
     private String VideoFileName; //video file to request to the server
     int RTSPSeqNb = 0;           //Sequence number of RTSP messages within the session
-    String RTSPid;              // ID of the RTSP session (given by the RTSP Server)
+    String RTSPid;              // ID of the RTSP session (given by the RTSP stream.Server)
 
     final static String CRLF = "\r\n";
     final static String DES_FNAME = "session_info.txt";
@@ -208,7 +211,7 @@ public class ClientVideo implements Initializable {
 
             //Wait for the response
             if (parseServerResponse() != 200)
-                System.out.println("Invalid Server Response");
+                System.out.println("Invalid stream.Server Response");
             else {
                 //change RTSP state and print new state
                 state = READY;
@@ -274,7 +277,7 @@ public class ClientVideo implements Initializable {
 
                     //Wait for the response
                     if (parseServerResponse() != 200) {
-                        System.out.println("Invalid Server Response");
+                        System.out.println("Invalid stream.Server Response");
                     } else {
                         //change RTSP state and print out new state
                         state = PLAYING;
@@ -310,7 +313,7 @@ public class ClientVideo implements Initializable {
 
                     //Wait for the response
                     if (parseServerResponse() != 200)
-                        System.out.println("Invalid Server Response");
+                        System.out.println("Invalid stream.Server Response");
                     else {
                         //change RTSP state and print out new state
                         state = READY;
@@ -343,7 +346,7 @@ public class ClientVideo implements Initializable {
 
             //Wait for the response
             if (parseServerResponse() != 200)
-                System.out.println("Invalid Server Response");
+                System.out.println("Invalid stream.Server Response");
             else {
                 //change RTSP state and print out new state
                 state = INIT;
@@ -381,7 +384,7 @@ public class ClientVideo implements Initializable {
                 statTotalPlayTime += curTime - statStartTime;
                 statStartTime = curTime;
 
-                //create an RTPpacket object from the DP
+                //create an stream.RTPpacket object from the DP
                 RTPpacket rtp_packet = new RTPpacket(rcvdp.getData(), rcvdp.getLength());
                 int seqNb = rtp_packet.getsequencenumber();
 
@@ -395,7 +398,7 @@ public class ClientVideo implements Initializable {
                 //print header bitstream:
                 rtp_packet.printheader();
 
-                //get the payload bitstream from the RTPpacket object
+                //get the payload bitstream from the stream.RTPpacket object
                 int payload_length = rtp_packet.getpayload_length();
                 System.out.println(payload_length);
                 byte [] payload = new byte[payload_length];
@@ -413,7 +416,7 @@ public class ClientVideo implements Initializable {
                 statFractionLost = (float)statCumLost / statHighSeqNb;
                 statTotalBytes += payload_length;
 
-                if(rtp_packet.getpayloadtype()==Server.MJPEG_TYPE) {
+                if(rtp_packet.getpayloadtype()== Server.MJPEG_TYPE) {
                     //get an Image object from the payload bitstream
                     BufferedImage img=decodeImage(payload,payload_length);
 //                    fsynch.addFrame(image, seqNb);
@@ -476,7 +479,7 @@ public class ClientVideo implements Initializable {
                             IConverter converter = ConverterFactory.createConverter(type
                                     .getDescriptor(), picture);
                             BufferedImage image = converter.toImage(picture);
-                            //BufferedImage convertedImage = ImageUtils.convertToType(image, BufferedImage.TYPE_3BYTE_BGR);
+                            //BufferedImage convertedImage = stream.ImageUtils.convertToType(image, BufferedImage.TYPE_3BYTE_BGR);
                             //here ,put out the image
                             converter.delete();
                             //clean the picture and reuse it
@@ -654,7 +657,7 @@ public class ClientVideo implements Initializable {
     }
 
     //------------------------------------
-    //Parse Server Response
+    //Parse stream.Server Response
     //------------------------------------
     private int parseServerResponse() {
         int reply_code = 0;
@@ -662,7 +665,7 @@ public class ClientVideo implements Initializable {
         try {
             //parse status line and extract the reply_code:
             String StatusLine = RTSPBufferedReader.readLine();
-            System.out.println("RTSP ClientVideo - Received from Server:");
+            System.out.println("RTSP ClientVideo - Received from stream.Server:");
             System.out.println(StatusLine);
 
             StringTokenizer tokens = new StringTokenizer(StatusLine);

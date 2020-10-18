@@ -102,8 +102,9 @@ public class LoginController implements Initializable {
                         Parent root = null;
                         try {
                             Stage stage = (Stage) login_btn.getScene().getWindow();
-                            stage.close();
                             root = FXMLLoader.load(getClass().getResource("MainPage.fxml"));
+                            stage.close();
+
                         } catch (IOException e) {
                             System.out.println(e.getMessage());
                         }

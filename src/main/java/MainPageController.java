@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MainPage implements Initializable {
+public class MainPageController implements Initializable {
     @FXML
     private JFXHamburger hamburger_id;
     @FXML
@@ -31,7 +31,6 @@ public class MainPage implements Initializable {
         chatdrawer_id.open();
         load_id.setVisible(false);Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
         mongoLogger.setLevel(Level.SEVERE);
-
 
         try {
             VBox toolbar = FXMLLoader.load(getClass().getResource("Home.fxml"));
