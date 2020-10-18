@@ -1,8 +1,11 @@
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.transitions.hamburger.HamburgerBasicCloseTransition;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -14,10 +17,18 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,6 +44,7 @@ public class MainPageController implements Initializable {
     @FXML
     private AnchorPane content;
     private JFXButton profile_btn;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         chatdrawer_id.open();
@@ -66,9 +78,12 @@ public class MainPageController implements Initializable {
                 meth.setRate(meth.getRate() * -1);
                 meth.play();
                 if (drawer_id.isClosed()) {
+                    drawer_id.toBack();
                     drawer_id.open();
                     drawer_id.setMaxWidth(180);
                 } else {
+                    drawer_id.toFront();
+
                     drawer_id.close();
                     drawer_id.setMaxWidth(0);
                 }
@@ -83,9 +98,11 @@ public class MainPageController implements Initializable {
             chat_btn.addEventHandler(MouseEvent.MOUSE_CLICKED, (Event event) -> {
 
                 if (!chat_btn.isSelected()) {
+                    chatdrawer_id.toBack();
                     chatdrawer_id.open();
                     chatdrawer_id.setMinWidth(225);
                 } else {
+                    chatdrawer_id.toFront();
                     chatdrawer_id.close();
                     chatdrawer_id.setMaxWidth(0);
                 }
@@ -93,5 +110,39 @@ public class MainPageController implements Initializable {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+    public void onExit(){
+        load_id.setVisible(true);
+        Task<HttpResponse> task =new Task<>() {
+            @Override
+            protected HttpResponse call() throws Exception {
+                var values = new HashMap<String, String>() {{
+                    put("uname", LoginController.curr_username);
+                }};
+
+                var objectMapper = new ObjectMapper();
+                String payload =
+                        objectMapper.writeValueAsString(values);
+
+                StringEntity entity = new StringEntity(payload,
+                        ContentType.APPLICATION_JSON);
+
+                CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                client.start();
+                HttpPost request = new HttpPost(Main.Connectingurl+"/signout");
+                request.setEntity(entity);
+                request.setHeader("Content-Type", "application/json; charset=UTF-8");
+                Future<HttpResponse> future = client.execute(request, null);
+
+                while(!future.isDone());
+                return future.get();
+            }
+        };
+        Thread thread = new Thread(task);
+        thread.start();
+        task.setOnSucceeded(res->{
+            load_id.setVisible(false);
+            System.exit(0);
+        });
     }
 }
