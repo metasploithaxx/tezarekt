@@ -78,11 +78,10 @@ public class MainPageController implements Initializable {
                 meth.setRate(meth.getRate() * -1);
                 meth.play();
                 if (drawer_id.isClosed()) {
-                    drawer_id.toBack();
                     drawer_id.open();
+                    drawer_id.toFront();
                     drawer_id.setMaxWidth(180);
                 } else {
-                    drawer_id.toFront();
 
                     drawer_id.close();
                     drawer_id.setMaxWidth(0);
