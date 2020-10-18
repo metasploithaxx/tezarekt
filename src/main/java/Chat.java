@@ -5,7 +5,6 @@ public class Chat {
     private String msg;
     private String date;
     private String time;
-    private Image image;
 
     Chat(String sender,String msg,String date,String time){
         this.sender=sender;
