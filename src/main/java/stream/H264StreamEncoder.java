@@ -1,3 +1,5 @@
+package stream;
+
 import com.xuggle.ferry.IBuffer;
 import com.xuggle.xuggler.*;
 import com.xuggle.xuggler.IPixelFormat.Type;

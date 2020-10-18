@@ -1,4 +1,5 @@
 import com.github.sarxos.webcam.Webcam;
+import stream.ServerFactory;
 
 import javax.sound.sampled.*;
 import java.awt.*;

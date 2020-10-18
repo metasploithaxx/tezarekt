@@ -1,9 +1,6 @@
+package stream;
+
 import com.github.sarxos.webcam.Webcam;
-import javafx.animation.KeyFrame;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,8 +32,8 @@ public class Server implements Runnable{
     //----------------
     int imagenb ; //image nb of the image currently transmitted
 //    VideoStream video; //VideoStream object used to access video frames
-    static int MJPEG_TYPE = 26; //RTP payload type for MJPEG video
-    static int MPA_TYPE = 14; //RTP payload type for MPA audio
+    public static int MJPEG_TYPE = 26; //RTP payload type for MJPEG video
+    public static int MPA_TYPE = 14; //RTP payload type for MPA audio
     int FRAME_PERIOD ; //Frame period of the video to stream, in ms
     int VIDEO_LENGTH ; //length of the video in frames
     int SAMPLE_RATE; //sample rate of audio
@@ -74,7 +71,7 @@ public class Server implements Runnable{
     final static int TEARDOWN = 6;
     final static int DESCRIBE = 7;
 
-    int state; //RTSP Server state == INIT or READY or PLAY
+    int state; //RTSP stream.Server state == INIT or READY or PLAY
     Socket RTSPsocket; //socket used to send/receive RTSP messages
     //input and output stream filters
     BufferedReader RTSPBufferedReader;
@@ -149,7 +146,7 @@ public class Server implements Runnable{
 
         @Override
         public void run() {
-//            Server server = new Server();
+//            stream.Server server = new stream.Server();
 //            System.out.println("Listening on port 1051...");
 //            //get RTSP socket port from the command line
 //            int RTSPport = 1051;
@@ -316,7 +313,7 @@ public class Server implements Runnable{
                 ByteBuffer msg = h264StreamEncoder.encode(image);
 
                 if (msg != null) {
-                    //Builds an RTPpacket object containing the frame
+                    //Builds an stream.RTPpacket object containing the frame
                     int size=msg.remaining();
                     byte[] buf=new byte[size];
                     msg.get(buf);
@@ -543,7 +540,7 @@ public class Server implements Runnable{
         try {
             //parse request line and extract the request_type:
             String RequestLine = RTSPBufferedReader.readLine();
-            System.out.println("RTSP Server - Received from ClientVideo:");
+            System.out.println("RTSP stream.Server - Received from ClientVideo:");
             System.out.println(RequestLine);
 
             StringTokenizer tokens = new StringTokenizer(RequestLine);
@@ -643,7 +640,7 @@ public class Server implements Runnable{
             RTSPBufferedWriter.write("Channels: "+AUDIO_CHANNELS+CRLF);
             RTSPBufferedWriter.write("Port: "+RTCP_RCV_PORT+CRLF);
             RTSPBufferedWriter.flush();
-            System.out.println("RTSP Server - Sent response to ClientVideo.");
+            System.out.println("RTSP stream.Server - Sent response to ClientVideo.");
         } catch(Exception ex) {
             ex.printStackTrace();
 //            System.exit(0);
@@ -657,7 +654,7 @@ public class Server implements Runnable{
             RTSPBufferedWriter.write("CSeq: "+RTSPSeqNb+CRLF);
             RTSPBufferedWriter.write(des);
             RTSPBufferedWriter.flush();
-            System.out.println("RTSP Server - Sent response to ClientVideo.");
+            System.out.println("RTSP stream.Server - Sent response to ClientVideo.");
         } catch(Exception ex) {
             ex.printStackTrace();
 //            System.exit(0);

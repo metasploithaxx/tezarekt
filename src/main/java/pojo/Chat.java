@@ -1,3 +1,5 @@
+package pojo;
+
 import javafx.scene.image.Image;
 
 public class Chat {
@@ -5,9 +7,8 @@ public class Chat {
     private String msg;
     private String date;
     private String time;
-    private Image image;
 
-    Chat(String sender,String msg,String date,String time){
+    public Chat(String sender,String msg,String date,String time){
         this.sender=sender;
         this.msg=msg;
         this.date=date;
