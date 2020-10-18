@@ -1,3 +1,5 @@
+package stream;
+
 import java.util.*;
 import java.nio.*;
 
@@ -23,7 +25,7 @@ import java.nio.*;
 //        |                   delay since last SR (DLSR)                  |
 //        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-class RTCPpacket {
+public class RTCPpacket {
 
     final static int HEADER_SIZE = 8;
     final static int BODY_SIZE = 24;

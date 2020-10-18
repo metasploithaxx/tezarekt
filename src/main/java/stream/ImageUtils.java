@@ -1,3 +1,5 @@
+package stream;
+
 import java.awt.image.BufferedImage;
 
 public class ImageUtils {

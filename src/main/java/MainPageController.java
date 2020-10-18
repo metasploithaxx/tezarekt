@@ -54,7 +54,7 @@ public class MainPageController implements Initializable {
         }
 
         try {
-            VBox chatbox = FXMLLoader.load(getClass().getResource("Chat.fxml"));
+            VBox chatbox = FXMLLoader.load(getClass().getResource("pojo.Chat.fxml"));
             chatdrawer_id.setSidePane(chatbox);
             chat_btn.addEventHandler(MouseEvent.MOUSE_CLICKED, (Event event) -> {
 
