@@ -21,7 +21,7 @@
       <ListView layoutX="5.0" layoutY="69.0" prefHeight="660.0" prefWidth="216.0" />
       <JFXHamburger fx:id="hamburger_id" layoutX="14.0" layoutY="15.0" />
       <JFXDrawer fx:id="drawer_id" defaultDrawerSize="225.0" layoutY="69.0" prefHeight="674.0" prefWidth="179.0" />
-      <ToggleButton fx:id="chat_btn" layoutX="991.0" layoutY="12.0" mnemonicParsing="false" text="pojo.Chat" />
+      <ToggleButton fx:id="chat_btn" layoutX="991.0" layoutY="12.0" mnemonicParsing="false" text="Chat" />
       <JFXDrawer fx:id="chatdrawer_id" defaultDrawerSize="225.0" layoutX="1038.0" layoutY="51.0" prefHeight="682.0" prefWidth="6.0" />
       <JFXSpinner fx:id="load_id" layoutX="499.0" layoutY="374.0" visible="false" />
    </children>

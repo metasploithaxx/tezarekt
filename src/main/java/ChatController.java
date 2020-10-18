@@ -91,7 +91,6 @@ public class ChatController implements Initializable {
                 ZonedDateTime indiaTime = timestamp.atZone(ZoneId.of("Asia/Kolkata"));
 
                 String date = indiaTime.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
-                System.out.println(date);
                 String timeshow = indiaTime.format(DateTimeFormatter.ofPattern("HH:mm"));
                 chat = new Chat(ResponseList.getJSONObject(i).getString("uname"),ResponseList.getJSONObject(i).getString("message"),date,timeshow);
             } catch (JSONException e) {

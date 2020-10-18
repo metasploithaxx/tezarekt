@@ -33,8 +33,6 @@ public class ChatCellController extends JFXListCell<Chat> {
                 }
 
             }
-
-
             name.setText(item.getSender());
                     msg.setText(item.getMsg());
                     date_id.setText(item.getDate());
