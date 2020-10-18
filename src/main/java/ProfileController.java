@@ -128,7 +128,6 @@ public class ProfileController implements Initializable {
                 try {
                     String jsonString = EntityUtils.toString(task.get().getEntity());
                     JSONObject myResponse = new JSONObject(jsonString);
-                    System.out.println(jsonString);
                     if (task.get().getStatusLine().getStatusCode() == 200) {
                         status_id.setText("Successfully Loaded");
                         status_id.setTextFill(Color.GREEN);

@@ -1,13 +1,18 @@
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.transitions.hamburger.HamburgerBasicCloseTransition;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -25,7 +30,9 @@ public class MainPageController implements Initializable {
     private ToggleButton chat_btn;
     @FXML
     private JFXSpinner load_id;
-
+    @FXML
+    private AnchorPane content;
+    private JFXButton profile_btn;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         chatdrawer_id.open();
@@ -33,9 +40,26 @@ public class MainPageController implements Initializable {
         mongoLogger.setLevel(Level.SEVERE);
 
         try {
-            VBox toolbar = FXMLLoader.load(getClass().getResource("Home.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("SideDrawer.fxml"));
+            VBox toolbar = loader.load();
             drawer_id.setSidePane(toolbar);
+            SideDrawerController sdc = loader.getController();
+            profile_btn =sdc.getProfile_page();
+            profile_btn.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    FXMLLoader loader1=new FXMLLoader((getClass().getResource("Profile.fxml")));
+                    Parent rt= null;
+                    try {
+                        rt = loader1.load();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    ProfileController pfc=loader1.getController();
 
+                    content.getChildren().setAll(rt);
+                }
+            });
             HamburgerBasicCloseTransition meth = new HamburgerBasicCloseTransition(hamburger_id);
             meth.setRate(-1);
             hamburger_id.addEventHandler(MouseEvent.MOUSE_CLICKED, (Event event) -> {

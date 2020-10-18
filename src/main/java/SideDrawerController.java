@@ -1,3 +1,4 @@
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSpinner;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -28,11 +29,13 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
-public class HomeController implements Initializable {
+public class SideDrawerController implements Initializable {
     @FXML
     private ImageView image_id;
     @FXML
     private JFXSpinner load_id;
+    @FXML
+    private JFXButton profile_page;
     @FXML
     private boolean ProfilePic() throws ClassNotFoundException {
         try {
@@ -49,6 +52,9 @@ public class HomeController implements Initializable {
             return false;
         }
 
+    }
+    public JFXButton getProfile_page(){
+        return profile_page;
     }
     public void ProfilePic1(ActionEvent actionEvent) throws IOException {
         Parent root= FXMLLoader.load(getClass().getResource("ProfileImage.fxml"));

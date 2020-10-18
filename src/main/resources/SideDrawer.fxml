@@ -16,11 +16,11 @@
                   <Image url="@noimage.jpg" />
                </image></ImageView>
             <JFXSpinner fx:id="load_id" layoutX="60.0" layoutY="175.0" visible="false" />
-            <JFXButton layoutY="213.0" prefHeight="35.0" prefWidth="165.0" text="Log in as Viewer" />
-            <JFXButton layoutY="248.0" prefHeight="35.0" prefWidth="165.0" text="Start Stream" />
-            <JFXButton fx:id="profile_btn" layoutY="283.0" onAction="#ProfilePage" prefHeight="35.0" prefWidth="165.0" text="Profile Page" />
-            <JFXButton fx:id="change_profile_pic_btn" layoutY="313.0" onAction="#ProfilePic1" prefHeight="35.0" prefWidth="165.0" text="Change Upload Profile Pic" />
-            <JFXButton fx:id="logout_btn" buttonType="RAISED" layoutY="348.0" onAction="#Logout" prefHeight="35.0" prefWidth="165.0" ripplerFill="#1d38ad" text="LogOut" />
+            <JFXButton fx:id="log_in_as_viewer" layoutY="213.0" prefHeight="35.0" prefWidth="165.0" text="Log in as Viewer" />
+            <JFXButton fx:id="start_stream" layoutY="248.0" prefHeight="35.0" prefWidth="165.0" text="Start Stream" />
+            <JFXButton fx:id="profile_page" layoutY="283.0" onAction="#ProfilePage" prefHeight="35.0" prefWidth="165.0" text="Profile Page" />
+            <JFXButton fx:id="change_profile_pic" layoutY="313.0" onAction="#ProfilePic1" prefHeight="35.0" prefWidth="165.0" text="Change Upload Profile Pic" />
+            <JFXButton fx:id="logout" buttonType="RAISED" layoutY="348.0" onAction="#Logout" prefHeight="35.0" prefWidth="165.0" ripplerFill="#1d38ad" text="LogOut" />
          </children>
       </AnchorPane>
    </children>
