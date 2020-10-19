@@ -8,7 +8,7 @@
 <AnchorPane fx:id="rootPane" prefHeight="496.0" prefWidth="730.0" style="-fx-border-color: #44bb00;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClientVideoController">
    <children>
       <ImageView fx:id="video" fitHeight="429.0" fitWidth="730.0" pickOnBounds="true" preserveRatio="true" />
-      <JFXButton fx:id="playBtn" contentDisplay="GRAPHIC_ONLY" layoutX="341.0" layoutY="431.0" prefHeight="59.0" prefWidth="64.0" style="-fx-background-radius: 5em; -fx-background-color: #ff6600;" text="Button" />
+      <JFXButton fx:id="playBtn" contentDisplay="GRAPHIC_ONLY" layoutX="341.0" layoutY="431.0" prefHeight="59.0" prefWidth="64.0" style="-fx-background-radius: 5em;" text="PLAY" />
       <JFXButton fx:id="pauseBtn" contentDisplay="GRAPHIC_ONLY" layoutX="499.0" layoutY="431.0" prefHeight="59.0" prefWidth="64.0" style="-fx-background-radius: 5em; -fx-background-color: #ff6600;" text="Button" />
       <JFXButton fx:id="stopBtn" contentDisplay="GRAPHIC_ONLY" layoutX="176.0" layoutY="431.0" prefHeight="59.0" prefWidth="64.0" style="-fx-background-radius: 5em; -fx-background-color: #ff6600;" text="Button" />
       <Separator layoutX="7.0" layoutY="425.0" prefHeight="6.0" prefWidth="730.0" />

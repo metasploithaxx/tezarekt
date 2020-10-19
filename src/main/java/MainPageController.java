@@ -42,7 +42,7 @@ public class MainPageController implements Initializable {
     @FXML
     private JFXSpinner load_id;
     @FXML
-    private AnchorPane content;
+    private AnchorPane content,onlineUsers;
     private JFXButton profile_btn;
 
     @Override
@@ -52,6 +52,10 @@ public class MainPageController implements Initializable {
         mongoLogger.setLevel(Level.SEVERE);
 
         try {
+            FXMLLoader loaderOnlineUsers = new FXMLLoader(getClass().getResource("OnlineUsersList.fxml"));
+
+            Parent rtUsers=loaderOnlineUsers.load();
+            onlineUsers.getChildren().setAll(rtUsers);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("SideDrawer.fxml"));
             VBox toolbar = loader.load();
             drawer_id.setSidePane(toolbar);
@@ -67,7 +71,6 @@ public class MainPageController implements Initializable {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    ProfileController pfc=loader1.getController();
 
                     content.getChildren().setAll(rt);
                 }

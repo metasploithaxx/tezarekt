@@ -20,7 +20,6 @@ public class ServerStart {
         }
         TargetDataLine line=null;
         try {
-
             line = (TargetDataLine) AudioSystem.getLine(info);
             line.open(format);
         } catch (LineUnavailableException ex) {
@@ -30,7 +29,6 @@ public class ServerStart {
         line.start();
 
         Thread serverFactory=new Thread(new ServerFactory(webcam,line));
-//        serverFactory.setDaemon(true);
         serverFactory.start();
         while(true);
 

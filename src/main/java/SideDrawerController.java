@@ -76,7 +76,6 @@ public class SideDrawerController implements Initializable {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-//
                 try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
                     MongoDatabase database = mongoClient.getDatabase("Photos");
                     GridFSBucket gridBucket = GridFSBuckets.create(database);
