@@ -29,7 +29,10 @@ public class OnlineUsersListCellController extends JFXListCell<OnlineUser> {
                     e.printStackTrace();
                 }
             }
-            uname_id.setText(item.getUname());
+            if(item.getUname().equals(LoginController.curr_username))
+                uname_id.setText("You");
+            else
+                uname_id.setText(item.getUname());
             setText(null);
             setGraphic(rootPane);
             }

@@ -59,58 +59,63 @@ public class ChatController implements Initializable {
     }
 
     private void init()  {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
+        new Thread(){
+            HttpResponse res = null;
+            public void run(){
                 CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
                 client.start();
                 HttpGet request = new HttpGet(Main.Connectingurl+"/chat/Global/"+LoginController.curr_username);
                 Future<HttpResponse> future = client.execute(request, null);
-                HttpResponse res = null;
+
                 while(!future.isDone());
                 try {
                     res = future.get();
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
-                ObservableList<Chat> list= FXCollections.observableArrayList();
-                String jsonList = null;
-                try {
-                    jsonList = EntityUtils.toString(res.getEntity());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                JSONArray ResponseList = null;
-                try {
-                    ResponseList = new JSONArray(jsonList);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                for(int i=0;i< ResponseList.length();i++) {
-                    Chat chat = null;
-                    try {
-                        String time = ResponseList.getJSONObject(i).getString("timestamp");
-                        Instant timestamp = Instant.parse(time);
-                        ZonedDateTime indiaTime = timestamp.atZone(ZoneId.of("Asia/Kolkata"));
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
 
-                        String date = indiaTime.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
-                        String timeshow = indiaTime.format(DateTimeFormatter.ofPattern("HH:mm"));
-                        chat = new Chat(ResponseList.getJSONObject(i).getString("uname"),ResponseList.getJSONObject(i).getString("message"),date,timeshow);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        ObservableList<Chat> list= FXCollections.observableArrayList();
+                        String jsonList = null;
+                        try {
+                            jsonList = EntityUtils.toString(res.getEntity());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        JSONArray ResponseList = null;
+                        try {
+                            ResponseList = new JSONArray(jsonList);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        for(int i=0;i< ResponseList.length();i++) {
+                            Chat chat = null;
+                            try {
+                                String time = ResponseList.getJSONObject(i).getString("timestamp");
+                                Instant timestamp = Instant.parse(time);
+                                ZonedDateTime indiaTime = timestamp.atZone(ZoneId.of("Asia/Kolkata"));
+
+                                String date = indiaTime.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
+                                String timeshow = indiaTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+                                chat = new Chat(ResponseList.getJSONObject(i).getString("uname"),ResponseList.getJSONObject(i).getString("message"),date,timeshow);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            list.add(chat);
+                        }
+                        chatList.setItems(list);
+                        chatList.setCellFactory(chat-> new ChatCellController());
+                        if(count!=list.size()) {
+                            chatList.scrollTo(list.size() - 1);
+                            count=list.size();
+                        }
                     }
-                    list.add(chat);
-                }
-                chatList.setItems(list);
-                chatList.setCellFactory(chat-> new ChatCellController());
-                if(count!=list.size()) {
-                    chatList.scrollTo(list.size() - 1);
-                    count=list.size();
-                }
+                });
             }
-        });
-
-            progress_id.setVisible(false);
+        }.start();
+        progress_id.setVisible(false);
     }
 
     public void send() {

@@ -72,7 +72,7 @@ public class MainPageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         chatdrawer_id.open();
-        load_id.setVisible(false);
+        load_id.setVisible(true);
         Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
         mongoLogger.setLevel(Level.SEVERE);
 
@@ -112,7 +112,7 @@ public class MainPageController implements Initializable {
                     drawer_id.toFront();
                     drawer_id.setMaxWidth(180);
                 } else {
-
+                    drawer_id.toBack();
                     drawer_id.close();
                     drawer_id.setMaxWidth(0);
                 }
@@ -126,7 +126,6 @@ public class MainPageController implements Initializable {
             chat_btn.addEventHandler(MouseEvent.MOUSE_CLICKED, (Event event) -> {
 
                 if (!chat_btn.isSelected()) {
-                    chatdrawer_id.toBack();
                     chatdrawer_id.open();
                     chatdrawer_id.setMinWidth(225);
                 } else {
@@ -138,6 +137,7 @@ public class MainPageController implements Initializable {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+        load_id.setVisible(false);
     }
     private void SearchUser(String uname){
         if(uname.length()>0) {
@@ -159,9 +159,10 @@ public class MainPageController implements Initializable {
             }
             Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
             mongoLogger.setLevel(Level.SEVERE);
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
+            new Thread(){
+                Image image=null;
+
+                public void run(){
                     try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
                         MongoDatabase database = mongoClient.getDatabase("Photos");
                         GridFSBucket gridBucket = GridFSBuckets.create(database);
@@ -169,15 +170,22 @@ public class MainPageController implements Initializable {
                         byte[] data = gdifs.readAllBytes();
                         ByteArrayInputStream input = new ByteArrayInputStream(data);
                         BufferedImage image1 = ImageIO.read(input);
-                        Image image = SwingFXUtils.toFXImage(image1, null);
-                        image_view_id.setImage(image);
+                        image = SwingFXUtils.toFXImage(image1, null);
+
                     }
                     catch (Exception e){
                         System.out.println(e.getMessage());
                     }
-
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            image_view_id.setImage(image);
+                            load_id.setVisible(false);
+                        }
+                    });
                 }
-            });
+            }.start();
+            load_id.setVisible(true);
             Task<HttpResponse> task = new Task<HttpResponse>() {
                 @Override
                 protected HttpResponse call() throws Exception {

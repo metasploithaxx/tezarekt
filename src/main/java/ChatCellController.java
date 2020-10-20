@@ -33,7 +33,12 @@ public class ChatCellController extends JFXListCell<Chat> {
                 }
 
             }
-            name.setText(item.getSender());
+                if(item.getSender().equals(LoginController.curr_username)){
+                    name.setText("You");
+                }
+                else {
+                    name.setText(item.getSender());
+                }
                     msg.setText(item.getMsg());
                     date_id.setText(item.getDate());
                     time_id.setText(item.getTime());
