@@ -3,18 +3,27 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="581.0" prefWidth="698.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ViewUserProfile">
+<AnchorPane prefHeight="581.0" prefWidth="698.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ViewUserProfileController">
    <children>
-      <ImageView fx:id="image_view_id" fitHeight="163.0" fitWidth="200.0" layoutX="249.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
-      <Label fx:id="uname_id" layoutX="271.0" layoutY="187.0" prefHeight="27.0" prefWidth="166.0" text="UserId is ...." />
-      <Label fx:id="fname_id" layoutX="182.0" layoutY="235.0" prefHeight="41.0" prefWidth="115.0" text="Firstname..." />
-      <Label fx:id="lname_id" layoutX="391.0" layoutY="234.0" prefHeight="42.0" prefWidth="125.0" text="Lastname ..." />
+      <ImageView fx:id="image_view_id" fitHeight="163.0" fitWidth="200.0" layoutX="275.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@photo/noimage.jpg" />
+         </image></ImageView>
+      <Label fx:id="uname_id" alignment="CENTER" layoutX="271.0" layoutY="187.0" prefHeight="27.0" prefWidth="166.0" text="UserId is ....">
+         <font>
+            <Font name="Bodoni MT Bold Italic" size="12.0" />
+         </font></Label>
+      <Label fx:id="fname_id" layoutX="213.0" layoutY="234.0" prefHeight="41.0" prefWidth="115.0" text="Firstname..." />
+      <Label fx:id="lname_id" layoutX="354.0" layoutY="233.0" prefHeight="42.0" prefWidth="125.0" text="Lastname ..." />
       <JFXButton fx:id="subscribe_btn" layoutX="618.0" layoutY="541.0" text="Subscribe" />
       <Label fx:id="subscost_id" layoutX="182.0" layoutY="300.0" prefHeight="26.0" prefWidth="105.0" text="Subscriber cost is:-.." />
-      <JFXTextArea fx:id="bio_id" layoutX="123.0" layoutY="337.0" />
+      <JFXTextArea fx:id="bio_id" editable="false" layoutX="123.0" layoutY="390.0" prefHeight="122.0" prefWidth="464.0" />
+      <Label fx:id="no_subscriber" layoutX="379.0" layoutY="292.0" prefHeight="41.0" prefWidth="115.0" text="No. of Subscriber:-" />
+      <Label layoutX="197.0" layoutY="192.0" prefHeight="18.0" prefWidth="80.0" text="Username is:-" />
    </children>
 </AnchorPane>
