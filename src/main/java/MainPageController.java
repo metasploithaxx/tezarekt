@@ -71,6 +71,7 @@ public class MainPageController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         chatdrawer_id.open();
         load_id.setVisible(true);
         Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
@@ -98,7 +99,6 @@ public class MainPageController implements Initializable {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
                     content.getChildren().setAll(rt);
                 }
             });
@@ -140,29 +140,19 @@ public class MainPageController implements Initializable {
         load_id.setVisible(false);
     }
     private void SearchUser(String uname){
+
         if(uname.length()>0) {
-            FXMLLoader loaderView = new FXMLLoader(getClass().getResource("viewUserProfile.fxml"));
-            Parent rtview = null;
+
             load_id.setVisible(true);
-            try {
-                rtview = loaderView.load();
-                ViewUserProfileController viewUserProfileController = loaderView.getController();
-                bio_id = viewUserProfileController.getBio_id();
-                uname_id = viewUserProfileController.getUname_id();
-                fname_id = viewUserProfileController.getFname_id();
-                lname_id = viewUserProfileController.getLname_id();
-                subscost_id = viewUserProfileController.getSubscost_id();
-                image_view_id = viewUserProfileController.getImage_view_id();
-                content.getChildren().setAll(rtview);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
             mongoLogger.setLevel(Level.SEVERE);
             new Thread(){
+                ViewUserProfileController viewUserProfileController=null;
                 Image image=null;
-
-                public void run(){
+                Future<HttpResponse> future=null;
+                @Override
+                public void run() {
+                    super.run();
                     try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
                         MongoDatabase database = mongoClient.getDatabase("Photos");
                         GridFSBucket gridBucket = GridFSBuckets.create(database);
@@ -171,7 +161,11 @@ public class MainPageController implements Initializable {
                         ByteArrayInputStream input = new ByteArrayInputStream(data);
                         BufferedImage image1 = ImageIO.read(input);
                         image = SwingFXUtils.toFXImage(image1, null);
-
+                        CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                        client.start();
+                        HttpGet request = new HttpGet(Main.Connectingurl + "/profile/user/" + search_uname.getText());
+                        future = client.execute(request, null);
+                        while (!future.isDone()) ;
                     }
                     catch (Exception e){
                         System.out.println(e.getMessage());
@@ -179,47 +173,43 @@ public class MainPageController implements Initializable {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
+                            FXMLLoader loaderView = new FXMLLoader(getClass().getResource("viewUserProfile.fxml"));
+                            Parent rtview = null;
+
+                            try {
+                                rtview = loaderView.load();
+                                viewUserProfileController= loaderView.getController();
+                                bio_id = viewUserProfileController.getBio_id();
+                                uname_id = viewUserProfileController.getUname_id();
+                                fname_id = viewUserProfileController.getFname_id();
+                                lname_id = viewUserProfileController.getLname_id();
+                                subscost_id = viewUserProfileController.getSubscost_id();
+                                image_view_id = viewUserProfileController.getImage_view_id();
+
+                                content.getChildren().setAll(rtview);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                             image_view_id.setImage(image);
+                            String jsonString = null;
+                            try {
+                                jsonString = EntityUtils.toString(future.get().getEntity());
+                                JSONObject myResponse = new JSONObject(jsonString);
+                                if (future.get().getStatusLine().getStatusCode() == 200) {
+                                    uname_id.setText(myResponse.getString("uname"));
+                                    fname_id.setText(myResponse.getString("fname"));
+                                    lname_id.setText(myResponse.getString("lname"));
+                                    bio_id.setText(myResponse.getString("bio"));
+                                    viewUserProfileController.isSubscribe();
+                                }
+                            } catch (IOException | InterruptedException | ExecutionException | JSONException e) {
+                                e.printStackTrace();
+                            }
                             load_id.setVisible(false);
                         }
                     });
                 }
             }.start();
-            load_id.setVisible(true);
-            Task<HttpResponse> task = new Task<HttpResponse>() {
-                @Override
-                protected HttpResponse call() throws Exception {
-                    CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
-                    client.start();
-                    HttpGet request = new HttpGet(Main.Connectingurl + "/profile/user/" + search_uname.getText());
-                    Future<HttpResponse> future = client.execute(request, null);
-                    while (!future.isDone()) ;
-                    return future.get();
-                }
-            };
-            Thread th = new Thread(task);
-            th.start();
-            task.setOnSucceeded(res -> {
-                load_id.setVisible(false);
-                if (task.isDone()) {
-
-                    String jsonString = null;
-                    try {
-                        jsonString = EntityUtils.toString(task.get().getEntity());
-                        JSONObject myResponse = new JSONObject(jsonString);
-                        if (task.get().getStatusLine().getStatusCode() == 200) {
-                            uname_id.setText(myResponse.getString("uname"));
-                            fname_id.setText(myResponse.getString("fname"));
-                            lname_id.setText(myResponse.getString("lname"));
-                            bio_id.setText(myResponse.getString("bio"));
-
-                        }
-                    } catch (IOException | InterruptedException | ExecutionException | JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            });
         }
     }
 

@@ -61,8 +61,11 @@ public class ChatController implements Initializable {
     private void init()  {
         new Thread(){
             HttpResponse res = null;
-            public void run(){
-                CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+
+            @Override
+            public void run() {
+                super.run();
+            CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
                 client.start();
                 HttpGet request = new HttpGet(Main.Connectingurl+"/chat/Global/"+LoginController.curr_username);
                 Future<HttpResponse> future = client.execute(request, null);

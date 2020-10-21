@@ -73,33 +73,18 @@ public class OnlineUsersListController implements Initializable {
         this.mainPageLoader = load_id;
     }
     private void SearchUser(String uname){
-        System.out.println(uname+"profile page");
 
         if(uname.length()>0) {
             mainPageLoader.setVisible(true);
-            FXMLLoader loaderView = new FXMLLoader(getClass().getResource("viewUserProfile.fxml"));
-
-            try {
-                rtview = loaderView.load();
-                ViewUserProfileController viewUserProfileController = loaderView.getController();
-                bio_id = viewUserProfileController.getBio_id();
-                uname_id = viewUserProfileController.getUname_id();
-                fname_id = viewUserProfileController.getFname_id();
-                lname_id = viewUserProfileController.getLname_id();
-                subscost_id = viewUserProfileController.getSubscost_id();
-                image_view_id = viewUserProfileController.getImage_view_id();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
-            mongoLogger.setLevel(Level.SEVERE);
 
 
             new Thread(){
                 String jsonString = null;
                 Future<HttpResponse> future = null;
-                public void run(){
+                Image image = null;
+                @Override
+                public void run() {
+                    super.run();
                     try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
                         MongoDatabase database = mongoClient.getDatabase("Photos");
                         GridFSBucket gridBucket = GridFSBuckets.create(database);
@@ -107,8 +92,8 @@ public class OnlineUsersListController implements Initializable {
                         byte[] data = gdifs.readAllBytes();
                         ByteArrayInputStream input = new ByteArrayInputStream(data);
                         BufferedImage image1 = ImageIO.read(input);
-                        Image image = SwingFXUtils.toFXImage(image1, null);
-                        image_view_id.setImage(image);
+                        image= SwingFXUtils.toFXImage(image1, null);
+
                         CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
                         client.start();
                         HttpGet request = new HttpGet(Main.Connectingurl + "/profile/user/"+ uname);
@@ -116,7 +101,7 @@ public class OnlineUsersListController implements Initializable {
                         future = client.execute(request, null);
                         while (!future.isDone()) ;
 
-                        jsonString = EntityUtils.toString(future.get().getEntity());
+
 
                     }
                     catch (Exception e){
@@ -125,17 +110,35 @@ public class OnlineUsersListController implements Initializable {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-//                            mainPageLoader.visibleProperty().bind(isSaving);
+                            FXMLLoader loaderView = new FXMLLoader(getClass().getResource("viewUserProfile.fxml"));
+                            ViewUserProfileController viewUserProfileController =null;
                             try {
+                                rtview = loaderView.load();
+                                viewUserProfileController = loaderView.getController();
+                                bio_id = viewUserProfileController.getBio_id();
+                                uname_id = viewUserProfileController.getUname_id();
+                                fname_id = viewUserProfileController.getFname_id();
+                                lname_id = viewUserProfileController.getLname_id();
+                                subscost_id = viewUserProfileController.getSubscost_id();
+                                image_view_id = viewUserProfileController.getImage_view_id();
 
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
+                            mongoLogger.setLevel(Level.SEVERE);
+
+                            try {
+                                jsonString = EntityUtils.toString(future.get().getEntity());
                                 JSONObject myResponse = new JSONObject(jsonString);
                                 if (future.get().getStatusLine().getStatusCode() == 200) {
                                     uname_id.setText(myResponse.getString("uname"));
                                     fname_id.setText(myResponse.getString("fname"));
                                     lname_id.setText(myResponse.getString("lname"));
                                     bio_id.setText(myResponse.getString("bio"));
+                                    image_view_id.setImage(image);
                                     content.getChildren().setAll(rtview);
-
+                                    viewUserProfileController.isSubscribe();
                                 }
                                 else{
                                     System.out.println(future.get().getStatusLine());
@@ -143,19 +146,21 @@ public class OnlineUsersListController implements Initializable {
 
                             } catch ( InterruptedException | ExecutionException | JSONException e) {
                                 e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
                             mainPageLoader.setVisible(false);
                         }
                     });
                 }
             }.start();
-
         }
     }
     private void init(){
-        Platform.runLater(new Runnable() {
+        new Thread(){
             @Override
             public void run() {
+                super.run();
                 CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
                 client.start();
                 HttpGet request = new HttpGet(Main.Connectingurl+"/onlineUsers");
@@ -181,7 +186,7 @@ public class OnlineUsersListController implements Initializable {
                     e.printStackTrace();
                 }
                 for(int i=0;i< ResponseList.length();i++) {
-                     OnlineUser users = null;
+                    OnlineUser users = null;
                     try {
                         users = new OnlineUser(ResponseList.getJSONObject(i).getString("uname"));
                     } catch (JSONException e) {
@@ -189,24 +194,28 @@ public class OnlineUsersListController implements Initializable {
                     }
                     list.add(users);
                 }
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        onlineuserslist.setItems(list);
+                        onlineuserslist.setCellFactory(userListView->{
+                            OnlineUsersListCellController onlineUsersListCellController = new OnlineUsersListCellController();
+                            onlineUsersListCellController.setOnMouseClicked(event -> {
+                                if(onlineUsersListCellController.uname_id.getText().equals("You")){
+                                    SearchUser(LoginController.curr_username);
+                                }
+                                else{
+                                    SearchUser(onlineUsersListCellController.uname_id.getText());
+                                }
 
-                onlineuserslist.setItems(list);
-                onlineuserslist.setCellFactory(userListView->{
-                    OnlineUsersListCellController onlineUsersListCellController = new OnlineUsersListCellController();
-                    onlineUsersListCellController.setOnMouseClicked(event -> {
-                        System.out.println("Mouse Clicked");
-                        if(onlineUsersListCellController.uname_id.getText().equals("You")){
-                            SearchUser(LoginController.curr_username);
-                        }
-                        else{
-                            SearchUser(onlineUsersListCellController.uname_id.getText());
-                        }
-
-                    });
-                    return onlineUsersListCellController;
+                            });
+                            return onlineUsersListCellController;
+                        });
+                        loader_id.setVisible(false);
+                    }
                 });
-                loader_id.setVisible(false);
             }
-        });
+        }.start();
+
     }
 }

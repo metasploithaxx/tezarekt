@@ -1,5 +1,7 @@
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextArea;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -10,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
@@ -32,11 +35,54 @@ public class ViewUserProfileController implements Initializable {
     private JFXTextArea bio_id;
     @FXML
     private ImageView image_view_id;
-
+    @FXML
+    private JFXButton subscribe_btn;
+    @FXML
+    private JFXSpinner subs_spinner_id;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+    }
+    public void isSubscribe(){
+        subs_spinner_id.setVisible(true);
+        new Thread(){
+            Future<HttpResponse> future = null;
+            @Override
+            public void run() {
+                super.run();
+                CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                client.start();
+                HttpGet request = new HttpGet(Main.Connectingurl+"/isSubscribed/"+uname_id.getText()+"/"+LoginController.curr_username);
+                future= client.execute(request, null);
+                while(!future.isDone());
 
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            if(future.get().getStatusLine().getStatusCode() == 200){
+                                String jsonString = EntityUtils.toString(future.get().getEntity());
+                                if(jsonString.equals("1")){
+                                    subscribe_btn.setText("Unsubscribe");
+                                    subscribe_btn.setStyle("-fx-background-color:#a09ea9;");
+                                }
+                                else{
+                                    subscribe_btn.setText("Subscribe");
+                                    subscribe_btn.setStyle("-fx-background-color:#dc0808;");
+                                }
+                            }
+                            else{
+                                subscribe_btn.setText("error");
+                            }
 
+                        } catch (InterruptedException | ExecutionException | IOException e) {
+                            e.printStackTrace();
+                        } finally {
+                            subs_spinner_id.setVisible(false);
+                        }
+                    }
+                });
+            }
+        }.start();
     }
     public JFXTextArea getBio_id(){
         return bio_id;
@@ -55,5 +101,8 @@ public class ViewUserProfileController implements Initializable {
     }
     public ImageView getImage_view_id(){
         return image_view_id;
+    }
+    public void Subscribe(ActionEvent actionEvent){
+
     }
 }

@@ -71,11 +71,13 @@ public class SideDrawerController implements Initializable {
     }
 
     public void init(){
+        load_id.setVisible(true);
         Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
-        mongoLogger.setLevel(Level.SEVERE);
-        Platform.runLater(new Runnable() {
+        new Thread(){
+            Image image=null;
             @Override
             public void run() {
+                super.run();
                 try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
                     MongoDatabase database = mongoClient.getDatabase("Photos");
                     GridFSBucket gridBucket = GridFSBuckets.create(database);
@@ -83,15 +85,22 @@ public class SideDrawerController implements Initializable {
                     byte[] data = gdifs.readAllBytes();
                     ByteArrayInputStream input = new ByteArrayInputStream(data);
                     BufferedImage image1 = ImageIO.read(input);
-                    Image image = SwingFXUtils.toFXImage(image1, null);
-                    image_id.setImage(image);
+                    image = SwingFXUtils.toFXImage(image1, null);
+
                 }
                 catch (Exception e){
                     System.out.println(e.getMessage());
                 }
-
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        image_id.setImage(image);
+                        load_id.setVisible(false);
+                    }
+                });
             }
-        });
+        }.start();
+
     }
     public void Logout(ActionEvent actionEvent) throws IOException {
         Preferences preferences ;

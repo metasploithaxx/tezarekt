@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXSpinner?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Glow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -16,11 +18,18 @@
          </image></ImageView>
       <Label fx:id="uname_id" alignment="CENTER" layoutX="271.0" layoutY="187.0" prefHeight="27.0" prefWidth="166.0" text="UserId is ....">
          <font>
-            <Font name="Bodoni MT Bold Italic" size="12.0" />
+            <Font name="Bodoni MT Bold Italic" size="18.0" />
          </font></Label>
       <Label fx:id="fname_id" layoutX="213.0" layoutY="234.0" prefHeight="41.0" prefWidth="115.0" text="Firstname..." />
       <Label fx:id="lname_id" layoutX="354.0" layoutY="233.0" prefHeight="42.0" prefWidth="125.0" text="Lastname ..." />
-      <JFXButton fx:id="subscribe_btn" layoutX="618.0" layoutY="541.0" text="Subscribe" />
+      <JFXButton fx:id="subscribe_btn" layoutX="596.0" layoutY="539.0" onAction="#Subscribe" text="...">
+         <graphic>
+            <JFXSpinner fx:id="subs_spinner_id" prefHeight="20.0" prefWidth="20.0" snapToPixel="false">
+               <effect>
+                  <Glow />
+               </effect>
+            </JFXSpinner>
+         </graphic></JFXButton>
       <Label fx:id="subscost_id" layoutX="182.0" layoutY="300.0" prefHeight="26.0" prefWidth="105.0" text="Subscriber cost is:-.." />
       <JFXTextArea fx:id="bio_id" editable="false" layoutX="123.0" layoutY="390.0" prefHeight="122.0" prefWidth="464.0" />
       <Label fx:id="no_subscriber" layoutX="379.0" layoutY="292.0" prefHeight="41.0" prefWidth="115.0" text="No. of Subscriber:-" />
