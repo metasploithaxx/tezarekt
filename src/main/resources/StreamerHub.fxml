@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane prefHeight="572.0" prefWidth="670.0" style="-fx-background-color: #444444;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StreamerHubController">
+   <children>
+      <Pane layoutX="8.0" layoutY="494.0" prefHeight="74.0" prefWidth="649.0" style="-fx-border-color: #4267B2; -fx-border-radius: 25;">
+         <children>
+            <JFXButton contentDisplay="GRAPHIC_ONLY" layoutX="435.0" layoutY="9.0" onAction="#startStream" prefHeight="52.0" prefWidth="75.0" style="-fx-background-color: #4267B2;">
+               <graphic>
+                  <ImageView fitHeight="46.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@photo/play-button.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </JFXButton>
+            <JFXButton contentDisplay="GRAPHIC_ONLY" layoutX="517.0" layoutY="11.0" onAction="#stopStream" prefHeight="52.0" prefWidth="75.0" style="-fx-background-color: #ff1122;">
+               <graphic>
+                  <ImageView fitHeight="46.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@photo/stop-button.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </JFXButton>
+            <Pane layoutX="263.0" layoutY="11.0" prefHeight="52.0" prefWidth="55.0" style="-fx-background-color: #1122FF;">
+               <children>
+                  <ImageView fitHeight="37.0" fitWidth="42.0" layoutX="9.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@photo/video-camera.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <Pane layoutX="42.0" layoutY="11.0" prefHeight="52.0" prefWidth="55.0" style="-fx-background-color: #1122FF;">
+               <children>
+                  <ImageView fitHeight="40.0" fitWidth="57.0" layoutX="10.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@photo/desktop.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <JFXToggleButton fx:id="videoToggle" contentDisplay="GRAPHIC_ONLY" layoutX="310.0" layoutY="9.0" prefHeight="60.0" prefWidth="48.0" />
+            <Pane layoutX="153.0" layoutY="11.0" prefHeight="52.0" prefWidth="55.0" style="-fx-background-color: #1122FF;">
+               <children>
+                  <ImageView fitHeight="37.0" fitWidth="42.0" layoutX="9.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@photo/microphone.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <JFXToggleButton fx:id="audioToggle" contentDisplay="GRAPHIC_ONLY" layoutX="201.0" layoutY="9.0" prefHeight="60.0" prefWidth="48.0" />
+            <JFXToggleButton fx:id="desktopToggle" contentDisplay="GRAPHIC_ONLY" layoutX="91.0" layoutY="9.0" prefHeight="60.0" prefWidth="48.0" />
+         </children>
+      </Pane>
+      <ImageView fx:id="display" fitHeight="480.0" fitWidth="640.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="loading" fitHeight="150.0" fitWidth="157.0" layoutX="258.0" layoutY="183.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@photo/gems.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
