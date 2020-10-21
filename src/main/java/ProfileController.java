@@ -120,12 +120,13 @@ public class ProfileController implements Initializable {
                 return future.get();
             }
         };
-        Thread th=new Thread(task);
-        th.start();
+            Thread th=new Thread(task);
+            th.start();
         task.setOnSucceeded(res->{
             loader_id.setVisible(false);
             if(task.isDone()) {
                 try {
+//                    String jsonString = EntityUtils.toString(task.get().getEntity());
                     String jsonString = EntityUtils.toString(task.get().getEntity());
                     JSONObject myResponse = new JSONObject(jsonString);
                     if (task.get().getStatusLine().getStatusCode() == 200) {

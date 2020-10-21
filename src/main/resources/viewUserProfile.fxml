@@ -34,5 +34,10 @@
       <JFXTextArea fx:id="bio_id" editable="false" layoutX="123.0" layoutY="390.0" prefHeight="122.0" prefWidth="464.0" />
       <Label fx:id="no_subscriber" layoutX="379.0" layoutY="292.0" prefHeight="41.0" prefWidth="115.0" text="No. of Subscriber:-" />
       <Label layoutX="197.0" layoutY="192.0" prefHeight="18.0" prefWidth="80.0" text="Username is:-" />
+      <Label fx:id="status_id" layoutX="326.0" layoutY="530.0" prefHeight="30.0" text="status">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

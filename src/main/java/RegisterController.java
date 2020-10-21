@@ -62,7 +62,7 @@ public class RegisterController {
 
                 CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
                 client.start();
-                HttpPost request = new HttpPost("http://[::1]:3000/register");
+                HttpPost request = new HttpPost(Main.Connectingurl+"/register");
                 request.setEntity(entity);
                 request.setHeader("Content-Type", "application/json; charset=UTF-8");
                 Future<HttpResponse> future = client.execute(request, null);

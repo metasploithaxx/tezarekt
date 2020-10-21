@@ -1,3 +1,5 @@
+import at.favre.lib.crypto.bcrypt.BCrypt;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextArea;
@@ -15,6 +17,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.util.EntityUtils;
@@ -23,6 +28,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -30,7 +36,7 @@ import java.util.concurrent.Future;
 public class ViewUserProfileController implements Initializable {
 
     @FXML
-    private Label uname_id, fname_id, lname_id, subscost_id;
+    private Label uname_id, fname_id, lname_id, subscost_id, status_id;
     @FXML
     private JFXTextArea bio_id;
     @FXML
@@ -108,7 +114,63 @@ public class ViewUserProfileController implements Initializable {
     public ImageView getImage_view_id(){
         return image_view_id;
     }
-    public void Subscribe(ActionEvent actionEvent){
 
+    public void Subscribe(ActionEvent actionEvent){
+        subs_spinner_id.setVisible(true);
+        Task<HttpResponse> task = new Task<HttpResponse>() {
+            @Override
+            protected HttpResponse call() throws Exception {
+
+                var values = new HashMap<String, String>() {{
+                    put("from", uname_id.getText());
+                    put("to", LoginController.curr_username);
+                    put("flag",(subscribe_btn.getText().equals("Subscribe")?"true":"false"));
+
+                }};
+
+                var objectMapper = new ObjectMapper();
+                String payload =
+                        objectMapper.writeValueAsString(values);
+
+                StringEntity entity = new StringEntity(payload,
+                        ContentType.APPLICATION_JSON);
+
+                CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                client.start();
+                HttpPost request = new HttpPost(Main.Connectingurl+"/subscribe");
+                request.setEntity(entity);
+                request.setHeader("Content-Type", "application/json; charset=UTF-8");
+                Future<HttpResponse> future = client.execute(request, null);
+
+                while(!future.isDone());
+                return future.get();
+            }
+        };
+        Thread thread = new Thread(task);
+        thread.start();
+
+        task.setOnSucceeded(res -> {
+            subs_spinner_id.setVisible(false);
+            if(task.isDone()){
+                try {
+                        String jsonString = EntityUtils.toString(task.get().getEntity());
+                        if (task.get().getStatusLine().getStatusCode() == 200)
+                        {
+                            status_id.setText(jsonString);
+                            status_id.setTextFill(Color.GREEN);
+                        }
+                        else
+                        {
+                            status_id.setText(jsonString);
+                            status_id.setTextFill(Color.RED);
+                        }
+                        isSubscribe();
+                    }
+                catch (IOException | InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
     }
 }
