@@ -41,9 +41,14 @@ public class ViewUserProfileController implements Initializable {
     private JFXSpinner subs_spinner_id;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        subscribe_btn.setDisable(true);
     }
     public void isSubscribe(){
+        if(uname_id.getText().equals(LoginController.curr_username))
+            subscribe_btn.setVisible(false);
         subs_spinner_id.setVisible(true);
+        subscribe_btn.setDisable(true);
         new Thread(){
             Future<HttpResponse> future = null;
             @Override
@@ -59,6 +64,7 @@ public class ViewUserProfileController implements Initializable {
                     @Override
                     public void run() {
                         try {
+                            subscribe_btn.setDisable(false);
                             if(future.get().getStatusLine().getStatusCode() == 200){
                                 String jsonString = EntityUtils.toString(future.get().getEntity());
                                 if(jsonString.equals("1")){
