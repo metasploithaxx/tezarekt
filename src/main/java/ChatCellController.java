@@ -35,14 +35,16 @@ public class ChatCellController extends JFXListCell<Chat> {
             }
                 if(item.getSender().equals(LoginController.curr_username)){
                     name.setText("You");
+                    rootPane.setStyle("-fx-background-color:#bec5fa;");
                 }
                 else {
                     name.setText(item.getSender());
+                    rootPane.setStyle("-fx-background-color:#FFFF;");
                 }
                     msg.setText(item.getMsg());
                     date_id.setText(item.getDate());
                     time_id.setText(item.getTime());
-
+                    rootPane.setPrefWidth(msg.getPrefWidth());
             setText(null);
             setGraphic(rootPane);
         }

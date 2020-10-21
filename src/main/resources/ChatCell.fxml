@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="225.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="rootPane" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="225.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox prefHeight="25.0" prefWidth="225.0">
          <children>
@@ -19,10 +19,10 @@
             <Label fx:id="name" prefHeight="25.0" prefWidth="146.0" text="Label" />
          </children>
       </HBox>
-      <HBox prefHeight="100.0" prefWidth="225.0">
+      <HBox maxHeight="1.7976931348623157E308" prefWidth="225.0">
          <children>
-            <Label fx:id="msg" prefHeight="34.0" prefWidth="240.0" text="Label" wrapText="true" />
-            <VBox prefHeight="200.0" prefWidth="100.0">
+            <Label fx:id="msg" maxHeight="1.7976931348623157E308" prefWidth="220.0" wrapText="true" HBox.hgrow="ALWAYS" />
+            <VBox prefWidth="100.0">
                <children>
                   <Label fx:id="date_id" prefHeight="8.0" prefWidth="82.0" text="6/10/2020">
                      <font>
