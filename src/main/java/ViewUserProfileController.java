@@ -1,4 +1,3 @@
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSpinner;
@@ -6,14 +5,10 @@ import com.jfoenix.controls.JFXTextArea;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -36,7 +31,7 @@ import java.util.concurrent.Future;
 public class ViewUserProfileController implements Initializable {
 
     @FXML
-    private Label uname_id, fname_id, lname_id, subscost_id, status_id;
+    private Label uname_id, fname_id, lname_id, subscost_id, status_id,subcount_id;
     @FXML
     private JFXTextArea bio_id;
     @FXML
@@ -47,9 +42,9 @@ public class ViewUserProfileController implements Initializable {
     private JFXSpinner subs_spinner_id;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         subscribe_btn.setDisable(true);
     }
+
     public void isSubscribe(){
         if(uname_id.getText().equals(LoginController.curr_username))
             subscribe_btn.setVisible(false);
@@ -60,6 +55,7 @@ public class ViewUserProfileController implements Initializable {
             @Override
             public void run() {
                 super.run();
+                SubsCount();
                 CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
                 client.start();
                 HttpGet request = new HttpGet(Main.Connectingurl+"/isSubscribed/"+uname_id.getText()+"/"+LoginController.curr_username);
@@ -70,6 +66,7 @@ public class ViewUserProfileController implements Initializable {
                     @Override
                     public void run() {
                         try {
+
                             subscribe_btn.setDisable(false);
                             if(future.get().getStatusLine().getStatusCode() == 200){
                                 String jsonString = EntityUtils.toString(future.get().getEntity());
@@ -96,6 +93,7 @@ public class ViewUserProfileController implements Initializable {
             }
         }.start();
     }
+
     public JFXTextArea getBio_id(){
         return bio_id;
     }
@@ -113,6 +111,37 @@ public class ViewUserProfileController implements Initializable {
     }
     public ImageView getImage_view_id(){
         return image_view_id;
+    }
+
+    public void SubsCount(){
+        new Thread(){
+            Future<HttpResponse> future=null;
+            @Override
+            public void run() {
+                super.run();
+                CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                client.start();
+                HttpGet request = new HttpGet(Main.Connectingurl+"/getSubscriptionCount/"+uname_id.getText());
+                future = client.execute(request, null);
+                while(!future.isDone());
+
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            String jsonString = EntityUtils.toString(future.get().getEntity());
+                            if (future.get().getStatusLine().getStatusCode() == 200){
+                                subcount_id.setText(jsonString);
+                            }
+                        } catch (IOException | ExecutionException | InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }.start();
+
+
     }
 
     public void Subscribe(ActionEvent actionEvent){
@@ -165,6 +194,7 @@ public class ViewUserProfileController implements Initializable {
                             status_id.setTextFill(Color.RED);
                         }
                         isSubscribe();
+
                     }
                 catch (IOException | InterruptedException | ExecutionException e) {
                     e.printStackTrace();
