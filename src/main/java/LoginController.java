@@ -134,7 +134,6 @@ public class LoginController implements Initializable {
 
             }
             else{
-                System.out.println("@@");
                 status_id.setText("Incorrect username or Password");
                 status_id.setTextFill(Color.RED);
             }

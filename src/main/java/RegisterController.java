@@ -118,6 +118,10 @@ public class RegisterController {
                 status_id.setText("Confirm Password and Password don't match");
                 status_id.setTextFill(Color.RED);
             }
+            else if(username_id.getText().equals("Global")){
+                status_id.setText("Can't set Global as a Username");
+                status_id.setTextFill(Color.RED);
+            }
             else{
                 server_reg();
             }
