@@ -65,10 +65,7 @@ public class ChatController implements Initializable {
         Timeline fiveSecondsWonder = new Timeline(
                 new KeyFrame(Duration.seconds(5.5),
                         event -> {
-                    if(MainPageController.displayedUname_id.equals("Global")){
-                        initAll(MainPageController.displayedUname_id);
-                    }
-                    else{
+
                         new Thread(){
                             Future<HttpResponse> future = null;
                             @Override
@@ -87,6 +84,7 @@ public class ChatController implements Initializable {
                                                 String jsonString = EntityUtils.toString(future.get().getEntity());
                                                 if(jsonString.equals("1")){
                                                     Subschat_Tab.setDisable(false);
+                                                    initSubs(MainPageController.displayedUname_id);
                                                 }
                                                 else{
                                                     Subschat_Tab.setDisable(true);
@@ -104,9 +102,8 @@ public class ChatController implements Initializable {
                             }
                         }.start();
                         initPrivate(MainPageController.displayedUname_id);
-                        initSubs(MainPageController.displayedUname_id);
                         initAll(MainPageController.displayedUname_id);
-                    }
+
                 }));
         fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
         fiveSecondsWonder.play();
@@ -180,6 +177,69 @@ public class ChatController implements Initializable {
     }
 
     private void initPrivate(String owner){
+        new Thread(){
+            HttpResponse res = null;
+            @Override
+            public void run() {
+                super.run();
+                CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                client.start();
+                HttpGet request = new HttpGet(Main.Connectingurl+"/privateChatView/"+owner+"/"+LoginController.curr_username);
+                Future<HttpResponse> future = client.execute(request, null);
+
+                while(!future.isDone());
+                try {
+                    res = future.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        statusPrivate_id.setText("");
+                        ObservableList<Chat> list= FXCollections.observableArrayList();
+                        JSONArray ResponseList = null;
+                        try {
+                            String jsonList = null;
+                            if(res.getStatusLine().getStatusCode()==200) {
+                                jsonList = EntityUtils.toString(res.getEntity());
+                                ResponseList = new JSONArray(jsonList);
+                                if (ResponseList.length() > 0)
+                                    for (int i = 0; i < ResponseList.length(); i++) {
+                                        Chat chat = null;
+                                        try {
+                                            String time = ResponseList.getJSONObject(i).getString("timestamp");
+                                            Instant timestamp = Instant.parse(time);
+                                            ZonedDateTime indiaTime = timestamp.atZone(ZoneId.of("Asia/Kolkata"));
+                                            String date = indiaTime.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
+                                            String timeshow = indiaTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+                                            chat = new Chat(ResponseList.getJSONObject(i).getString("from"), ResponseList.getJSONObject(i).getString("msg"), date, timeshow);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        list.add(chat);
+                                    }
+                                PrivatechatList.setItems(list);
+                                PrivatechatList.setCellFactory(chat -> new ChatCellController());
+                                if (Privatecount!= list.size()) {
+                                    PrivatechatList.scrollTo(list.size() - 1);
+                                    Privatecount = list.size();
+                                }
+                            }
+                            else{
+                                statusPrivate_id.setText("No data found in this Chat");
+                                PrivatechatList.setItems(list);
+                                PrivatechatList.setCellFactory(chat -> new ChatCellController());
+                            }
+                        } catch (IOException | JSONException e) {
+                            System.out.println(e.getMessage());
+                        }
+
+
+                    }
+                });
+            }
+        }.start();
 
     }
 
@@ -304,6 +364,58 @@ public class ChatController implements Initializable {
         }
     }
     public void SendPrivate(){
+        if (Privatetextarea_id.getText().length()>0) {
+            System.out.println("calll");
+            Privateprogress_id.setVisible(true);
+            new Thread(){
+                Future<HttpResponse> future=null;
+                @Override
+                public void run() {
+                    super.run();
+                    var values = new HashMap<String, String>() {{
+                        put("to",MainPageController.displayedUname_id);
+                        put("from", LoginController.curr_username);
+                        put("msg",Privatetextarea_id.getText());
+                    }};
+
+                    var objectMapper = new ObjectMapper();
+                    String payload = null;
+                    try {
+                        payload = objectMapper.writeValueAsString(values);
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                    }
+
+                    StringEntity entity = new StringEntity(payload,
+                            ContentType.APPLICATION_JSON);
+
+                    CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                    client.start();
+                    HttpPost request = new HttpPost(Main.Connectingurl+"/privateChatPost");
+                    request.setEntity(entity);
+                    request.setHeader("Content-Type", "application/json; charset=UTF-8");
+                    Future<HttpResponse> future = client.execute(request, null);
+
+                    while(!future.isDone());
+                    try {
+                        future.get();
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(future.isDone()) {
+                                Privateprogress_id.setVisible(false);
+                                Privatetextarea_id.setText("");
+                                initPrivate(MainPageController.displayedUname_id);
+                            }
+                        }
+                    });
+                }
+            }.start();
+
+        }
 
     }
 

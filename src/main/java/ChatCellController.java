@@ -34,7 +34,7 @@ public class ChatCellController extends JFXListCell<Chat> {
 
             }
                 if(item.getSender().equals(LoginController.curr_username)){
-                    name.setText("You");
+                    name.setText("You("+LoginController.curr_username+")");
                     rootPane.setStyle("-fx-background-color:#bec5fa;");
                 }
                 else {
