@@ -69,9 +69,11 @@ public class MainPageController implements Initializable {
     private JFXButton profile_btn;
     public JFXTextArea bio_id;
 
+    public static String displayedUname_id=null;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        displayedUname_id=null;
         chatdrawer_id.open();
         load_id.setVisible(true);
         Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
@@ -121,7 +123,10 @@ public class MainPageController implements Initializable {
             ioException.printStackTrace();
         }
         try {
-            VBox chatbox = FXMLLoader.load(getClass().getResource("Chat.fxml"));
+            FXMLLoader loader= new FXMLLoader(getClass().getResource("Chat.fxml"));
+            VBox chatbox = loader.load();
+            ChatController chatController = loader.getController();
+            chatController.setAnchorPane1(content);
             chatdrawer_id.setSidePane(chatbox);
             chat_btn.addEventHandler(MouseEvent.MOUSE_CLICKED, (Event event) -> {
 
@@ -200,6 +205,7 @@ public class MainPageController implements Initializable {
                                     fname_id.setText(myResponse.getString("fname"));
                                     lname_id.setText(myResponse.getString("lname"));
                                     bio_id.setText(myResponse.getString("bio"));
+                                    displayedUname_id=uname_id.getText();
                                     viewUserProfileController.isSubscribe();
                                 }
                             } catch (IOException | InterruptedException | ExecutionException | JSONException e) {

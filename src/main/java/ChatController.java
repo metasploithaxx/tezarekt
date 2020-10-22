@@ -1,4 +1,5 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextArea;
@@ -10,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -39,26 +41,33 @@ import java.util.logging.Logger;
 
 public class ChatController implements Initializable {
 
-    public JFXListView<Chat> chatList;
     @FXML
-    private JFXTextArea textarea_id;
+    public JFXListView<Chat> SubsChatList,PrivatechatList,AllchatList;
     @FXML
-    private JFXSpinner progress_id;
+    private JFXTextArea Alltextarea_id,Privatetextarea_id,Substextarea_id;
+    @FXML
+    private JFXButton Subssend_btn,Privatesend_btn,Allsend_btn;
+    @FXML
+    public JFXSpinner Allprogress_id,Subsprogress_id,Privateprogress_id;
+    public AnchorPane anchorPane;
     public int count=0;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
         mongoLogger.setLevel(Level.SEVERE);
-        progress_id.setVisible(true);
+        Allprogress_id.setVisible(true);
         Timeline fiveSecondsWonder = new Timeline(
                 new KeyFrame(Duration.seconds(4.5),
-                        event -> {init();}));
+                        event -> {initAll();}));
         fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
         fiveSecondsWonder.play();
 
-    }
 
-    private void init()  {
+    }
+    public void setAnchorPane1(AnchorPane anchorPane){
+        this.anchorPane = anchorPane;
+    }
+    private void initAll()  {
         new Thread(){
             HttpResponse res = null;
 
@@ -108,22 +117,22 @@ public class ChatController implements Initializable {
                             }
                             list.add(chat);
                         }
-                        chatList.setItems(list);
-                        chatList.setCellFactory(chat-> new ChatCellController());
+                        AllchatList.setItems(list);
+                        AllchatList.setCellFactory(chat-> new ChatCellController());
                         if(count!=list.size()) {
-                            chatList.scrollTo(list.size() - 1);
+                            AllchatList.scrollTo(list.size() - 1);
                             count=list.size();
                         }
                     }
                 });
             }
         }.start();
-        progress_id.setVisible(false);
+        Allprogress_id.setVisible(false);
     }
 
     public void send() {
-        if (textarea_id.getText().length()>0) {
-            progress_id.setVisible(true);
+        if (Alltextarea_id.getText().length()>0) {
+            Allprogress_id.setVisible(true);
             Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
             Task<HttpResponse> task =new Task<>() {
                 @Override
@@ -131,7 +140,7 @@ public class ChatController implements Initializable {
                     var values = new HashMap<String, String>() {{
                         put("owner","Global");
                         put("uname", LoginController.curr_username);
-                        put("message", textarea_id.getText());
+                        put("message",Alltextarea_id.getText());
                         put("subscribermsg", "true");
                     }};
 
@@ -156,9 +165,9 @@ public class ChatController implements Initializable {
             Thread th=new Thread(task);
             th.start();
             task.setOnSucceeded(res -> {
-                progress_id.setVisible(false);
-                textarea_id.setText("");
-                init();
+                Allprogress_id.setVisible(false);
+                Alltextarea_id.setText("");
+                initAll();
             });
         }
     }

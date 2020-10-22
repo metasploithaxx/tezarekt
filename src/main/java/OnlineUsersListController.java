@@ -122,6 +122,7 @@ public class OnlineUsersListController implements Initializable {
                                 subscost_id = viewUserProfileController.getSubscost_id();
                                 image_view_id = viewUserProfileController.getImage_view_id();
 
+
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -138,6 +139,7 @@ public class OnlineUsersListController implements Initializable {
                                     bio_id.setText(myResponse.getString("bio"));
                                     image_view_id.setImage(image);
                                     content.getChildren().setAll(rtview);
+                                    MainPageController.displayedUname_id=uname_id.getText();
                                     viewUserProfileController.isSubscribe();
                                 }
                                 else{
