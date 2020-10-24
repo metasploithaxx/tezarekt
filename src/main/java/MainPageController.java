@@ -22,9 +22,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -33,6 +35,9 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.util.EntityUtils;
+import org.controlsfx.control.textfield.AutoCompletionBinding;
+import org.controlsfx.control.textfield.TextFields;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,8 +47,14 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
@@ -64,12 +75,22 @@ public class MainPageController implements Initializable {
     private TextField search_uname;
     @FXML
     private JFXButton search_btn;
-    public Label uname_id, fname_id, lname_id, subscost_id;
+    @FXML
+    private Label status_id;
+
+    public Label uname_id, fname_id, lname_id, subscost_id,online_status;
+
     public ImageView image_view_id;
+
     private JFXButton profile_btn;
+
     public JFXTextArea bio_id;
 
+    private AutoCompletionBinding <String> autoCompletionBinding;
+
     public static String displayedUname_id="Global";
+
+    private Set<String> possibleSuggestion = new HashSet<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -78,7 +99,38 @@ public class MainPageController implements Initializable {
         load_id.setVisible(true);
         Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
         mongoLogger.setLevel(Level.SEVERE);
+        load_id.setVisible(true);
+        new Thread(){
 
+            Future<HttpResponse> future=null;
+            @Override
+            public void run() {
+                super.run();
+                CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                client.start();
+                HttpGet request = new HttpGet(Main.Connectingurl+"/getAllUsers");
+                future = client.execute(request, null);
+                while(!future.isDone());
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            String jsonList = EntityUtils.toString(future.get().getEntity());
+                            JSONArray jsonArray = new JSONArray(jsonList);
+                            for(int i=0;i< jsonArray.length();i++){
+                                possibleSuggestion.add(jsonArray.getJSONObject(i).getString("uname"));
+                            }
+                            autoCompletionBinding = TextFields.bindAutoCompletion(search_uname,possibleSuggestion);
+                        } catch (IOException | InterruptedException | ExecutionException | JSONException e) {
+                            e.printStackTrace();
+                        }
+                        finally {
+                            load_id.setVisible(false);
+                        }
+                    }
+                });
+            }
+        }.start();
         try {
             FXMLLoader loaderOnlineUsers = new FXMLLoader(getClass().getResource("OnlineUsersList.fxml"));
             Parent rtUsers=loaderOnlineUsers.load();
@@ -91,6 +143,20 @@ public class MainPageController implements Initializable {
             drawer_id.setSidePane(toolbar);
             SideDrawerController sdc = loader.getController();
             profile_btn =sdc.getProfile_page();
+            search_uname.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent event) {
+                    switch(event.getCode()){
+                        case ENTER:
+                            if(search_uname.getText().length()>0) {
+                                SearchUser(search_uname.getText());
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            });
             profile_btn.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -170,49 +236,73 @@ public class MainPageController implements Initializable {
                         HttpGet request = new HttpGet(Main.Connectingurl + "/profile/user/" + search_uname.getText());
                         future = client.execute(request, null);
                         while (!future.isDone()) ;
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                FXMLLoader loaderView = new FXMLLoader(getClass().getResource("viewUserProfile.fxml"));
+                                Parent rtview = null;
+                                try {
+                                    String jsonString = null;
+
+                                    if (future.get().getStatusLine().getStatusCode() == 200) {
+                                        jsonString = EntityUtils.toString(future.get().getEntity());
+                                        JSONObject myResponse = new JSONObject(jsonString);
+                                        try {
+                                            rtview = loaderView.load();
+                                            viewUserProfileController= loaderView.getController();
+                                            bio_id = viewUserProfileController.getBio_id();
+                                            uname_id = viewUserProfileController.getUname_id();
+                                            fname_id = viewUserProfileController.getFname_id();
+                                            lname_id = viewUserProfileController.getLname_id();
+                                            subscost_id = viewUserProfileController.getSubscost_id();
+                                            image_view_id = viewUserProfileController.getImage_view_id();
+                                            online_status = viewUserProfileController.getOnline_status();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                        image_view_id.setImage(image);
+                                        uname_id.setText(myResponse.getString("uname"));
+                                        fname_id.setText(myResponse.getString("fname"));
+                                        lname_id.setText(myResponse.getString("lname"));
+                                        bio_id.setText(myResponse.getString("bio"));
+                                        if(myResponse.getBoolean("isonline")){
+                                            online_status.setText("User is Online");
+                                        }
+                                        else{
+                                            String time = myResponse.getString("lastseen");
+                                            Instant timestamp = Instant.parse(time);
+                                            ZonedDateTime indiaTime = timestamp.atZone(ZoneId.of("Asia/Kolkata"));
+                                            String date = indiaTime.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
+                                            String timeshow = indiaTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+                                            online_status.setText("Last Seen \nDate :- "+date+"\n time :- "+timeshow);
+                                        }
+                                        content.getChildren().setAll(rtview);
+                                        displayedUname_id=uname_id.getText();
+                                        viewUserProfileController.isSubscribe();
+//                                        return true;
+                                    }
+                                    else{
+//                                        return false;
+                                    }
+                                } catch (IOException | InterruptedException | ExecutionException | JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                load_id.setVisible(false);
+                            }
+                        });
                     }
                     catch (Exception e){
                         System.out.println(e.getMessage());
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                status_id.setText("No such User found!!!");
+                                status_id.setTextFill(Color.RED);
+                                load_id.setVisible(false);
+                            }
+                        });
                     }
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            FXMLLoader loaderView = new FXMLLoader(getClass().getResource("viewUserProfile.fxml"));
-                            Parent rtview = null;
 
-                            try {
-                                rtview = loaderView.load();
-                                viewUserProfileController= loaderView.getController();
-                                bio_id = viewUserProfileController.getBio_id();
-                                uname_id = viewUserProfileController.getUname_id();
-                                fname_id = viewUserProfileController.getFname_id();
-                                lname_id = viewUserProfileController.getLname_id();
-                                subscost_id = viewUserProfileController.getSubscost_id();
-                                image_view_id = viewUserProfileController.getImage_view_id();
-
-                                content.getChildren().setAll(rtview);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            image_view_id.setImage(image);
-                            String jsonString = null;
-                            try {
-                                jsonString = EntityUtils.toString(future.get().getEntity());
-                                JSONObject myResponse = new JSONObject(jsonString);
-                                if (future.get().getStatusLine().getStatusCode() == 200) {
-                                    uname_id.setText(myResponse.getString("uname"));
-                                    fname_id.setText(myResponse.getString("fname"));
-                                    lname_id.setText(myResponse.getString("lname"));
-                                    bio_id.setText(myResponse.getString("bio"));
-                                    displayedUname_id=uname_id.getText();
-                                    viewUserProfileController.isSubscribe();
-                                }
-                            } catch (IOException | InterruptedException | ExecutionException | JSONException e) {
-                                e.printStackTrace();
-                            }
-                            load_id.setVisible(false);
-                        }
-                    });
                 }
             }.start();
         }

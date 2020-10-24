@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXSpinner?>
+<?import com.jfoenix.controls.JFXToggleButton?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -9,23 +10,28 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="165.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SideDrawerController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="165.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SideDrawerController">
    <children>
-      <AnchorPane prefHeight="400.0" prefWidth="0.0">
+      <AnchorPane prefHeight="500.0" prefWidth="166.0">
          <children>
+            <JFXToggleButton fx:id="toggle_id" layoutX="19.0" layoutY="228.0" prefHeight="25.0" prefWidth="123.0" size="7.0" text="Set Status" toggleColor="#4442b2">
+               <font>
+                  <Font name="Bookshelf Symbol 7" size="12.0" />
+               </font>
+            </JFXToggleButton>
             <ImageView fx:id="image_id" fitHeight="172.0" fitWidth="159.0" layoutX="2.0" onMouseClicked="#ProfilePic" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@photo/noimage.jpg" />
                </image></ImageView>
             <JFXSpinner fx:id="load_id" layoutX="60.0" layoutY="175.0" visible="false" />
-            <JFXButton fx:id="log_in_as_viewer" layoutY="213.0" prefHeight="35.0" prefWidth="165.0" text="Log in as Viewer" />
-            <JFXButton fx:id="start_stream" layoutY="248.0" prefHeight="35.0" prefWidth="165.0" text="Start Stream" />
-            <JFXButton fx:id="profile_page" layoutY="283.0" prefHeight="35.0" prefWidth="165.0" text="Profile Page" />
-            <JFXButton fx:id="change_profile_pic" layoutY="313.0" onAction="#ProfilePic1" prefHeight="35.0" prefWidth="165.0" text="Change Upload Profile Pic" />
-            <JFXButton fx:id="logout" buttonType="RAISED" layoutY="348.0" onAction="#Logout" prefHeight="35.0" prefWidth="165.0" ripplerFill="#1d38ad" text="LogOut" />
-            <Label fx:id="username_id" alignment="CENTER" contentDisplay="CENTER" layoutX="7.0" layoutY="175.0" prefHeight="35.0" prefWidth="146.0" text="Hello User">
+            <JFXButton fx:id="log_in_as_viewer" layoutX="3.0" layoutY="267.0" prefHeight="35.0" prefWidth="165.0" text="Log in as Viewer" />
+            <JFXButton fx:id="start_stream" layoutX="1.0" layoutY="303.0" prefHeight="35.0" prefWidth="165.0" text="Start Stream" />
+            <JFXButton fx:id="profile_page" layoutX="3.0" layoutY="339.0" prefHeight="35.0" prefWidth="165.0" text="Profile Page" />
+            <JFXButton fx:id="change_profile_pic" layoutX="-1.0" layoutY="375.0" onAction="#ProfilePic1" prefHeight="35.0" prefWidth="165.0" text="Change Upload Profile Pic" />
+            <JFXButton fx:id="logout" buttonType="RAISED" layoutY="411.0" onAction="#Logout" prefHeight="35.0" prefWidth="165.0" ripplerFill="#1d38ad" text="LogOut" />
+            <Label fx:id="username_id" alignment="CENTER" contentDisplay="CENTER" layoutX="11.0" layoutY="175.0" prefHeight="35.0" prefWidth="146.0" text="Hello User">
                <font>
-                  <Font name="Arial" size="12.0" />
+                  <Font name="Arial Bold Italic" size="17.0" />
                </font>
             </Label>
          </children>

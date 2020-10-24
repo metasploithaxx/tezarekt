@@ -40,6 +40,10 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -47,12 +51,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class OnlineUsersListController implements Initializable {
+
     public JFXListView<OnlineUser> onlineuserslist;
-    public Label uname_id, fname_id, lname_id, subscost_id;
+
+    public Label online_status,uname_id, fname_id, lname_id, subscost_id;
+
     public ImageView image_view_id;
+
     private JFXButton profile_btn;
+
     public JFXTextArea bio_id;
+
     private JFXSpinner mainPageLoader;
+
     public AnchorPane content;
     @FXML
     private JFXSpinner loader_id;
@@ -121,7 +132,7 @@ public class OnlineUsersListController implements Initializable {
                                 lname_id = viewUserProfileController.getLname_id();
                                 subscost_id = viewUserProfileController.getSubscost_id();
                                 image_view_id = viewUserProfileController.getImage_view_id();
-
+                                online_status = viewUserProfileController.getOnline_status();
 
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -138,6 +149,17 @@ public class OnlineUsersListController implements Initializable {
                                     lname_id.setText(myResponse.getString("lname"));
                                     bio_id.setText(myResponse.getString("bio"));
                                     image_view_id.setImage(image);
+                                    if(myResponse.getBoolean("isonline")){
+                                        online_status.setText("User is Online");
+                                    }
+                                    else{
+                                        String time = myResponse.getString("lastseen");
+                                        Instant timestamp = Instant.parse(time);
+                                        ZonedDateTime indiaTime = timestamp.atZone(ZoneId.of("Asia/Kolkata"));
+                                        String date = indiaTime.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
+                                        String timeshow = indiaTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+                                        online_status.setText("Last Seen \nDate :- "+date+"\n time :- "+timeshow);
+                                    }
                                     content.getChildren().setAll(rtview);
                                     MainPageController.displayedUname_id=uname_id.getText();
                                     viewUserProfileController.isSubscribe();
@@ -178,44 +200,45 @@ public class OnlineUsersListController implements Initializable {
                 String jsonList = null;
                 try {
                     jsonList = EntityUtils.toString(res.getEntity());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                JSONArray ResponseList = null;
-                try {
+                    JSONArray ResponseList = null;
                     ResponseList = new JSONArray(jsonList);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                for(int i=0;i< ResponseList.length();i++) {
-                    OnlineUser users = null;
-                    try {
-                        users = new OnlineUser(ResponseList.getJSONObject(i).getString("uname"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    list.add(users);
-                }
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        onlineuserslist.setItems(list);
-                        onlineuserslist.setCellFactory(userListView->{
-                            OnlineUsersListCellController onlineUsersListCellController = new OnlineUsersListCellController();
-                            onlineUsersListCellController.setOnMouseClicked(event -> {
-                                if(onlineUsersListCellController.uname_id.getText().equals("You")){
-                                    SearchUser(LoginController.curr_username);
-                                }
-                                else{
-                                    SearchUser(onlineUsersListCellController.uname_id.getText());
-                                }
 
-                            });
-                            return onlineUsersListCellController;
-                        });
-                        loader_id.setVisible(false);
+                    for(int i=0;i< ResponseList.length();i++) {
+                        OnlineUser users = null;
+                        try {
+                            users = new OnlineUser(ResponseList.getJSONObject(i).getString("uname"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        list.add(users);
                     }
-                });
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            onlineuserslist.setItems(list);
+                            onlineuserslist.setCellFactory(userListView->{
+                                OnlineUsersListCellController onlineUsersListCellController = new OnlineUsersListCellController();
+                                onlineUsersListCellController.setOnMouseClicked(event -> {
+                                    if(onlineUsersListCellController.uname_id.getText().startsWith("You")){
+                                        SearchUser(LoginController.curr_username);
+                                    }
+                                    else{
+                                        SearchUser(onlineUsersListCellController.uname_id.getText());
+                                    }
+
+                                });
+                                return onlineUsersListCellController;
+                            });
+                        }
+                    });
+                } catch (IOException | JSONException e) {
+                    onlineuserslist.setItems(null);
+                }
+                finally {
+                    loader_id.setVisible(false);
+                }
+
+
             }
         }.start();
 

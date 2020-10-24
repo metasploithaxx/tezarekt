@@ -29,5 +29,6 @@
       <JFXButton layoutX="902.0" layoutY="12.0" onAction="#onExit" style="-fx-border-color: #ac1313;" text="Exit" textFill="#ac1313" />
       <AnchorPane fx:id="onlineUsers" layoutX="-1.0" layoutY="70.0" prefHeight="674.0" prefWidth="216.0" />
       <JFXButton fx:id="search_btn" layoutX="783.0" layoutY="13.0" onAction="#OnSearch" text="Search" />
+      <Label fx:id="status_id" layoutX="228.0" layoutY="40.0" prefHeight="26.0" prefWidth="534.0" />
    </children>
 </AnchorPane>

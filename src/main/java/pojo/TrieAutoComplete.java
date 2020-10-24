@@ -1,4 +1,4 @@
-package stream;
+package pojo;
 
 
 import java.io.*;
@@ -90,10 +90,11 @@ public class TrieAutoComplete {
 
                 pCrawl = pCrawl.getChildren(index);
             }
-
-            if((pCrawl != null && pCrawl.isEndOfWord()){
-                return null;
-            }
+            return null;
+//
+//            if((pCrawl != null && pCrawl.isEndOfWord()){
+//                return null;
+//            }
         }
 
         // Driver
@@ -132,22 +133,22 @@ public class TrieAutoComplete {
             }
             obj.root=newRoot;
 
-            // Search for different keys
-            if(obj.search("the") == true)
-                System.out.println("the --- " + output[1]);
-            else System.out.println("the --- " + output[0]);
-
-            if(obj.search("these") == true)
-                System.out.println("these --- " + output[1]);
-            else System.out.println("these --- " + output[0]);
-
-            if(obj.search("their") == true)
-                System.out.println("their --- " + output[1]);
-            else System.out.println("their --- " + output[0]);
-
-            if(obj.search("thaw") == true)
-                System.out.println("thaw --- " + output[1]);
-            else System.out.println("thaw --- " + output[0]);
+//            // Search for different keys
+//            if(obj.search("the") == true)
+//                System.out.println("the --- " + output[1]);
+//            else System.out.println("the --- " + output[0]);
+//
+//            if(obj.search("these") == true)
+//                System.out.println("these --- " + output[1]);
+//            else System.out.println("these --- " + output[0]);
+//
+//            if(obj.search("their") == true)
+//                System.out.println("their --- " + output[1]);
+//            else System.out.println("their --- " + output[0]);
+//
+//            if(obj.search("thaw") == true)
+//                System.out.println("thaw --- " + output[1]);
+//            else System.out.println("thaw --- " + output[0]);
 
         }
 

@@ -44,5 +44,6 @@
             <Font size="16.0" />
          </font>
       </Label>
+      <Label fx:id="online_status" layoutX="265.0" layoutY="349.0" prefWidth="175.0" text="Online Status:- " />
    </children>
 </AnchorPane>

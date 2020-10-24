@@ -1,5 +1,9 @@
+import at.favre.lib.crypto.bcrypt.BCrypt;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSpinner;
+import com.jfoenix.controls.JFXToggleButton;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
@@ -7,8 +11,12 @@ import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSBuckets;
 import com.mongodb.client.gridfs.GridFSDownloadStream;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,8 +25,19 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -26,7 +45,10 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -42,7 +64,10 @@ public class SideDrawerController implements Initializable {
     @FXML
     private Label username_id;
     @FXML
+    private JFXToggleButton toggle_id;
+    @FXML
     private boolean ProfilePic() throws ClassNotFoundException {
+
         try {
             Parent root= FXMLLoader.load(getClass().getResource("ProfileImage.fxml"));
             Scene scene = new Scene(root,540,400);
@@ -75,6 +100,8 @@ public class SideDrawerController implements Initializable {
         Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
         new Thread(){
             Image image=null;
+
+            Future<HttpResponse> future=null;
             @Override
             public void run() {
                 super.run();
@@ -86,7 +113,11 @@ public class SideDrawerController implements Initializable {
                     ByteArrayInputStream input = new ByteArrayInputStream(data);
                     BufferedImage image1 = ImageIO.read(input);
                     image = SwingFXUtils.toFXImage(image1, null);
-
+                    CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                    client.start();
+                    HttpGet request = new HttpGet(Main.Connectingurl+"/getStatus/"+LoginController.curr_username);
+                    future = client.execute(request, null);
+                    while(!future.isDone());
                 }
                 catch (Exception e){
                     System.out.println(e.getMessage());
@@ -96,27 +127,147 @@ public class SideDrawerController implements Initializable {
                     public void run() {
                         image_id.setImage(image);
                         load_id.setVisible(false);
+
+                        try {
+                            String jsonString = EntityUtils.toString(future.get().getEntity());
+                            if (future.get().getStatusLine().getStatusCode() == 200){
+                                if(jsonString.equals("true")){
+                                    toggle_id.setSelected(true);
+                                    toggle_id.setText("Online");
+
+                                    toggle_id.setTextFill(Color.GREEN);
+                                }
+                                else{
+                                    toggle_id.setText("Offline");
+                                    toggle_id.setTextFill(Color.GRAY);
+                                    toggle_id.setSelected(false);
+                                }
+
+                            }
+                        } catch (IOException | ExecutionException | InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
             }
         }.start();
+    }
+    public void setStatus(){
+        new Thread(){
+            Future<HttpResponse> future=null;
+            @Override
+            public void run() {
+                super.run();
+                var values = new HashMap<String, String>() {{
+                    put("uname",LoginController.curr_username);
+                }};
 
+                var objectMapper = new ObjectMapper();
+                String payload =
+                        null;
+                try {
+                    payload = objectMapper.writeValueAsString(values);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+
+                StringEntity entity = new StringEntity(payload,
+                        ContentType.APPLICATION_JSON);
+
+                CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                client.start();
+                HttpPost request = new HttpPost(Main.Connectingurl+"/setStatus");
+                request.setEntity(entity);
+                request.setHeader("Content-Type", "application/json; charset=UTF-8");
+                future = client.execute(request, null);
+
+                while(!future.isDone());
+                try {
+                    future.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(future.isDone()){
+                            String jsonString = null;
+                            try {
+                                jsonString = EntityUtils.toString(future.get().getEntity());
+                                if (future.get().getStatusLine().getStatusCode() == 200) {
+                                    if(jsonString.equals("true")){
+                                        toggle_id.setText("Online");
+                                        toggle_id.setTextFill(Color.GREEN);
+                                    }
+                                    else{
+
+                                        toggle_id.setTextFill(Color.GRAY);
+                                        toggle_id.setText("Offline");
+                                    }
+                                }
+                            } catch (IOException | InterruptedException | ExecutionException  e) {
+                                e.printStackTrace();
+                            }
+                            System.out.println(jsonString);
+
+                        }
+                    }
+                });
+            }
+        }.start();
     }
     public void Logout(ActionEvent actionEvent) throws IOException {
         Preferences preferences ;
         preferences = Preferences.userRoot();
         preferences.put("username", "");
         preferences.put("password","");
-        Stage stage = (Stage) image_id.getScene().getWindow();
+        load_id.setVisible(true);
+            Task<HttpResponse> task =new Task<>() {
+                @Override
+                protected HttpResponse call() throws Exception {
+                    var values = new HashMap<String, String>() {{
+                        put("uname", LoginController.curr_username);
+                    }};
 
-        Parent root= FXMLLoader.load(getClass().getResource("Login.fxml"));
-        Scene scene = new Scene(root,500,325);
-        scene.getStylesheets().add(getClass().getResource("css/stylesheet.css").toString());
-        Stage primaryStage = new Stage();
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Login page");
-        primaryStage.show();
-        stage.close();
+                    var objectMapper = new ObjectMapper();
+                    String payload =
+                            objectMapper.writeValueAsString(values);
+
+                    StringEntity entity = new StringEntity(payload,
+                            ContentType.APPLICATION_JSON);
+
+                    CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                    client.start();
+                    HttpPost request = new HttpPost(Main.Connectingurl+"/signout");
+                    request.setEntity(entity);
+                    request.setHeader("Content-Type", "application/json; charset=UTF-8");
+                    Future<HttpResponse> future = client.execute(request, null);
+
+                    while(!future.isDone());
+                    return future.get();
+                }
+            };
+            Thread thread = new Thread(task);
+            thread.start();
+            task.setOnSucceeded(res->{
+                load_id.setVisible(false);
+                Stage stage = (Stage) image_id.getScene().getWindow();
+
+                Parent root= null;
+                try {
+                    root = FXMLLoader.load(getClass().getResource("Login.fxml"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Scene scene = new Scene(root,500,325);
+                scene.getStylesheets().add(getClass().getResource("css/stylesheet.css").toString());
+                Stage primaryStage = new Stage();
+                primaryStage.setScene(scene);
+                primaryStage.setTitle("Login page");
+                primaryStage.show();
+                stage.close();
+            });
+
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -125,5 +276,11 @@ public class SideDrawerController implements Initializable {
         username_id.setText("Hello "+LoginController.curr_username);
         username_id.setTextFill(Color.BLUEVIOLET);
         init();
+        toggle_id.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                setStatus();
+            }
+        });
     }
 }
