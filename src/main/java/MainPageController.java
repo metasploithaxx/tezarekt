@@ -148,9 +148,11 @@ public class MainPageController implements Initializable {
                 public void handle(KeyEvent event) {
                     switch(event.getCode()){
                         case ENTER:
+                            status_id.setText("");
                             if(search_uname.getText().length()>0) {
                                 SearchUser(search_uname.getText());
                             }
+
                             break;
                         default:
                             break;
@@ -223,14 +225,19 @@ public class MainPageController implements Initializable {
                 @Override
                 public void run() {
                     super.run();
-                    try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
-                        MongoDatabase database = mongoClient.getDatabase("Photos");
-                        GridFSBucket gridBucket = GridFSBuckets.create(database);
-                        GridFSDownloadStream gdifs = gridBucket.openDownloadStream(search_uname.getText());
-                        byte[] data = gdifs.readAllBytes();
-                        ByteArrayInputStream input = new ByteArrayInputStream(data);
-                        BufferedImage image1 = ImageIO.read(input);
-                        image = SwingFXUtils.toFXImage(image1, null);
+                    try{
+                        try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
+                            MongoDatabase database = mongoClient.getDatabase("Photos");
+                            GridFSBucket gridBucket = GridFSBuckets.create(database);
+                            GridFSDownloadStream gdifs = gridBucket.openDownloadStream(search_uname.getText());
+                            byte[] data = gdifs.readAllBytes();
+                            ByteArrayInputStream input = new ByteArrayInputStream(data);
+                            BufferedImage image1 = ImageIO.read(input);
+                            image = SwingFXUtils.toFXImage(image1, null);
+                        }
+                        catch (Exception e){
+                            image=null;
+                        }
                         CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
                         client.start();
                         HttpGet request = new HttpGet(Main.Connectingurl + "/profile/user/" + search_uname.getText());
@@ -257,35 +264,43 @@ public class MainPageController implements Initializable {
                                             subscost_id = viewUserProfileController.getSubscost_id();
                                             image_view_id = viewUserProfileController.getImage_view_id();
                                             online_status = viewUserProfileController.getOnline_status();
+
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
-                                        image_view_id.setImage(image);
+                                        if(image!=null) {
+                                            image_view_id.setImage(image);
+                                        }
                                         uname_id.setText(myResponse.getString("uname"));
                                         fname_id.setText(myResponse.getString("fname"));
                                         lname_id.setText(myResponse.getString("lname"));
                                         bio_id.setText(myResponse.getString("bio"));
-                                        if(myResponse.getBoolean("isonline")){
-                                            online_status.setText("User is Online");
-                                        }
-                                        else{
-                                            String time = myResponse.getString("lastseen");
-                                            Instant timestamp = Instant.parse(time);
-                                            ZonedDateTime indiaTime = timestamp.atZone(ZoneId.of("Asia/Kolkata"));
-                                            String date = indiaTime.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
-                                            String timeshow = indiaTime.format(DateTimeFormatter.ofPattern("HH:mm"));
-                                            online_status.setText("Last Seen \nDate :- "+date+"\n time :- "+timeshow);
+                                        if(!myResponse.getString("isonline").equals("null")){
+                                            if (myResponse.getBoolean("isonline") == true) {
+                                                online_status.setText("User is Online");
+                                            } else {
+                                                String time = myResponse.getString("lastseen");
+                                                Instant timestamp = Instant.parse(time);
+                                                ZonedDateTime indiaTime = timestamp.atZone(ZoneId.of("Asia/Kolkata"));
+                                                String date = indiaTime.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
+                                                String timeshow = indiaTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+                                                online_status.setText("Last Seen \nDate :- " + date + "\n time :- " + timeshow);
+                                            }
                                         }
                                         content.getChildren().setAll(rtview);
                                         displayedUname_id=uname_id.getText();
                                         viewUserProfileController.isSubscribe();
-//                                        return true;
                                     }
                                     else{
-//                                        return false;
+                                        status_id.setText("No such User found!!!");
+                                        status_id.setTextFill(Color.RED);
+                                        load_id.setVisible(false);
                                     }
                                 } catch (IOException | InterruptedException | ExecutionException | JSONException e) {
                                     e.printStackTrace();
+                                    status_id.setText("No such User found!!!");
+                                    status_id.setTextFill(Color.RED);
+                                    load_id.setVisible(false);
                                 }
                                 load_id.setVisible(false);
                             }
