@@ -30,7 +30,7 @@
                </effect>
             </JFXSpinner>
          </graphic></JFXButton>
-      <Label fx:id="subscost_id" layoutX="182.0" layoutY="300.0" prefHeight="26.0" prefWidth="105.0" text="Subscriber cost is:-.." />
+      <Label fx:id="subscost_id" layoutX="145.0" layoutY="300.0" prefHeight="26.0" prefWidth="105.0" text="Subscriber cost is:-.." />
       <JFXTextArea fx:id="bio_id" editable="false" layoutX="123.0" layoutY="390.0" prefHeight="122.0" prefWidth="464.0" />
       <Label fx:id="no_subscriber" layoutX="379.0" layoutY="292.0" prefHeight="41.0" prefWidth="115.0" text="No. of Subscriber:-" />
       <Label layoutX="197.0" layoutY="192.0" prefHeight="18.0" prefWidth="80.0" text="Username is:-" />
@@ -45,5 +45,6 @@
          </font>
       </Label>
       <Label fx:id="online_status" layoutX="265.0" layoutY="349.0" prefWidth="175.0" text="Online Status:- " />
+      <Label fx:id="cost_id" layoutX="260.0" layoutY="301.0" prefHeight="25.0" prefWidth="74.0" text="Label" />
    </children>
 </AnchorPane>

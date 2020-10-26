@@ -31,7 +31,7 @@ import java.util.concurrent.Future;
 public class ViewUserProfileController implements Initializable {
 
     @FXML
-    private Label online_status,uname_id, fname_id, lname_id, subscost_id, status_id,subcount_id;
+    private Label online_status,uname_id, fname_id, lname_id, subscost_id, status_id,subcount_id,cost_id;
     @FXML
     private JFXTextArea bio_id;
     @FXML
@@ -106,8 +106,8 @@ public class ViewUserProfileController implements Initializable {
     public Label getLname_id(){
         return lname_id;
     }
-    public Label getSubscost_id(){
-        return subscost_id;
+    public Label getCost_id(){
+        return cost_id;
     }
     public ImageView getImage_view_id(){
         return image_view_id;

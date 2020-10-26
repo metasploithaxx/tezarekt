@@ -138,6 +138,7 @@ public class ProfileController implements Initializable {
                         twitter_id.setText(myResponse.getString("twitterid"));
                         subsrate_id.setText(myResponse.getString("subsrate"));
                         intro_id.setText(myResponse.getString("bio"));
+
                         if(!myResponse.getString("isinstaidpublic").equals("null")){
                             if(myResponse.getString("isinstaidpublic").equals("true")){
                                 instagram_check.setSelected(true);
