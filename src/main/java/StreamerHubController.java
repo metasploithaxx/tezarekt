@@ -112,17 +112,19 @@ public class StreamerHubController implements Initializable {
 
         videoToggle.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue&&!desktopToggle.isSelected()){
-                webcam.close();
                 videoStatus=0;
+                webcam.close();
+
 //                stopVideoGrabber();
                 display.setVisible(false);
                 loading.setVisible(true);
                 rt.playFromStart();
             }
             else if(!newValue&&desktopToggle.isSelected()){
-
-
                 videoStatus=2;
+                webcam.close();
+
+
             }
             else if(newValue&&desktopToggle.isSelected()){
                 webcam.open();
@@ -135,9 +137,9 @@ public class StreamerHubController implements Initializable {
                 loading.setRotate(0);
                 display.setVisible(true);
                 loading.setVisible(false);
-                webcam.close();
-                if(imageGrabTaskFuture.isCancelled())
-                    startVideoGrabber();
+
+//                if(imageGrabTaskFuture.isCancelled())
+//                    startVideoGrabber();
                 videoStatus=1;
             }
 
@@ -163,9 +165,9 @@ public class StreamerHubController implements Initializable {
                 loading.setRotate(0);
                 display.setVisible(true);
                 loading.setVisible(false);
-                webcam.close();
-                if(imageGrabTaskFuture.isCancelled())
-                startVideoGrabber();
+
+//                if(imageGrabTaskFuture.isCancelled())
+//                startVideoGrabber();
             }
         });
         audioToggle.selectedProperty().addListener((observable, oldValue, newValue) -> {
@@ -224,9 +226,12 @@ public class StreamerHubController implements Initializable {
         initTime=System.currentTimeMillis();
         this.encodeWorker = Executors.newSingleThreadExecutor();
         this.encodeAudioWorker= Executors.newSingleThreadExecutor();
+        startVideoGrabber();
     }
     public void stopStream(){
         isStreaming=false;
+        if(videoToggle.isSelected())videoToggle.fire();
+        if(desktopToggle.isSelected())desktopToggle.fire();
         stopVideoGrabber();
         encodeWorker.shutdown();
         encodeAudioWorker.shutdown();
@@ -235,7 +240,7 @@ public class StreamerHubController implements Initializable {
 
         @Override
         public void run() {
-            imagenb++;
+
             BufferedImage img;
             switch (videoStatus){
                 case 1:
@@ -251,6 +256,7 @@ public class StreamerHubController implements Initializable {
                     img=new BufferedImage(640,480,BufferedImage.TYPE_INT_RGB);
 
             }
+
             display.setImage(SwingFXUtils.toFXImage(img,null));
 
             if(isStreaming)
@@ -294,8 +300,12 @@ public class StreamerHubController implements Initializable {
         @Override
         public void run() {
             try {
+                imagenb++;
+//                System.out.println(imagenb+":"+image);
                 ByteBuffer msg = h264StreamEncoder.encode(image);
-
+//                System.out.println("Encoded "+imagenb+":"+msg);
+                if(msg==null)
+                    System.err.println("%%%%%%%%%%%%%%%ERROR%%%%%%%%%%%%%%%%%%");
                 if (msg != null) {
                     //Builds an stream.RTPpacket object containing the frame
                     int size=msg.remaining();
@@ -334,7 +344,7 @@ public class StreamerHubController implements Initializable {
 
         @Override
         public void run() {
-            audionb++;
+
             int numBytesRead;
             byte[] data = new byte [4096];
 
@@ -358,7 +368,7 @@ public class StreamerHubController implements Initializable {
         @Override
         public void run() {
             try {
-
+                audionb++;
                 ByteBuffer msg=null;
                 if ( audioBytesRead > 0 ) {
                     msg = audioEncoder.encode(audioData,audioBytesRead);
@@ -383,6 +393,21 @@ public class StreamerHubController implements Initializable {
                     rtp_packet.printheader();
                     System.out.println("Send audio frame #" + audionb);
                 }
+//                RTPpacket rtp_packet = new RTPpacket(MPA_TYPE, audionb, (int)(System.currentTimeMillis()-initTime), audioData, audioBytesRead);
+//
+//                    //get to total length of the full rtp packet to send
+//                    int packet_length = rtp_packet.getlength();
+//
+//                    //retrieve the packet bitstream and store it in an array of bytes
+//                    byte[] packet_bits = new byte[packet_length];
+//                    rtp_packet.getpacket(packet_bits);
+//
+//                    //send the packet as a DatagramPacket over the UDP socket
+//                    DatagramPacket senddp = new DatagramPacket(packet_bits, packet_length, multicastGroup, AUDIO_PORT);
+//                    multicastAudioSocket.send(senddp);
+//                    //print the header bitstream
+//                    rtp_packet.printheader();
+//                    System.out.println("Send audio frame #" + audionb);
 
             } catch (Exception e) {
                 // TODO Auto-generated catch block
