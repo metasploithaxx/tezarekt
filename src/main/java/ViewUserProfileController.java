@@ -1,15 +1,20 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXSpinner;
-import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.*;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -30,8 +35,11 @@ import java.util.concurrent.Future;
 
 public class ViewUserProfileController implements Initializable {
 
+    public Label status_subs;
+    public PasswordField pwd_id;
+    public JFXButton proceed_btn;
     @FXML
-    private Label online_status,uname_id, fname_id, lname_id, subscost_id, status_id,subcount_id,cost_id;
+    private Label online_status,uname_id, fname_id, lname_id,status_id,subcount_id,cost_id;
     @FXML
     private JFXTextArea bio_id;
     @FXML
@@ -147,63 +155,112 @@ public class ViewUserProfileController implements Initializable {
 
     }
 
-    public void Subscribe(ActionEvent actionEvent){
+    public void initProceed()
+    {
+
+    }
+
+    public void Subscribe(ActionEvent actionEvent) throws IOException {
+
         subs_spinner_id.setVisible(true);
-        Task<HttpResponse> task = new Task<HttpResponse>() {
+        FXMLLoader loader=new FXMLLoader(getClass().getResource("SubscribeConfirmation.fxml"));
+        Parent root =loader.load();
+        Scene scene = new Scene(root,600,400);
+        Stage primaryStage = new Stage();
+        primaryStage.initModality(Modality.APPLICATION_MODAL);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Confirmation Page");
+
+
+        SubscribeConfirmationController Sbcc = loader.getController();
+        status_subs=Sbcc.getLable_id();
+        pwd_id=Sbcc.getPwd_id();
+        proceed_btn=Sbcc.getButton_id();
+
+        String fg=subscribe_btn.getText().equals("Subscribe") ? "true" : "false";
+
+        if(fg=="true")
+            status_subs.setText("Are you sure you want to Subcribe to "+uname_id.getText()+"\nThis will cost you : "+cost_id.getText());
+        else
+            status_subs.setText("Are you sure you want to Unsubcribe to "+uname_id.getText()+"\nYou will not get any refund");
+
+        proceed_btn.setOnAction(new EventHandler<ActionEvent>() {
+
+
             @Override
-            protected HttpResponse call() throws Exception {
+            public void handle(ActionEvent event) {
 
-                var values = new HashMap<String, String>() {{
-                    put("from", uname_id.getText());
-                    put("to", LoginController.curr_username);
-                    put("flag",(subscribe_btn.getText().equals("Subscribe")?"true":"false"));
+               Future<Boolean> flag =  Sbcc.checkPassword(LoginController.curr_username);
+               while(!flag.isDone());
 
-                }};
+                if(flag.isDone()){
+                    Task<HttpResponse> task = new Task<HttpResponse>() {
+                        @Override
+                        protected HttpResponse call() throws Exception {
 
-                var objectMapper = new ObjectMapper();
-                String payload =
-                        objectMapper.writeValueAsString(values);
+                            var values = new HashMap<String, String>() {{
+                                put("from", uname_id.getText());
+                                put("to", LoginController.curr_username);
+                                put("flag", (subscribe_btn.getText().equals("Subscribe") ? "true" : "false"));
 
-                StringEntity entity = new StringEntity(payload,
-                        ContentType.APPLICATION_JSON);
+                            }};
 
-                CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
-                client.start();
-                HttpPost request = new HttpPost(Main.Connectingurl+"/subscribe");
-                request.setEntity(entity);
-                request.setHeader("Content-Type", "application/json; charset=UTF-8");
-                Future<HttpResponse> future = client.execute(request, null);
+                            var objectMapper = new ObjectMapper();
+                            String payload =
+                                    objectMapper.writeValueAsString(values);
 
-                while(!future.isDone());
-                return future.get();
-            }
-        };
-        Thread thread = new Thread(task);
-        thread.start();
+                            StringEntity entity = new StringEntity(payload,
+                                    ContentType.APPLICATION_JSON);
 
-        task.setOnSucceeded(res -> {
-            subs_spinner_id.setVisible(false);
-            if(task.isDone()){
-                try {
-                        String jsonString = EntityUtils.toString(task.get().getEntity());
-                        if (task.get().getStatusLine().getStatusCode() == 200)
-                        {
-                            status_id.setText(jsonString);
-                            status_id.setTextFill(Color.GREEN);
+                            CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                            client.start();
+                            HttpPost request = new HttpPost(Main.Connectingurl + "/subscribe");
+                            request.setEntity(entity);
+                            request.setHeader("Content-Type", "application/json; charset=UTF-8");
+                            Future<HttpResponse> future = client.execute(request, null);
+
+                            while (!future.isDone()) ;
+                            return future.get();
                         }
-                        else
-                        {
-                            status_id.setText(jsonString);
-                            status_id.setTextFill(Color.RED);
-                        }
-                        isSubscribe();
+                    };
+                    Thread thread = new Thread(task);
+                    thread.start();
 
-                    }
-                catch (IOException | InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
+                    task.setOnSucceeded(res -> {
+                        subs_spinner_id.setVisible(false);
+                        if (task.isDone()) {
+                            try {
+                                String jsonString = EntityUtils.toString(task.get().getEntity());
+                                if (task.get().getStatusLine().getStatusCode() == 200) {
+                                    status_id.setText(jsonString);
+                                    status_id.setTextFill(Color.GREEN);
+                                } else {
+                                    status_id.setText(jsonString);
+                                    status_id.setTextFill(Color.RED);
+                                }
+                                isSubscribe();
+                            } catch (IOException | InterruptedException | ExecutionException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    });
+
                 }
+                else{
 
+                    subs_spinner_id.setVisible(false);
+                    isSubscribe();
+                    status_id.setText("Wrong password");
+                    status_id.setTextFill(Color.RED);
+                }
+                primaryStage.close();
             }
         });
+
+
+        primaryStage.showAndWait();
+
+
     }
 }

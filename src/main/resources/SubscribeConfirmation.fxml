@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="347.0" prefWidth="552.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SubscribeConfirmationController">
+   <children>
+      <Label fx:id="lable_id" alignment="CENTER" layoutX="61.0" layoutY="63.0" prefHeight="100.0" prefWidth="430.0">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <JFXPasswordField fx:id="pwd_id" alignment="CENTER" layoutX="158.0" layoutY="191.0" prefHeight="40.0" prefWidth="237.0" promptText="Enter your password" />
+      <JFXButton fx:id="button_id" layoutX="216.0" layoutY="265.0" prefHeight="40.0" prefWidth="122.0" text="Proceed" />
+   </children>
+</AnchorPane>
