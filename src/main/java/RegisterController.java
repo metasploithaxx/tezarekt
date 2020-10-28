@@ -4,10 +4,14 @@ import com.jfoenix.controls.JFXSpinner;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
@@ -58,7 +62,7 @@ public class RegisterController {
 
                 CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
                 client.start();
-                HttpPost request = new HttpPost("http://[::1]:3000/register");
+                HttpPost request = new HttpPost(Main.Connectingurl+"/register");
                 request.setEntity(entity);
                 request.setHeader("Content-Type", "application/json; charset=UTF-8");
                 Future<HttpResponse> future = client.execute(request, null);
@@ -79,6 +83,16 @@ public class RegisterController {
                     if (task.get().getStatusLine().getStatusCode() == 200) {
                         status_id.setText("Successfully Registered");
                         status_id.setTextFill(Color.GREEN);
+                        Stage stage = (Stage) status_id.getScene().getWindow();
+
+                        Parent root= FXMLLoader.load(getClass().getResource("Login.fxml"));
+                        Scene scene = new Scene(root,500,325);
+                        scene.getStylesheets().add(getClass().getResource("css/stylesheet.css").toString());
+                        Stage primaryStage = new Stage();
+                        primaryStage.setScene(scene);
+                        primaryStage.setTitle("Login page");
+                        primaryStage.show();
+                        stage.close();
 
                     } else {
 
@@ -102,6 +116,10 @@ public class RegisterController {
         if(username_id.getText().length()>0 && password_id.getText().length()>0 && confirmpd_id.getText().length()>0 && firstname_id.getText().length()>0 && lastname_id.getText().length()>0 ){
             if(!confirmpd_id.getText().equals(password_id.getText())){
                 status_id.setText("Confirm Password and Password don't match");
+                status_id.setTextFill(Color.RED);
+            }
+            else if(username_id.getText().equals("Global")){
+                status_id.setText("Can't set Global as a Username");
                 status_id.setTextFill(Color.RED);
             }
             else{

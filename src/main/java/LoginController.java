@@ -24,6 +24,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -60,9 +62,15 @@ public class LoginController implements Initializable {
         Task<HttpResponse> task =new Task<>() {
             @Override
             protected HttpResponse call() throws Exception {
+                String ip;
+                try(final DatagramSocket socket = new DatagramSocket()){
+                    socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+                    ip = socket.getLocalAddress().getHostAddress();
+                }
                 var values = new HashMap<String, String>() {{
                     put("passhash", password_id.getText());
                     put("uname", username_id.getText());
+                    put("ip",ip);
                 }};
 
                 var objectMapper = new ObjectMapper();
@@ -108,7 +116,7 @@ public class LoginController implements Initializable {
                         } catch (IOException e) {
                             System.out.println(e.getMessage());
                         }
-                        Scene scene = new Scene(root, 1050, 750);
+                        Scene scene = new Scene(root, 1050, 760);
                         scene.getStylesheets().add(getClass().getResource("css/stylesheet.css").toString());
                         Stage primaryStage = new Stage();
                         primaryStage.setScene(scene);
@@ -126,7 +134,6 @@ public class LoginController implements Initializable {
 
             }
             else{
-                System.out.println("@@");
                 status_id.setText("Incorrect username or Password");
                 status_id.setTextFill(Color.RED);
             }
