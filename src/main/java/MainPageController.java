@@ -171,17 +171,12 @@ public class MainPageController implements Initializable {
                                                         while(!future.isDone());
                                                         try {
                                                             System.out.println(future.get().getStatusLine());
-                                                        } catch (InterruptedException e) {
-                                                            e.printStackTrace();
-                                                        } catch (ExecutionException e) {
+                                                        } catch (InterruptedException | ExecutionException e) {
                                                             e.printStackTrace();
                                                         }
                                                     }
                                                 }.start();
-                                                if(!chat_btn.isSelected()){
-                                                    chat_btn.fire();
 
-                                                }
                                             }
 
                                             @Override
@@ -353,6 +348,7 @@ public class MainPageController implements Initializable {
             mongoLogger.setLevel(Level.SEVERE);
             new Thread(){
                 ViewUserProfileController viewUserProfileController=null;
+
                 Image image=null;
                 Future<HttpResponse> future=null;
                 @Override

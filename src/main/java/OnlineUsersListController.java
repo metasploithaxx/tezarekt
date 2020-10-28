@@ -68,6 +68,7 @@ public class OnlineUsersListController implements Initializable {
     @FXML
     private JFXSpinner loader_id;
     Parent rtview = null;
+    public static int Online_count=0;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loader_id.setVisible(true);
@@ -215,20 +216,22 @@ public class OnlineUsersListController implements Initializable {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            onlineuserslist.setItems(list);
-                            onlineuserslist.setCellFactory(userListView->{
-                                OnlineUsersListCellController onlineUsersListCellController = new OnlineUsersListCellController();
-                                onlineUsersListCellController.setOnMouseClicked(event -> {
-                                    if(onlineUsersListCellController.uname_id.getText().startsWith("You")){
-                                        SearchUser(LoginController.curr_username);
-                                    }
-                                    else{
-                                        SearchUser(onlineUsersListCellController.uname_id.getText());
-                                    }
+                            if(list.size()!=Online_count) {
+                                onlineuserslist.setItems(list);
+                                onlineuserslist.setCellFactory(userListView -> {
+                                    OnlineUsersListCellController onlineUsersListCellController = new OnlineUsersListCellController();
+                                    onlineUsersListCellController.setOnMouseClicked(event -> {
+                                        if (onlineUsersListCellController.uname_id.getText().startsWith("You")) {
+                                            SearchUser(LoginController.curr_username);
+                                        } else {
+                                            SearchUser(onlineUsersListCellController.uname_id.getText());
+                                        }
 
+                                    });
+                                    return onlineUsersListCellController;
                                 });
-                                return onlineUsersListCellController;
-                            });
+                                Online_count = list.size();
+                            }
                         }
                     });
                 } catch (IOException | JSONException e) {

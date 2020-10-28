@@ -146,27 +146,29 @@ public class ChatController implements Initializable {
                             if(res.getStatusLine().getStatusCode()==200) {
                                 jsonList = EntityUtils.toString(res.getEntity());
                                 ResponseList = new JSONArray(jsonList);
-                                if (ResponseList.length() > 0)
-                                    for (int i = 0; i < ResponseList.length(); i++) {
-                                        Chat chat = null;
-                                        try {
-                                            String time = ResponseList.getJSONObject(i).getString("timestamp");
-                                            Instant timestamp = Instant.parse(time);
-                                            ZonedDateTime indiaTime = timestamp.atZone(ZoneId.of("Asia/Kolkata"));
-                                            String date = indiaTime.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
-                                            String timeshow = indiaTime.format(DateTimeFormatter.ofPattern("HH:mm"));
-                                            chat = new Chat(ResponseList.getJSONObject(i).getString("uname"), ResponseList.getJSONObject(i).getString("message"), date, timeshow);
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
+                                if (ResponseList.length() > 0 )
+                                    if(ResponseList.length()!=Subscount) {
+                                        for (int i = 0; i < ResponseList.length(); i++) {
+                                            Chat chat = null;
+                                            try {
+                                                String time = ResponseList.getJSONObject(i).getString("timestamp");
+                                                Instant timestamp = Instant.parse(time);
+                                                ZonedDateTime indiaTime = timestamp.atZone(ZoneId.of("Asia/Kolkata"));
+                                                String date = indiaTime.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
+                                                String timeshow = indiaTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+                                                chat = new Chat(ResponseList.getJSONObject(i).getString("uname"), ResponseList.getJSONObject(i).getString("message"), date, timeshow);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            list.add(chat);
                                         }
-                                        list.add(chat);
+                                        SubsChatList.setItems(list);
+                                        SubsChatList.setCellFactory(chat -> new ChatCellController());
+                                        if (Subscount != list.size()) {
+                                            SubsChatList.scrollTo(list.size() - 1);
+                                            Subscount = list.size();
+                                        }
                                     }
-                                SubsChatList.setItems(list);
-                                SubsChatList.setCellFactory(chat -> new ChatCellController());
-                                if (Subscount != list.size()) {
-                                    SubsChatList.scrollTo(list.size() - 1);
-                                    Subscount = list.size();
-                                }
                             }
                             else{
                                 statusSubs_id.setText("No data found in this Chat");
@@ -213,26 +215,28 @@ public class ChatController implements Initializable {
                                 jsonList = EntityUtils.toString(res.getEntity());
                                 ResponseList = new JSONArray(jsonList);
                                 if (ResponseList.length() > 0)
-                                    for (int i = 0; i < ResponseList.length(); i++) {
-                                        Chat chat = null;
-                                        try {
-                                            String time = ResponseList.getJSONObject(i).getString("timestamp");
-                                            Instant timestamp = Instant.parse(time);
-                                            ZonedDateTime indiaTime = timestamp.atZone(ZoneId.of("Asia/Kolkata"));
-                                            String date = indiaTime.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
-                                            String timeshow = indiaTime.format(DateTimeFormatter.ofPattern("HH:mm"));
-                                            chat = new Chat(ResponseList.getJSONObject(i).getString("from"), ResponseList.getJSONObject(i).getString("msg"), date, timeshow);
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
+                                    if(ResponseList.length()!=Privatecount) {
+                                        for (int i = 0; i < ResponseList.length(); i++) {
+                                            Chat chat = null;
+                                            try {
+                                                String time = ResponseList.getJSONObject(i).getString("timestamp");
+                                                Instant timestamp = Instant.parse(time);
+                                                ZonedDateTime indiaTime = timestamp.atZone(ZoneId.of("Asia/Kolkata"));
+                                                String date = indiaTime.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
+                                                String timeshow = indiaTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+                                                chat = new Chat(ResponseList.getJSONObject(i).getString("from"), ResponseList.getJSONObject(i).getString("msg"), date, timeshow);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            list.add(chat);
                                         }
-                                        list.add(chat);
+                                        PrivatechatList.setItems(list);
+                                        PrivatechatList.setCellFactory(chat -> new ChatCellController());
+                                        if (Privatecount != list.size()) {
+                                            PrivatechatList.scrollTo(list.size() - 1);
+                                            Privatecount = list.size();
+                                        }
                                     }
-                                PrivatechatList.setItems(list);
-                                PrivatechatList.setCellFactory(chat -> new ChatCellController());
-                                if (Privatecount!= list.size()) {
-                                    PrivatechatList.scrollTo(list.size() - 1);
-                                    Privatecount = list.size();
-                                }
                             }
                             else{
                                 statusPrivate_id.setText("No data found in this Chat");
@@ -280,26 +284,28 @@ public class ChatController implements Initializable {
                                 jsonList = EntityUtils.toString(res.getEntity());
                                 ResponseList = new JSONArray(jsonList);
                                 if (ResponseList.length() > 0)
-                                    for (int i = 0; i < ResponseList.length(); i++) {
-                                        Chat chat = null;
-                                        try {
-                                            String time = ResponseList.getJSONObject(i).getString("timestamp");
-                                            Instant timestamp = Instant.parse(time);
-                                            ZonedDateTime indiaTime = timestamp.atZone(ZoneId.of("Asia/Kolkata"));
-                                            String date = indiaTime.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
-                                            String timeshow = indiaTime.format(DateTimeFormatter.ofPattern("HH:mm"));
-                                            chat = new Chat(ResponseList.getJSONObject(i).getString("uname"), ResponseList.getJSONObject(i).getString("message"), date, timeshow);
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
+                                    if(ResponseList.length()!=Allcount) {
+                                        for (int i = 0; i < ResponseList.length(); i++) {
+                                            Chat chat = null;
+                                            try {
+                                                String time = ResponseList.getJSONObject(i).getString("timestamp");
+                                                Instant timestamp = Instant.parse(time);
+                                                ZonedDateTime indiaTime = timestamp.atZone(ZoneId.of("Asia/Kolkata"));
+                                                String date = indiaTime.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
+                                                String timeshow = indiaTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+                                                chat = new Chat(ResponseList.getJSONObject(i).getString("uname"), ResponseList.getJSONObject(i).getString("message"), date, timeshow);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            list.add(chat);
                                         }
-                                        list.add(chat);
+                                        AllchatList.setItems(list);
+                                        AllchatList.setCellFactory(chat -> new ChatCellController());
+                                        if (Allcount != list.size()) {
+                                            AllchatList.scrollTo(list.size() - 1);
+                                            Allcount = list.size();
+                                        }
                                     }
-                                AllchatList.setItems(list);
-                                AllchatList.setCellFactory(chat -> new ChatCellController());
-                                if (Allcount != list.size()) {
-                                    AllchatList.scrollTo(list.size() - 1);
-                                    Allcount = list.size();
-                                }
                             }
                             else{
                                 statusAll_id.setText("No data found in this Chat");
