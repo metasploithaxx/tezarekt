@@ -43,19 +43,27 @@ public class ChatController implements Initializable {
 
     @FXML
     public JFXListView<Chat> SubsChatList,PrivatechatList,AllchatList;
+
     @FXML
     private JFXTextArea Alltextarea_id,Privatetextarea_id,Substextarea_id;
+
     @FXML
     private JFXButton Subssend_btn,Privatesend_btn,Allsend_btn;
+
     @FXML
     public JFXSpinner Allprogress_id,Subsprogress_id,Privateprogress_id;
+
     @FXML
     private JFXTabPane Tabpane;
+
     @FXML
     private Tab Subschat_Tab;
+
     @FXML
     private Label statusAll_id,statusSubs_id,statusPrivate_id;
+
     public int Allcount=0,Subscount=0,Privatecount=0;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
@@ -308,6 +316,7 @@ public class ChatController implements Initializable {
         }.start();
         Allprogress_id.setVisible(false);
     }
+
     public void SendSubs(){
         if (Substextarea_id.getText().length()>0) {
             Subsprogress_id.setVisible(true);
@@ -363,6 +372,7 @@ public class ChatController implements Initializable {
 
         }
     }
+
     public void SendPrivate(){
         if (Privatetextarea_id.getText().length()>0) {
             System.out.println("calll");
@@ -377,25 +387,37 @@ public class ChatController implements Initializable {
                         put("from", LoginController.curr_username);
                         put("msg",Privatetextarea_id.getText());
                     }};
-
+                    var values_Notify = new HashMap<String, String>() {{
+                        put("owner",MainPageController.displayedUname_id);
+                        put("msg",LoginController.curr_username+" has sent you a private message");
+                    }};
                     var objectMapper = new ObjectMapper();
-                    String payload = null;
+                    String payload = null, payloadNotify=null;
+
                     try {
                         payload = objectMapper.writeValueAsString(values);
+                        payloadNotify = objectMapper.writeValueAsString(values_Notify);
                     } catch (JsonProcessingException e) {
                         e.printStackTrace();
                     }
 
                     StringEntity entity = new StringEntity(payload,
                             ContentType.APPLICATION_JSON);
+                    StringEntity entity1 = new StringEntity(payloadNotify,ContentType.APPLICATION_JSON);
 
                     CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
                     client.start();
+
                     HttpPost request = new HttpPost(Main.Connectingurl+"/privateChatPost");
                     request.setEntity(entity);
                     request.setHeader("Content-Type", "application/json; charset=UTF-8");
                     Future<HttpResponse> future = client.execute(request, null);
 
+                    HttpPost requestNotify = new HttpPost(Main.Connectingurl+"/setNotification");
+                    requestNotify.setEntity(entity1);
+                    requestNotify.setHeader("Content-Type", "application/json; charset=UTF-8");
+                    Future<HttpResponse> futureNotify = client.execute(requestNotify, null);
+                    while (!futureNotify.isDone());
                     while(!future.isDone());
                     try {
                         future.get();
