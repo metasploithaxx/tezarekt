@@ -28,6 +28,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -259,11 +260,11 @@ public class SideDrawerController implements Initializable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Scene scene = new Scene(root,500,325);
+                Scene scene = new Scene(root);
                 scene.getStylesheets().add(getClass().getResource("css/stylesheet.css").toString());
-                Stage primaryStage = new Stage();
+                Stage primaryStage = new Stage(StageStyle.UNDECORATED);
                 primaryStage.setScene(scene);
-                primaryStage.setTitle("Login page");
+                primaryStage.setResizable(false);
                 primaryStage.show();
                 stage.close();
             });

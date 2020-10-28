@@ -1,45 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXSpinner?>
-<?import javafx.scene.control.CheckBox?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LoginController">
+<AnchorPane prefHeight="605.0" prefWidth="1167.0" style="-fx-background-color: #444444;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LoginController">
    <children>
-      <Label fx:id="lblOutput" alignment="CENTER" layoutX="175.0" layoutY="14.0" prefHeight="35.0" prefWidth="150.0" text="Login Page" textAlignment="CENTER" wrapText="true">
+      <JFXTextField fx:id="username_id" layoutX="51.0" layoutY="217.0" prefHeight="35.0" prefWidth="271.0" promptText="  Username" style="-fx-border-width: 1; -fx-border-color: #999999; -fx-border-radius: 5; -fx-prompt-text-fill: #cccccc; -fx-text-fill: #ffffff;">
          <font>
-            <Font size="22.0" />
+            <Font name="CoolveticaRg-Regular" size="16.0" />
+         </font>
+      </JFXTextField>
+      <JFXPasswordField fx:id="password_id" layoutX="51.0" layoutY="302.0" prefHeight="35.0" prefWidth="271.0" promptText="  Password" style="-fx-border-width: 1; -fx-border-color: #999999; -fx-border-radius: 5; -fx-prompt-text-fill: #cccccc; -fx-text-fill: #ffffff;">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="16.0" />
+         </font>
+      </JFXPasswordField>
+      <JFXButton fx:id="login_btn" layoutX="54.0" layoutY="430.0" mnemonicParsing="false" onAction="#Login" prefHeight="35.0" prefWidth="100.0" style="-fx-border-color: #999999; -fx-border-radius: 10;" text="Login" textFill="WHITE">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="16.0" />
+         </font>
+      </JFXButton>
+      <Label fx:id="status_id" layoutX="175.0" layoutY="560.0" prefHeight="34.0" prefWidth="147.0" />
+      <ImageView fitHeight="615.0" fitWidth="846.0" layoutX="362.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@photo/randomart.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="464.0" layoutY="119.0" prefHeight="160.0" prefWidth="662.0" text="Welcome to TEZAREKT" textFill="WHITE">
+         <font>
+            <Font name="Alata Regular" size="63.0" />
          </font>
       </Label>
-      <TextField fx:id="username_id" layoutX="100.0" layoutY="89.0" prefHeight="25.0" prefWidth="300.0" promptText="Username">
+      <Label fx:id="loginState" layoutX="471.0" layoutY="295.0" prefHeight="135.0" prefWidth="455.0" text="Login to continue" textFill="WHITE">
          <font>
-            <Font size="20.0" />
+            <Font name="Alata Regular" size="40.0" />
          </font>
-      </TextField>
-      <PasswordField fx:id="password_id" layoutX="100.0" layoutY="150.0" prefHeight="25.0" prefWidth="300.0" promptText="Password">
+      </Label>
+      <Label layoutX="471.0" layoutY="194.0" prefHeight="135.0" prefWidth="569.0" text="Your friendly neighbourhood streaming platform" textFill="WHITE">
          <font>
-            <Font size="20.0" />
+            <Font name="Alata Regular" size="24.0" />
          </font>
-      </PasswordField>
-      <Label fx:id="status_id" layoutX="100.0" layoutY="274.0" prefHeight="35.0" prefWidth="300.0" />
-      <CheckBox fx:id="check_id" layoutX="100.0" layoutY="201.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="133.0" text="Remember me" />
-      <JFXButton fx:id="login_btn" buttonType="RAISED" layoutX="100.0" layoutY="230.0" onAction="#Login" prefHeight="44.0" prefWidth="100.0" ripplerFill="#272acf" text="Login" textFill="#2c2b2b">
+      </Label>
+      <JFXCheckBox fx:id="check_id" layoutX="54.0" layoutY="372.0" text="Remember me" textFill="WHITE">
          <font>
-            <Font size="20.0" />
+            <Font name="CoolveticaRg-Regular" size="18.0" />
          </font>
-      </JFXButton>
-      <JFXButton fx:id="register_btn" buttonType="RAISED" layoutX="300.0" layoutY="230.0" onAction="#Register" prefHeight="44.0" prefWidth="116.0" ripplerFill="#272acf" text="Register">
+      </JFXCheckBox>
+      <JFXButton fx:id="register_btn" layoutX="207.0" layoutY="430.0" mnemonicParsing="false" onAction="#Register" prefHeight="35.0" prefWidth="100.0" style="-fx-border-color: #999999; -fx-border-radius: 10;" text="Register" textFill="WHITE">
          <font>
-            <Font size="20.0" />
+            <Font name="CoolveticaRg-Regular" size="16.0" />
          </font>
       </JFXButton>
-
-      <JFXSpinner fx:id="loader_id" layoutX="218.0" layoutY="147.0" visible="false" />
-
+      <JFXSpinner fx:id="loader_id" layoutX="795.0" layoutY="314.0" prefHeight="97.0" prefWidth="92.0" visible="false" />
+      <JFXButton layoutX="1143.0" layoutY="20.0" mnemonicParsing="false" onAction="#exit" prefHeight="35.0" prefWidth="42.0" style="-fx-border-color: #999999; -fx-border-radius: 10;" text="X" textFill="WHITE">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="16.0" />
+         </font>
+      </JFXButton>
    </children>
-</Pane>
+</AnchorPane>
