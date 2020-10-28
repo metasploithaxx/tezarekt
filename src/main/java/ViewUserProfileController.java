@@ -48,6 +48,8 @@ public class ViewUserProfileController implements Initializable {
     private JFXButton subscribe_btn;
     @FXML
     private JFXSpinner subs_spinner_id;
+
+    private Stage primaryStage=null;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         subscribe_btn.setDisable(true);
@@ -158,6 +160,60 @@ public class ViewUserProfileController implements Initializable {
     public void initProceed()
     {
 
+            Task<HttpResponse> task = new Task<HttpResponse>() {
+                @Override
+                protected HttpResponse call() throws Exception {
+
+                    var values = new HashMap<String, String>() {{
+                        put("from", uname_id.getText());
+                        put("to", LoginController.curr_username);
+                        put("flag", (subscribe_btn.getText().equals("Subscribe") ? "true" : "false"));
+
+                    }};
+
+                    var objectMapper = new ObjectMapper();
+                    String payload =
+                            objectMapper.writeValueAsString(values);
+
+                    StringEntity entity = new StringEntity(payload,
+                            ContentType.APPLICATION_JSON);
+
+                    CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                    client.start();
+                    HttpPost request = new HttpPost(Main.Connectingurl + "/subscribe");
+                    request.setEntity(entity);
+                    request.setHeader("Content-Type", "application/json; charset=UTF-8");
+                    Future<HttpResponse> future = client.execute(request, null);
+
+                    while (!future.isDone()) ;
+                    return future.get();
+                }
+            };
+            Thread thread = new Thread(task);
+            thread.start();
+
+            task.setOnSucceeded(res -> {
+                subs_spinner_id.setVisible(false);
+                if (task.isDone()) {
+                    try {
+                        String jsonString = EntityUtils.toString(task.get().getEntity());
+                        System.out.println(jsonString);
+                        if (task.get().getStatusLine().getStatusCode() == 200) {
+                            status_id.setText(jsonString);
+                            status_id.setTextFill(Color.GREEN);
+                        } else {
+                            status_id.setText(jsonString);
+                            status_id.setTextFill(Color.RED);
+                        }
+                        isSubscribe();
+                    } catch (IOException | InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+
+        primaryStage.close();
     }
 
     public void Subscribe(ActionEvent actionEvent) throws IOException {
@@ -166,7 +222,7 @@ public class ViewUserProfileController implements Initializable {
         FXMLLoader loader=new FXMLLoader(getClass().getResource("SubscribeConfirmation.fxml"));
         Parent root =loader.load();
         Scene scene = new Scene(root,600,400);
-        Stage primaryStage = new Stage();
+        primaryStage = new Stage();
         primaryStage.initModality(Modality.APPLICATION_MODAL);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Confirmation Page");
@@ -189,20 +245,13 @@ public class ViewUserProfileController implements Initializable {
 
             @Override
             public void handle(ActionEvent event) {
-
-               Future<Boolean> flag =  Sbcc.checkPassword(LoginController.curr_username);
-               while(!flag.isDone());
-
-                if(flag.isDone()){
-                    Task<HttpResponse> task = new Task<HttpResponse>() {
+                if(pwd_id.getText().length()>0){
+                    Task<HttpResponse> task =new Task<>() {
                         @Override
                         protected HttpResponse call() throws Exception {
-
                             var values = new HashMap<String, String>() {{
-                                put("from", uname_id.getText());
-                                put("to", LoginController.curr_username);
-                                put("flag", (subscribe_btn.getText().equals("Subscribe") ? "true" : "false"));
-
+                                put("uname", LoginController.curr_username);
+                                put("passhash", pwd_id.getText());
                             }};
 
                             var objectMapper = new ObjectMapper();
@@ -214,47 +263,37 @@ public class ViewUserProfileController implements Initializable {
 
                             CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
                             client.start();
-                            HttpPost request = new HttpPost(Main.Connectingurl + "/subscribe");
+                            HttpPost request = new HttpPost(Main.Connectingurl+"/checkPassword");
                             request.setEntity(entity);
                             request.setHeader("Content-Type", "application/json; charset=UTF-8");
                             Future<HttpResponse> future = client.execute(request, null);
 
-                            while (!future.isDone()) ;
+                            while(!future.isDone());
                             return future.get();
                         }
                     };
-                    Thread thread = new Thread(task);
-                    thread.start();
-
-                    task.setOnSucceeded(res -> {
-                        subs_spinner_id.setVisible(false);
-                        if (task.isDone()) {
+                    Thread th=new Thread(task);
+                    th.start();
+                    task.setOnSucceeded(res->{
+                        if(task.isDone()) {
                             try {
                                 String jsonString = EntityUtils.toString(task.get().getEntity());
-                                if (task.get().getStatusLine().getStatusCode() == 200) {
-                                    status_id.setText(jsonString);
-                                    status_id.setTextFill(Color.GREEN);
-                                } else {
-                                    status_id.setText(jsonString);
-                                    status_id.setTextFill(Color.RED);
+                                System.out.println(jsonString);
+                                if (jsonString.equals("true")){
+                                    initProceed();
+                                    System.out.println("$$$");
                                 }
-                                isSubscribe();
-                            } catch (IOException | InterruptedException | ExecutionException e) {
+                                else{
+                                    System.out.println("Wrong password");
+                                }
+
+                            } catch (InterruptedException | ExecutionException | IOException e) {
                                 e.printStackTrace();
                             }
-
                         }
                     });
-
+                    System.out.println("^^^");
                 }
-                else{
-
-                    subs_spinner_id.setVisible(false);
-                    isSubscribe();
-                    status_id.setText("Wrong password");
-                    status_id.setTextFill(Color.RED);
-                }
-                primaryStage.close();
             }
         });
 
