@@ -54,7 +54,7 @@ public class OnlineUsersListController implements Initializable {
 
     public JFXListView<OnlineUser> onlineuserslist;
 
-    public Label online_status,uname_id, fname_id, lname_id, subscost_id;
+    public Label online_status,uname_id, fname_id, lname_id, cost_id;
 
     public ImageView image_view_id;
 
@@ -131,7 +131,7 @@ public class OnlineUsersListController implements Initializable {
                                 uname_id = viewUserProfileController.getUname_id();
                                 fname_id = viewUserProfileController.getFname_id();
                                 lname_id = viewUserProfileController.getLname_id();
-                                subscost_id = viewUserProfileController.getSubscost_id();
+                                cost_id = viewUserProfileController.getCost_id();
                                 image_view_id = viewUserProfileController.getImage_view_id();
                                 online_status = viewUserProfileController.getOnline_status();
 
@@ -149,6 +149,7 @@ public class OnlineUsersListController implements Initializable {
                                     fname_id.setText(myResponse.getString("fname"));
                                     lname_id.setText(myResponse.getString("lname"));
                                     bio_id.setText(myResponse.getString("bio"));
+                                    cost_id.setText(myResponse.getString("subsrate"));
                                     image_view_id.setImage(image);
                                     if(myResponse.getBoolean("isonline")){
                                         online_status.setText("User is Online");

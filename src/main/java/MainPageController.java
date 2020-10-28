@@ -92,7 +92,7 @@ public class MainPageController implements Initializable {
     private JFXComboBox<Notification> notification_id;
 
 
-    public Label uname_id, fname_id, lname_id, subscost_id,online_status;
+    public Label uname_id, fname_id, lname_id, cost_id,online_status;
 
     public ImageView image_view_id;
 
@@ -390,7 +390,7 @@ public class MainPageController implements Initializable {
                                             uname_id = viewUserProfileController.getUname_id();
                                             fname_id = viewUserProfileController.getFname_id();
                                             lname_id = viewUserProfileController.getLname_id();
-                                            subscost_id = viewUserProfileController.getSubscost_id();
+                                            cost_id = viewUserProfileController.getCost_id();
                                             image_view_id = viewUserProfileController.getImage_view_id();
                                             online_status = viewUserProfileController.getOnline_status();
 
@@ -403,6 +403,7 @@ public class MainPageController implements Initializable {
                                         uname_id.setText(myResponse.getString("uname"));
                                         fname_id.setText(myResponse.getString("fname"));
                                         lname_id.setText(myResponse.getString("lname"));
+                                        cost_id.setText(myResponse.getString("subsrate"));
                                         bio_id.setText(myResponse.getString("bio"));
                                         if(!myResponse.getString("isonline").equals("null")){
                                             if (myResponse.getBoolean("isonline") == true) {
