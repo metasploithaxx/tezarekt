@@ -37,7 +37,7 @@ public class H264StreamEncoder{
 
 	private void initialize(){
 		//setup
-		iStreamCoder.setNumPicturesInGroupOfPictures(25);
+		iStreamCoder.setNumPicturesInGroupOfPictures(60);
 
 		iStreamCoder.setBitRate(200000);
 		iStreamCoder.setBitRateTolerance(10000);
@@ -47,7 +47,7 @@ public class H264StreamEncoder{
 		iStreamCoder.setFlag(IStreamCoder.Flags.FLAG_QSCALE, true);
 		iStreamCoder.setGlobalQuality(0);
 		//rate
-		IRational rate = IRational.make(25, 1);
+		IRational rate = IRational.make(60, 1);
 		iStreamCoder.setFrameRate(rate);
 		//time base
 		iStreamCoder.setTimeBase(IRational.make(rate.getDenominator(),rate.getNumerator()));
@@ -59,7 +59,7 @@ public class H264StreamEncoder{
 			throw new RuntimeException("could not open the coder");
 		}
 
-		iStreamCoder.setNumPicturesInGroupOfPictures(25);
+		iStreamCoder.setNumPicturesInGroupOfPictures(60);
 
 
 		iAudioStreamCoder.setChannels(2);
