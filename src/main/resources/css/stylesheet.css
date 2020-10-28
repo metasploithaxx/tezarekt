@@ -8,3 +8,11 @@
     -fx-font-family : "serief";
     -fx-background1 : rgb(218,232,240);
 }
+.jfx-combo-box .arrow{
+    -fx-background-color: transparent;
+    -fx-background-position: center;
+}
+.jfx-combo-box .arrow-button{
+    -fx-background-color: transparent;
+    -fx-background-position: center;
+}

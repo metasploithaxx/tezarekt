@@ -62,7 +62,7 @@ public class RegisterController {
 
                 CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
                 client.start();
-                HttpPost request = new HttpPost("http://[::1]:3000/register");
+                HttpPost request = new HttpPost(Main.Connectingurl+"/register");
                 request.setEntity(entity);
                 request.setHeader("Content-Type", "application/json; charset=UTF-8");
                 Future<HttpResponse> future = client.execute(request, null);
@@ -116,6 +116,10 @@ public class RegisterController {
         if(username_id.getText().length()>0 && password_id.getText().length()>0 && confirmpd_id.getText().length()>0 && firstname_id.getText().length()>0 && lastname_id.getText().length()>0 ){
             if(!confirmpd_id.getText().equals(password_id.getText())){
                 status_id.setText("Confirm Password and Password don't match");
+                status_id.setTextFill(Color.RED);
+            }
+            else if(username_id.getText().equals("Global")){
+                status_id.setText("Can't set Global as a Username");
                 status_id.setTextFill(Color.RED);
             }
             else{

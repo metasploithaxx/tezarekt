@@ -116,7 +116,7 @@ public class LoginController implements Initializable {
                         } catch (IOException e) {
                             System.out.println(e.getMessage());
                         }
-                        Scene scene = new Scene(root, 1050, 750);
+                        Scene scene = new Scene(root, 1050, 760);
                         scene.getStylesheets().add(getClass().getResource("css/stylesheet.css").toString());
                         Stage primaryStage = new Stage();
                         primaryStage.setScene(scene);
@@ -134,7 +134,6 @@ public class LoginController implements Initializable {
 
             }
             else{
-                System.out.println("@@");
                 status_id.setText("Incorrect username or Password");
                 status_id.setTextFill(Color.RED);
             }
