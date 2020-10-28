@@ -16,7 +16,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent root= FXMLLoader.load(getClass().getResource("StreamerHub.fxml"));
+        Parent root= FXMLLoader.load(getClass().getResource("Login.fxml"));
         Scene scene = new Scene(root);
 
         scene.getStylesheets().add(getClass().getResource("css/stylesheet.css").toString());
