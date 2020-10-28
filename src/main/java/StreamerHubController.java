@@ -256,7 +256,7 @@ public class StreamerHubController implements Initializable {
                     img=new BufferedImage(640,480,BufferedImage.TYPE_INT_RGB);
 
             }
-
+//            System.out.println(img.getType());
             display.setImage(SwingFXUtils.toFXImage(img,null));
 
             if(isStreaming)
@@ -369,31 +369,15 @@ public class StreamerHubController implements Initializable {
         public void run() {
             try {
                 audionb++;
-                ByteBuffer msg=null;
-                if ( audioBytesRead > 0 ) {
-                    msg = audioEncoder.encode(audioData,audioBytesRead);
-                }
-                if ( msg != null ) {
-                    int size=msg.remaining();
-                    byte[] buf=new byte[size];
-                    msg.get(buf);
-                    RTPpacket rtp_packet = new RTPpacket(MPA_TYPE, audionb, (int)(System.currentTimeMillis()-initTime), buf, size);
-
-                    //get to total length of the full rtp packet to send
-                    int packet_length = rtp_packet.getlength();
-
-                    //retrieve the packet bitstream and store it in an array of bytes
-                    byte[] packet_bits = new byte[packet_length];
-                    rtp_packet.getpacket(packet_bits);
-
-                    //send the packet as a DatagramPacket over the UDP socket
-                    DatagramPacket senddp = new DatagramPacket(packet_bits, packet_length, multicastGroup, AUDIO_PORT);
-                    multicastAudioSocket.send(senddp);
-                    //print the header bitstream
-                    rtp_packet.printheader();
-                    System.out.println("Send audio frame #" + audionb);
-                }
-//                RTPpacket rtp_packet = new RTPpacket(MPA_TYPE, audionb, (int)(System.currentTimeMillis()-initTime), audioData, audioBytesRead);
+//                ByteBuffer msg=null;
+//                if ( audioBytesRead > 0 ) {
+//                    msg = audioEncoder.encode(audioData,audioBytesRead);
+//                }
+//                if ( msg != null ) {
+//                    int size=msg.remaining();
+//                    byte[] buf=new byte[size];
+//                    msg.get(buf);
+//                    RTPpacket rtp_packet = new RTPpacket(MPA_TYPE, audionb, (int)(System.currentTimeMillis()-initTime), buf, size);
 //
 //                    //get to total length of the full rtp packet to send
 //                    int packet_length = rtp_packet.getlength();
@@ -408,6 +392,22 @@ public class StreamerHubController implements Initializable {
 //                    //print the header bitstream
 //                    rtp_packet.printheader();
 //                    System.out.println("Send audio frame #" + audionb);
+//                }
+                RTPpacket rtp_packet = new RTPpacket(MPA_TYPE, audionb, (int)(System.currentTimeMillis()-initTime), audioData, audioBytesRead);
+
+                    //get to total length of the full rtp packet to send
+                    int packet_length = rtp_packet.getlength();
+
+                    //retrieve the packet bitstream and store it in an array of bytes
+                    byte[] packet_bits = new byte[packet_length];
+                    rtp_packet.getpacket(packet_bits);
+
+                    //send the packet as a DatagramPacket over the UDP socket
+                    DatagramPacket senddp = new DatagramPacket(packet_bits, packet_length, multicastGroup, AUDIO_PORT);
+                    multicastAudioSocket.send(senddp);
+                    //print the header bitstream
+                    rtp_packet.printheader();
+                    System.out.println("Send audio frame #" + audionb);
 
             } catch (Exception e) {
                 // TODO Auto-generated catch block

@@ -53,15 +53,16 @@ public class ClientVideoController implements Initializable {
 
     Timeline videoTimer; //timer used to receive data from the UDP socket
     protected ScheduledExecutorService timeWorker;
-    protected ScheduledFuture<?> audioGrabFuture;
+    protected ScheduledFuture<?> audioGrabFuture,syncer;
     byte[] buf;  //buffer used to store data received from the server
     private int playing;
     private boolean playingAudio,startedPlaying;
-    protected ExecutorService decodeVideoWorker,decodeAudioWorker;
+//    protected ExecutorService decodeVideoWorker,decodeAudioWorker;
 
     private InetAddress multicastGroup;
     FrameSynchronizer fsynch;
     private SourceDataLine soundLine;
+    int currTime,currStream,lastTime; //Used to sync frames
 
     Dimension dimension;
     protected final IStreamCoder iStreamCoder = IStreamCoder.make(IStreamCoder.Direction.DECODING, ICodec.ID.CODEC_ID_H264);
@@ -73,17 +74,16 @@ public class ClientVideoController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb){
         try {
-//            videoTimer=new Timeline(
-//                    new KeyFrame(
-//                            Duration.millis(15),
-//                            new videoFrameListener()
-//                    )
-//
-//            );
-//            videoTimer.setCycleCount(Timeline.INDEFINITE);
-            this.timeWorker = new ScheduledThreadPoolExecutor(5);
-            this.decodeAudioWorker=Executors.newSingleThreadExecutor();
-            this.decodeVideoWorker=Executors.newSingleThreadExecutor();
+            videoTimer=new Timeline(
+                    new KeyFrame(
+                            Duration.millis(15),
+                            new videoFrameListener()
+                    )
+
+            );
+            videoTimer.setCycleCount(Timeline.INDEFINITE);
+            this.timeWorker = new ScheduledThreadPoolExecutor(15);
+
             snackbar = new JFXSnackbar(rootPane);
 
             buf = new byte[63800];
@@ -97,7 +97,6 @@ public class ClientVideoController implements Initializable {
             multicastVideoSocket.setTimeToLive(0);
             multicastAudioSocket.setTimeToLive(0);
             //create the frame synchronizer
-            fsynch = new FrameSynchronizer(100);
             dimension=new Dimension(640,480);
 
             iStreamCoder.open(null, null);
@@ -146,8 +145,8 @@ public class ClientVideoController implements Initializable {
 
         playing=0;
         startedPlaying=false;
-
-
+        currTime=lastTime=0;
+        currStream=0;
     }
 
 
@@ -164,6 +163,7 @@ public class ClientVideoController implements Initializable {
             if(!startedPlaying){
                 videoTimer.play();
                 startAudio();
+                startSync();
                 startedPlaying=true;
             }
             rcvdp = new DatagramPacket(buf, buf.length);
@@ -206,6 +206,18 @@ public class ClientVideoController implements Initializable {
         audioGrabFuture.cancel(false);
     }
 
+    public void startSync(){
+        syncer=timeWorker.scheduleWithFixedDelay(new FrameSynchronizer(),
+                0,
+                6,
+                TimeUnit.MILLISECONDS
+        );
+    }
+
+    public void stopSync(){
+        syncer.cancel(true);
+    }
+
 
     //------------------------------------
     //Handler for timer
@@ -228,7 +240,9 @@ public class ClientVideoController implements Initializable {
                 //create an stream.RTPpacket object from the DP
                 RTPpacket rtp_packet = new RTPpacket(rcvdp.getData(), rcvdp.getLength());
                 int seqNb = rtp_packet.getsequencenumber();
-
+                currStream=1;
+                lastTime=currTime;
+                currTime=rtp_packet.gettimestamp();
                 //this is the highest seq num received
 
                 //print important header fields of the RTP packet received:
@@ -300,14 +314,14 @@ public class ClientVideoController implements Initializable {
                             IConverter converter = ConverterFactory.createConverter(type
                                     .getDescriptor(), picture);
                             BufferedImage image = converter.toImage(picture);
-                            //BufferedImage convertedImage = stream.ImageUtils.convertToType(image, BufferedImage.TYPE_3BYTE_BGR);
+                            BufferedImage convertedImage = stream.ImageUtils.convertToType(image, BufferedImage.TYPE_3BYTE_BGR);
                             //here ,put out the image
                             converter.delete();
                             //clean the picture and reuse it
                             picture.getByteBuffer().clear();
                             //display the image as an Image object
 
-                            video.setImage(SwingFXUtils.toFXImage(image,null));
+                            video.setImage(SwingFXUtils.toFXImage(convertedImage,null));
 
                         } else {
                             picture.delete();
@@ -339,7 +353,9 @@ public class ClientVideoController implements Initializable {
                 //create an stream.RTPpacket object from the DP
                 RTPpacket rtp_packet = new RTPpacket(rcvdp.getData(), rcvdp.getLength());
                 int seqNb = rtp_packet.getsequencenumber();
-
+                currStream=0;
+                lastTime=currTime;
+                currTime=rtp_packet.gettimestamp();
                 //this is the highest seq num received
 
                 //print important header fields of the RTP packet received:
@@ -366,8 +382,8 @@ public class ClientVideoController implements Initializable {
 
                     //get an AudioSample object from the payload bitstream
                     if(playingAudio)
-                        decodeAudioWorker.execute(new DecodeAudioTask(payload,payload_length));
-//                        soundLine.write(payload, 0, payload_length);
+//                        decodeAudioWorker.execute(new DecodeAudioTask(payload,payload_length));
+                        soundLine.write(payload, 0, payload_length);
 //                    decodeAndPlay(payload, payload_length);
 //                    fsynch.addFrame(image, seqNb);
 //                    videoBuffer.add(image);
@@ -452,41 +468,46 @@ public class ClientVideoController implements Initializable {
     //------------------------------------
     //Synchronize frames
     //------------------------------------
-    class FrameSynchronizer {
+    class FrameSynchronizer implements Runnable{
 
-        private ArrayDeque<Image> queue;
-        private int bufSize;
-        private int curSeqNb;
-        private Image lastImage;
+        @Override
+        public void run() {
+            if(currTime<lastTime){
+                videoTimer.pause();
+                stopAudio();
+                loading.setVisible(true);
+                if(currStream==0){ //Audio is lagging, forward it to current
+                    while(currTime<lastTime) {
+                        try {
+                            //receive the DP from the socket, save time for stats
+                            multicastAudioSocket.receive(rcvdp);
 
-        public FrameSynchronizer(int bsize) {
-            curSeqNb = 1;
-            bufSize = bsize;
-            queue = new ArrayDeque<Image>(bufSize);
-        }
-
-        //synchronize frames based on their sequence number
-        public void addFrame(Image image, int seqNum) {
-            if (seqNum < curSeqNb) {
-                queue.add(lastImage);
-            }
-            else if (seqNum > curSeqNb) {
-                for (int i = curSeqNb; i < seqNum; i++) {
-                    queue.add(lastImage);
+                            //create an stream.RTPpacket object from the DP
+                            RTPpacket rtp_packet = new RTPpacket(rcvdp.getData(), rcvdp.getLength());
+                            currTime = rtp_packet.gettimestamp();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
-                queue.add(image);
-            }
-            else {
-                queue.add(image);
-            }
+                else{ //Video is lagging
+                    while(currTime<lastTime) {
+                        try {
+                            //receive the DP from the socket, save time for stats
+                            multicastVideoSocket.receive(rcvdp);
 
-        }
-
-        //get the next synchronized frame
-        public Image nextFrame() {
-            curSeqNb++;
-            lastImage = queue.peekLast();
-            return queue.remove();
+                            //create an stream.RTPpacket object from the DP
+                            RTPpacket rtp_packet = new RTPpacket(rcvdp.getData(), rcvdp.getLength());
+                            currTime = rtp_packet.gettimestamp();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                loading.setVisible(false);
+                videoTimer.play();
+                startAudio();
+            }
         }
     }
 }
