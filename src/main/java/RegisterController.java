@@ -4,10 +4,14 @@ import com.jfoenix.controls.JFXSpinner;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
@@ -79,6 +83,16 @@ public class RegisterController {
                     if (task.get().getStatusLine().getStatusCode() == 200) {
                         status_id.setText("Successfully Registered");
                         status_id.setTextFill(Color.GREEN);
+                        Stage stage = (Stage) status_id.getScene().getWindow();
+
+                        Parent root= FXMLLoader.load(getClass().getResource("Login.fxml"));
+                        Scene scene = new Scene(root,500,325);
+                        scene.getStylesheets().add(getClass().getResource("css/stylesheet.css").toString());
+                        Stage primaryStage = new Stage();
+                        primaryStage.setScene(scene);
+                        primaryStage.setTitle("Login page");
+                        primaryStage.show();
+                        stage.close();
 
                     } else {
 

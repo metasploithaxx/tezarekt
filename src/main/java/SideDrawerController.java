@@ -1,3 +1,4 @@
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSpinner;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -13,11 +14,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -28,11 +32,15 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
-public class HomeController implements Initializable {
+public class SideDrawerController implements Initializable {
     @FXML
     private ImageView image_id;
     @FXML
     private JFXSpinner load_id;
+    @FXML
+    private JFXButton profile_page;
+    @FXML
+    private Label username_id;
     @FXML
     private boolean ProfilePic() throws ClassNotFoundException {
         try {
@@ -50,6 +58,9 @@ public class HomeController implements Initializable {
         }
 
     }
+    public JFXButton getProfile_page(){
+        return profile_page;
+    }
     public void ProfilePic1(ActionEvent actionEvent) throws IOException {
         Parent root= FXMLLoader.load(getClass().getResource("ProfileImage.fxml"));
         Scene scene = new Scene(root,540,400);
@@ -58,14 +69,7 @@ public class HomeController implements Initializable {
         primaryStage.setTitle("ProfilePictureImage");
         primaryStage.show();
     }
-    public void ProfilePage(ActionEvent actionEvent) throws IOException {
-        Parent root= FXMLLoader.load(getClass().getResource("Profile.fxml"));
-        Scene scene = new Scene(root,600,400);
-        Stage primaryStage = new Stage();
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Profile page");
-        primaryStage.show();
-    }
+
     public void init(){
         Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
         mongoLogger.setLevel(Level.SEVERE);
@@ -99,6 +103,7 @@ public class HomeController implements Initializable {
 
         Parent root= FXMLLoader.load(getClass().getResource("Login.fxml"));
         Scene scene = new Scene(root,500,325);
+        scene.getStylesheets().add(getClass().getResource("css/stylesheet.css").toString());
         Stage primaryStage = new Stage();
         primaryStage.setScene(scene);
         primaryStage.setTitle("Login page");
@@ -109,6 +114,8 @@ public class HomeController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
         mongoLogger.setLevel(Level.SEVERE);
+        username_id.setText("Hello "+LoginController.curr_username);
+        username_id.setTextFill(Color.BLUEVIOLET);
         init();
     }
 }

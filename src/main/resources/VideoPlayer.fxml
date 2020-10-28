@@ -1,16 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import javafx.scene.control.Separator?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 
-<AnchorPane fx:id="rootPane" prefHeight="496.0" prefWidth="730.0" style="-fx-border-color: #44bb00;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClientVideoController">
+<AnchorPane fx:id="rootPane" prefHeight="572.0" prefWidth="670.0" style="-fx-background-color: #444444;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClientVideoController">
    <children>
-      <ImageView fx:id="video" fitHeight="429.0" fitWidth="730.0" pickOnBounds="true" preserveRatio="true" />
-      <JFXButton fx:id="playBtn" contentDisplay="GRAPHIC_ONLY" layoutX="341.0" layoutY="431.0" prefHeight="59.0" prefWidth="64.0" style="-fx-background-radius: 5em; -fx-background-color: #ff6600;" text="Button" />
-      <JFXButton fx:id="pauseBtn" contentDisplay="GRAPHIC_ONLY" layoutX="499.0" layoutY="431.0" prefHeight="59.0" prefWidth="64.0" style="-fx-background-radius: 5em; -fx-background-color: #ff6600;" text="Button" />
-      <JFXButton fx:id="stopBtn" contentDisplay="GRAPHIC_ONLY" layoutX="176.0" layoutY="431.0" prefHeight="59.0" prefWidth="64.0" style="-fx-background-radius: 5em; -fx-background-color: #ff6600;" text="Button" />
-      <Separator layoutX="7.0" layoutY="425.0" prefHeight="6.0" prefWidth="730.0" />
+      <Pane layoutX="8.0" layoutY="494.0" prefHeight="74.0" prefWidth="649.0" style="-fx-border-color: #4267B2; -fx-border-radius: 25;">
+         <children>
+            <JFXButton fx:id="playPauseBtn" contentDisplay="GRAPHIC_ONLY" layoutX="287.0" layoutY="9.0" onAction="#playPause" prefHeight="52.0" prefWidth="75.0" style="-fx-background-color: #4267B2;" text="Button">
+               <graphic>
+                  <ImageView fx:id="playPauseImg" fitHeight="46.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@photo/play-button.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </JFXButton>
+            <Pane layoutX="58.0" layoutY="11.0" prefHeight="52.0" prefWidth="55.0" style="-fx-background-color: #1122FF;">
+               <children>
+                  <ImageView fitHeight="37.0" fitWidth="42.0" layoutX="9.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@photo/audio.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <JFXToggleButton fx:id="audioToggle" contentDisplay="GRAPHIC_ONLY" layoutX="113.0" layoutY="7.0" prefHeight="60.0" prefWidth="48.0" />
+         </children>
+      </Pane>
+      <ImageView fx:id="video" fitHeight="480.0" fitWidth="640.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="loading" fitHeight="150.0" fitWidth="157.0" layoutX="258.0" layoutY="183.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@photo/gems.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
