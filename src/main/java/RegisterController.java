@@ -1,6 +1,7 @@
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jfoenix.controls.JFXSpinner;
+import com.jfoenix.controls.JFXTextArea;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -33,7 +34,9 @@ import java.util.logging.Logger;
 
 public class RegisterController {
     @FXML
-    private TextField username_id,password_id,confirmpd_id,firstname_id,lastname_id,briefinfo_id;
+    private TextField username_id,password_id,confirmpd_id,firstname_id,lastname_id;
+    @FXML
+    private JFXTextArea briefinfo_id;
     @FXML
     private Label status_id;
     @FXML
@@ -130,5 +133,8 @@ public class RegisterController {
             status_id.setText("Fill all the Details");
             status_id.setTextFill(Color.RED);
         }
+    }
+    public void exit(){
+        ((Stage)status_id.getScene().getWindow()).close();
     }
 }

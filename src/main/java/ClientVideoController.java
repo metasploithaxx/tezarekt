@@ -49,7 +49,7 @@ public class ClientVideoController implements Initializable {
     //RTP variables:
     //----------------
     DatagramPacket rcvdp;            //UDP packet received from the server
-    MulticastSocket multicastAudioSocket,multicastVideoSocket;        //socket to be used to send and receive UDP packets
+    DatagramSocket multicastAudioSocket,multicastVideoSocket;        //socket to be used to send and receive UDP packets
 
     Timeline videoTimer; //timer used to receive data from the UDP socket
     protected ScheduledExecutorService timeWorker;
@@ -90,12 +90,12 @@ public class ClientVideoController implements Initializable {
             multicastVideoSocket=new MulticastSocket(StreamerHubController.VIDEO_PORT);
             multicastAudioSocket=new MulticastSocket(StreamerHubController.AUDIO_PORT);
             multicastGroup=InetAddress.getByName("230.0.0.0");  //230.0.0.0 is our multicast server
-            multicastVideoSocket.joinGroup(multicastGroup);
-            multicastAudioSocket.joinGroup(multicastGroup);
+//            multicastVideoSocket.joinGroup(multicastGroup);
+//            multicastAudioSocket.joinGroup(multicastGroup);
             multicastVideoSocket.setSoTimeout(5);
             multicastAudioSocket.setSoTimeout(5);
-            multicastVideoSocket.setTimeToLive(0);
-            multicastAudioSocket.setTimeToLive(0);
+//            multicastVideoSocket.setTimeToLive(0);
+//            multicastAudioSocket.setTimeToLive(0);
             //create the frame synchronizer
             dimension=new Dimension(640,480);
 

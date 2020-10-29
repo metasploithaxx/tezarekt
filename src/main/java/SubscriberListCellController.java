@@ -13,7 +13,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -26,7 +25,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-public class OnlineUsersListCellController extends JFXListCell<OnlineUser> {
+public class SubscriberListCellController extends JFXListCell<OnlineUser> {
+
     private FXMLLoader loader;
     @FXML
     VBox rootPane;
@@ -37,14 +37,14 @@ public class OnlineUsersListCellController extends JFXListCell<OnlineUser> {
 
     @Override
     protected void updateItem(OnlineUser item,boolean empty){
-            super.updateItem(item,empty);
-            if(empty||item==null){
-                setText(null);
-                setGraphic(null);
-            }
-            else{
+        super.updateItem(item,empty);
+        if(empty||item==null){
+            setText(null);
+            setGraphic(null);
+        }
+        else{
             if (loader == null) {
-                loader = new FXMLLoader(getClass().getResource("OnlineUsersListCell.fxml"));
+                loader = new FXMLLoader(getClass().getResource("SubscriberListCell.fxml"));
                 loader.setController(this);
 
                 try {
@@ -66,40 +66,35 @@ public class OnlineUsersListCellController extends JFXListCell<OnlineUser> {
                     e.printStackTrace();
                 }
             }
-                new Thread(){
-                    Image image=null;
-                    @Override
-                    public void run() {
-                        super.run();
-                        try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
-                            MongoDatabase database = mongoClient.getDatabase("Photos");
-                            GridFSBucket gridBucket = GridFSBuckets.create(database);
-                            GridFSDownloadStream gdifs = gridBucket.openDownloadStream(item.getUname());
-                            byte[] data = gdifs.readAllBytes();
-                            ByteArrayInputStream input = new ByteArrayInputStream(data);
-                            BufferedImage image1 = ImageIO.read(input);
-                            image = SwingFXUtils.toFXImage(image1, null);
-                        }
-                        catch (Exception e){
-                            image=null;
-                        }
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(image!=null)
-                                    image_id.setFill(new ImagePattern(image));
-                            }
-                        });
+            new Thread(){
+                Image image=null;
+                @Override
+                public void run() {
+                    super.run();
+                    try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
+                        MongoDatabase database = mongoClient.getDatabase("Photos");
+                        GridFSBucket gridBucket = GridFSBuckets.create(database);
+                        GridFSDownloadStream gdifs = gridBucket.openDownloadStream(item.getUname());
+                        byte[] data = gdifs.readAllBytes();
+                        ByteArrayInputStream input = new ByteArrayInputStream(data);
+                        BufferedImage image1 = ImageIO.read(input);
+                        image = SwingFXUtils.toFXImage(image1, null);
                     }
-                }.start();
-            if(item.getUname().equals(LoginController.curr_username)) {
-                uname_id.setText("You("+LoginController.curr_username+")");
-                rootPane.setStyle("-fx-background-color:#bec5fa;");
-            }
-            else
-                uname_id.setText(item.getUname());
+                    catch (Exception e){
+                        image=null;
+                    }
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(image!=null)
+                                image_id.setFill(new ImagePattern(image));
+                        }
+                    });
+                }
+            }.start();
+            uname_id.setText(item.getUname());
             setText(null);
             setGraphic(rootPane);
-            }
         }
+    }
 }

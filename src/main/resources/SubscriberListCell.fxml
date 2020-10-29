@@ -16,7 +16,8 @@
             <Label fx:id="uname_id" prefHeight="41.0" prefWidth="175.0" text="Label">
                <font>
                   <Font name="System Bold Italic" size="15.0" />
-               </font></Label>
+               </font>
+            </Label>
          </children>
       </HBox>
    </children>

@@ -1,6 +1,7 @@
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jfoenix.controls.JFXSpinner;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
@@ -37,6 +39,7 @@ import java.util.prefs.Preferences;
 
 public class LoginController implements Initializable {
     public static String curr_username;
+    public Label loginState;
     @FXML
     private Label status_id;
     @FXML
@@ -50,14 +53,15 @@ public class LoginController implements Initializable {
     public static Preferences preferences;
     public void Register() throws IOException {
         Parent root= FXMLLoader.load(getClass().getResource("Register.fxml"));
-        Scene scene = new Scene(root,600,400);
-        Stage primaryStage = new Stage();
+        Scene scene = new Scene(root);
+        Stage primaryStage = new Stage(StageStyle.UNDECORATED);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Register page");
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
     public void Signin(){
         Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+        loginState.setText("Logging you in");
         loader_id.setVisible(true);
         Task<HttpResponse> task =new Task<>() {
             @Override
@@ -93,7 +97,6 @@ public class LoginController implements Initializable {
         };
         Thread thread = new Thread(task);
         thread.start();
-
         task.setOnSucceeded(res-> {
             loader_id.setVisible(false);
             if(task.isDone()){
@@ -124,7 +127,7 @@ public class LoginController implements Initializable {
                         primaryStage.show();
                     } else {
                         String jsonString = EntityUtils.toString(task.get().getEntity());
-
+                        loginState.setText("Please try again");
                         status_id.setText(jsonString);
                         status_id.setTextFill(Color.RED);
                     }
@@ -134,6 +137,7 @@ public class LoginController implements Initializable {
 
             }
             else{
+                loginState.setText("Please try again");
                 status_id.setText("Incorrect username or Password");
                 status_id.setTextFill(Color.RED);
             }
@@ -141,6 +145,10 @@ public class LoginController implements Initializable {
     }
     public void Login(javafx.event.ActionEvent actionEvent) {
         Signin();
+    }
+
+    public void exit(){
+        Platform.exit();
     }
 
     @Override

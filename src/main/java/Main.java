@@ -3,8 +3,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.io.File;
+import javafx.stage.StageStyle;
 import java.io.IOException;
 
 public class Main extends Application {
@@ -16,14 +15,18 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+        primaryStage.initStyle(StageStyle.UNDECORATED);
         Parent root= FXMLLoader.load(getClass().getResource("Login.fxml"));
         Scene scene = new Scene(root);
 
         scene.getStylesheets().add(getClass().getResource("css/stylesheet.css").toString());
+        primaryStage.setResizable(false);
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Login");
         primaryStage.show();
+
+
 
     }
 }

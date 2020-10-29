@@ -24,16 +24,17 @@
                   <Image url="@photo/noimage.jpg" />
                </image></ImageView>
             <JFXSpinner fx:id="load_id" layoutX="60.0" layoutY="175.0" visible="false" />
-            <JFXButton fx:id="log_in_as_viewer" layoutX="3.0" layoutY="267.0" prefHeight="35.0" prefWidth="165.0" text="Log in as Viewer" />
-            <JFXButton fx:id="start_stream" layoutX="1.0" layoutY="303.0" prefHeight="35.0" prefWidth="165.0" text="Start Stream" />
-            <JFXButton fx:id="profile_page" layoutX="3.0" layoutY="339.0" prefHeight="35.0" prefWidth="165.0" text="Profile Page" />
-            <JFXButton fx:id="change_profile_pic" layoutX="-1.0" layoutY="375.0" onAction="#ProfilePic1" prefHeight="35.0" prefWidth="165.0" text="Change Upload Profile Pic" />
-            <JFXButton fx:id="logout" buttonType="RAISED" layoutY="411.0" onAction="#Logout" prefHeight="35.0" prefWidth="165.0" ripplerFill="#1d38ad" text="LogOut" />
+            <JFXButton fx:id="log_in_as_viewer" layoutX="3.0" layoutY="267.0" prefHeight="35.0" prefWidth="159.0" text="Log in as Viewer" />
+            <JFXButton fx:id="start_stream" layoutX="1.0" layoutY="303.0" prefHeight="35.0" prefWidth="159.0" text="Start Stream" />
+            <JFXButton fx:id="profile_page" layoutX="3.0" layoutY="339.0" prefHeight="35.0" prefWidth="159.0" text="Profile Page" />
+            <JFXButton fx:id="change_profile_pic" layoutY="375.0" onAction="#ProfilePic1" prefHeight="35.0" prefWidth="165.0" text="Change Upload Profile Pic" />
+            <JFXButton fx:id="logout" buttonType="RAISED" layoutY="411.0" onAction="#Logout" prefHeight="35.0" prefWidth="166.0" ripplerFill="#1d38ad" text="LogOut" />
             <Label fx:id="username_id" alignment="CENTER" contentDisplay="CENTER" layoutX="11.0" layoutY="175.0" prefHeight="35.0" prefWidth="146.0" text="Hello User">
                <font>
                   <Font name="Arial Bold Italic" size="17.0" />
                </font>
             </Label>
+            <JFXButton layoutX="4.0" layoutY="446.0" onAction="#viewTopicofInterest" prefHeight="35.0" prefWidth="159.0" text="Topic of Interests" />
          </children>
       </AnchorPane>
    </children>

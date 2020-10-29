@@ -7,12 +7,19 @@ import com.mongodb.client.gridfs.GridFSBuckets;
 import com.mongodb.client.gridfs.GridFSDownloadStream;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import pojo.Chat;
 
 import javax.imageio.ImageIO;
@@ -26,13 +33,16 @@ public class ChatCellController extends JFXListCell<Chat> {
     @FXML
     VBox rootPane;
     @FXML
-    private ImageView image_id;
+    private Circle image_id;
     private FXMLLoader loader;
 
     @Override
     protected void updateItem(Chat item,boolean empty){
         super.updateItem(item,empty);
-        if(empty||item==null){}
+        if(empty||item==null){
+            setText(null);
+            setGraphic(null);
+        }
         else{
             if (loader == null) {
                 loader = new FXMLLoader(getClass().getResource("ChatCell.fxml"));
@@ -40,6 +50,21 @@ public class ChatCellController extends JFXListCell<Chat> {
 
                 try {
                     loader.load();
+                    image_id.setFill(new ImagePattern(new Image(getClass().getResource("photo/face.png").toString())));
+                    image_id.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            image_id.setEffect(new DropShadow(20, Color.BLACK));
+                        }
+                    });
+                    image_id.setOnMouseExited(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            image_id.setEffect(null);
+                        }
+                    });
+
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -65,8 +90,9 @@ public class ChatCellController extends JFXListCell<Chat> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            if(image!=null)
-                            image_id.setImage(image);
+                            if(image!=null){
+                                image_id.setFill(new ImagePattern(image));
+                            }
                         }
                     });
                 }

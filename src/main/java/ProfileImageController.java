@@ -36,7 +36,9 @@ public class ProfileImageController {
     private ImageView image_id;
     @FXML
     private JFXButton setpic_btn;
+
     private File selectedImage=null;
+
     public void ChooseFile(ActionEvent actionEvent)  {
         FileChooser fc = new FileChooser();
         FileChooser.ExtensionFilter extFilter =
@@ -70,6 +72,7 @@ public class ProfileImageController {
             status_id.setText("You have not selected any file");
         }
     }
+
     public void UploadPic(ActionEvent actionEvent){
         load_id.setVisible(true);
         Logger.getLogger("com.mongodb.driver").setLevel(Level.WARNING);
