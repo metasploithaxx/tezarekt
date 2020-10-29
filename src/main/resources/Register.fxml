@@ -48,9 +48,9 @@
          </font></JFXButton>
       <Label fx:id="status_id" layoutX="175.0" layoutY="560.0" prefHeight="34.0" prefWidth="147.0" />
       <JFXSpinner fx:id="loader_id" layoutX="297.0" layoutY="156.0" visible="false" />
-      <ImageView fitHeight="615.0" fitWidth="846.0" layoutX="362.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="615.0" fitWidth="846.0" layoutX="362.0" pickOnBounds="true">
          <image>
-            <Image url="@photo/randomart.png" />
+            <Image url="@photo/bglogin.jpg" />
          </image>
       </ImageView>
       <Label layoutX="464.0" layoutY="119.0" prefHeight="160.0" prefWidth="662.0" text="Welcome to TEZAREKT" textFill="WHITE">
