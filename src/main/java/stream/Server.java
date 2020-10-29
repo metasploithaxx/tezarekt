@@ -1,9 +1,6 @@
+package stream;
+
 import com.github.sarxos.webcam.Webcam;
-import javafx.animation.KeyFrame;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,8 +32,8 @@ public class Server implements Runnable{
     //----------------
     int imagenb ; //image nb of the image currently transmitted
 //    VideoStream video; //VideoStream object used to access video frames
-    static int MJPEG_TYPE = 26; //RTP payload type for MJPEG video
-    static int MPA_TYPE = 14; //RTP payload type for MPA audio
+    public static int MJPEG_TYPE = 26; //RTP payload type for MJPEG video
+    public static int MPA_TYPE = 14; //RTP payload type for MPA audio
     int FRAME_PERIOD ; //Frame period of the video to stream, in ms
     int VIDEO_LENGTH ; //length of the video in frames
     int SAMPLE_RATE; //sample rate of audio
@@ -44,7 +41,6 @@ public class Server implements Runnable{
 
     Timer timer;    //timer used to send the images at the video frame rate
 //    byte[] buf;
-    FrameType fbuf;                // buffer used to store the images to send to the client
     int sendDelay;  //the delay to send images over the wire. Ideally should be
                     //equal to the frame rate of the video file, but may be
                     //adjusted when congestion is detected.
@@ -74,7 +70,7 @@ public class Server implements Runnable{
     final static int TEARDOWN = 6;
     final static int DESCRIBE = 7;
 
-    int state; //RTSP Server state == INIT or READY or PLAY
+    int state; //RTSP stream.Server state == INIT or READY or PLAY
     Socket RTSPsocket; //socket used to send/receive RTSP messages
     //input and output stream filters
     BufferedReader RTSPBufferedReader;
@@ -106,7 +102,7 @@ public class Server implements Runnable{
         sendDelay = FRAME_PERIOD;
 
         imagenb=0;
-        fbuf=new FrameType();
+
 
 
         //init the RTCP packet receiver
@@ -149,17 +145,7 @@ public class Server implements Runnable{
 
         @Override
         public void run() {
-//            Server server = new Server();
-//            System.out.println("Listening on port 1051...");
-//            //get RTSP socket port from the command line
-//            int RTSPport = 1051;
-//            RTSP_dest_port = RTSPport;
             try {
-            //Initiate TCP connection with the client for the RTSP session
-//            ServerSocket listenSocket = new ServerSocket(RTSPport);
-//            RTSPsocket = listenSocket.accept();
-//            listenSocket.close();
-
             //Get ClientVideo IP address
             ClientIPAddr = RTSPsocket.getInetAddress();
 
@@ -300,14 +286,10 @@ public class Server implements Runnable{
 
     private class EncodeTask implements Runnable{
         private final BufferedImage image;
-//			private final byte[] audioData;
-//			private final int audioBytesRead;
 
         public EncodeTask(BufferedImage image) {
             super();
             this.image = image;
-//				this.audioData = audioData;
-//				this.audioBytesRead = audioBytesRead;
         }
 
         @Override
@@ -316,7 +298,7 @@ public class Server implements Runnable{
                 ByteBuffer msg = h264StreamEncoder.encode(image);
 
                 if (msg != null) {
-                    //Builds an RTPpacket object containing the frame
+                    //Builds an stream.RTPpacket object containing the frame
                     int size=msg.remaining();
                     byte[] buf=new byte[size];
                     msg.get(buf);
@@ -391,32 +373,6 @@ public class Server implements Runnable{
         }
     }
 
-    //------------------------
-    //Controls RTP sending rate based on traffic
-    //------------------------
-//    class CongestionController extends TimerTask {
-//        private Timer ccTimer;
-//        int interval;   //interval to check traffic stats
-//        int prevLevel;  //previously sampled congestion level
-//
-//        public CongestionController(int interval) {
-//            this.interval = interval;
-//            ccTimer =new Timer(true);
-//            ccTimer.schedule(this,0,interval);
-//        }
-//        @Override
-//        public void run() {
-//
-//            //adjust the send rate
-//            if (prevLevel != congestionLevel) {
-//                sendDelay = FRAME_PERIOD + congestionLevel * (int)(FRAME_PERIOD * 0.1);
-//                timer.setRate(FRAME_PERIOD/(double)sendDelay);
-//                timer.setDelay(Duration.millis(sendDelay));
-//                prevLevel = congestionLevel;
-//                System.out.println("Send delay changed to: " + sendDelay);
-//            }
-//        }
-//    }
 
     //------------------------
     //Listener for RTCP packets sent from client
@@ -543,7 +499,7 @@ public class Server implements Runnable{
         try {
             //parse request line and extract the request_type:
             String RequestLine = RTSPBufferedReader.readLine();
-            System.out.println("RTSP Server - Received from ClientVideo:");
+            System.out.println("RTSP stream.Server - Received from ClientVideo:");
             System.out.println(RequestLine);
 
             StringTokenizer tokens = new StringTokenizer(RequestLine);
@@ -643,7 +599,7 @@ public class Server implements Runnable{
             RTSPBufferedWriter.write("Channels: "+AUDIO_CHANNELS+CRLF);
             RTSPBufferedWriter.write("Port: "+RTCP_RCV_PORT+CRLF);
             RTSPBufferedWriter.flush();
-            System.out.println("RTSP Server - Sent response to ClientVideo.");
+            System.out.println("RTSP stream.Server - Sent response to ClientVideo.");
         } catch(Exception ex) {
             ex.printStackTrace();
 //            System.exit(0);
@@ -657,7 +613,7 @@ public class Server implements Runnable{
             RTSPBufferedWriter.write("CSeq: "+RTSPSeqNb+CRLF);
             RTSPBufferedWriter.write(des);
             RTSPBufferedWriter.flush();
-            System.out.println("RTSP Server - Sent response to ClientVideo.");
+            System.out.println("RTSP stream.Server - Sent response to ClientVideo.");
         } catch(Exception ex) {
             ex.printStackTrace();
 //            System.exit(0);
@@ -665,48 +621,3 @@ public class Server implements Runnable{
     }
 }
 
-class FrameType{
-    public byte[] videoBuffer,soundBuffer;
-    private int videoSize,audioSize;
-    private boolean gotVideo,gotAudio;
-    public FrameType(){
-        videoBuffer=new byte[63800];
-        soundBuffer=new byte[63800];
-        gotVideo=gotAudio=false;
-    }
-    public void setVideoBuffer(byte buf[]){
-        System.arraycopy(buf,0,videoBuffer,0,buf.length>63800?63800:buf.length);
-        videoSize=buf.length>63800?63800:buf.length;
-        gotVideo=true;
-    }
-
-    public void setSoundBuffer(byte[] buf) {
-        System.arraycopy(buf,0,soundBuffer,0,buf.length>63800?63800:buf.length);
-        audioSize=buf.length>63800?63800:buf.length;
-        gotAudio=true;
-    }
-    public void unsetVideoBuffer(){
-        videoSize=0;
-        gotVideo=false;
-    }
-    public void unsetAudioBuffer(){
-        audioSize=0;
-        gotAudio=false;
-    }
-
-    public boolean isGotVideo() {
-        return gotVideo;
-    }
-
-    public boolean isGotAudio() {
-        return gotAudio;
-    }
-
-    public int getVideoSize() {
-        return videoSize;
-    }
-
-    public int getAudioSize() {
-        return audioSize;
-    }
-}

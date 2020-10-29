@@ -1,14 +1,10 @@
+package stream;
+
 import java.awt.image.BufferedImage;
 
 public class ImageUtils {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
-	}
 
 	  /**
 	   * Convert a {@link BufferedImage} of any type, to {@link BufferedImage} of a

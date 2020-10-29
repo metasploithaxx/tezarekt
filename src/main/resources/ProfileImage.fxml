@@ -12,7 +12,7 @@
    <children>
       <ImageView fx:id="image_id" fitHeight="150.0" fitWidth="192.0" layoutX="200.0" layoutY="14.0" onMouseClicked="#UploadPic" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@noimage.jpg" />
+            <Image url="@photo/noimage.jpg" />
          </image>
       </ImageView>
       <JFXTextField fx:id="text_id" editable="false" layoutX="32.0" layoutY="200.0" prefHeight="26.0" prefWidth="402.0" />

@@ -120,15 +120,14 @@ public class ProfileController implements Initializable {
                 return future.get();
             }
         };
-        Thread th=new Thread(task);
-        th.start();
+            Thread th=new Thread(task);
+            th.start();
         task.setOnSucceeded(res->{
             loader_id.setVisible(false);
             if(task.isDone()) {
                 try {
                     String jsonString = EntityUtils.toString(task.get().getEntity());
                     JSONObject myResponse = new JSONObject(jsonString);
-                    System.out.println(jsonString);
                     if (task.get().getStatusLine().getStatusCode() == 200) {
                         status_id.setText("Successfully Loaded");
                         status_id.setTextFill(Color.GREEN);
@@ -139,6 +138,7 @@ public class ProfileController implements Initializable {
                         twitter_id.setText(myResponse.getString("twitterid"));
                         subsrate_id.setText(myResponse.getString("subsrate"));
                         intro_id.setText(myResponse.getString("bio"));
+
                         if(!myResponse.getString("isinstaidpublic").equals("null")){
                             if(myResponse.getString("isinstaidpublic").equals("true")){
                                 instagram_check.setSelected(true);
