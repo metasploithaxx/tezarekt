@@ -13,6 +13,7 @@ public class Main2 extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+
         Parent root= FXMLLoader.load(getClass().getResource("VideoPlayer.fxml"));
         Scene scene = new Scene(root);
 
