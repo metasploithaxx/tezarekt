@@ -78,7 +78,7 @@ public class MainPageController implements Initializable {
     @FXML
     private JFXSpinner load_id;
     @FXML
-    private AnchorPane content,onlineUsers;
+    private AnchorPane content,onlineUsers,subscriber_pane;
     @FXML
     private TextField search_uname;
     @FXML
@@ -258,12 +258,21 @@ public class MainPageController implements Initializable {
             }
         }.start();
         try {
+
             FXMLLoader loaderOnlineUsers = new FXMLLoader(getClass().getResource("OnlineUsersList.fxml"));
             Parent rtUsers=loaderOnlineUsers.load();
             OnlineUsersListController obj = loaderOnlineUsers.getController();
             obj.setContent(content);
             obj.setLoaderID(load_id);
             onlineUsers.getChildren().setAll(rtUsers);
+
+            FXMLLoader loaderSubscriberUsers = new FXMLLoader(getClass().getResource("SubscriberList.fxml"));
+            Parent SubsUsers=loaderSubscriberUsers.load();
+            SubscriberListController subscriberListController = loaderSubscriberUsers.getController();
+            subscriberListController.setContent(content);
+            subscriberListController.setLoaderID(load_id);
+            subscriber_pane.getChildren().setAll(SubsUsers);
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("SideDrawer.fxml"));
             VBox toolbar = loader.load();
             drawer_id.setSidePane(toolbar);
@@ -271,6 +280,7 @@ public class MainPageController implements Initializable {
             profile_btn =sdc.getProfile_page();
             startStreamBtn=sdc.getStart_stream();
             search_uname.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
                 @Override
                 public void handle(KeyEvent event) {
                     switch(event.getCode()){
@@ -412,11 +422,13 @@ public class MainPageController implements Initializable {
                                         if(image!=null) {
                                             image_view_id.setImage(image);
                                         }
+
                                         uname_id.setText(myResponse.getString("uname"));
                                         fname_id.setText(myResponse.getString("fname"));
                                         lname_id.setText(myResponse.getString("lname"));
                                         cost_id.setText(myResponse.getString("subsrate"));
                                         bio_id.setText(myResponse.getString("bio"));
+
                                         if(!myResponse.getString("isonline").equals("null")){
                                             if (myResponse.getBoolean("isonline") == true) {
                                                 online_status.setText("User is Online");

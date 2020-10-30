@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXSpinner?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="286.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ChooseTOIController">
+   <children>
+      <JFXCheckBox fx:id="cb1" layoutX="91.0" layoutY="109.0" text="Among Us" />
+      <JFXCheckBox fx:id="cb2" layoutX="91.0" layoutY="138.0" text="Fortnite" />
+      <JFXCheckBox fx:id="cb3" layoutX="89.0" layoutY="167.0" text="GTA V" />
+      <JFXCheckBox fx:id="cb4" layoutX="91.0" layoutY="200.0" text="PUBG" />
+      <JFXCheckBox fx:id="cb5" layoutX="91.0" layoutY="231.0" text="Strategic Games" />
+      <JFXCheckBox fx:id="cb6" layoutX="94.0" layoutY="260.0" text="Fun Time" />
+      <Label layoutX="9.0" layoutY="13.0" prefHeight="62.0" prefWidth="265.0" text="Choose your Topic of interest." />
+      <JFXButton fx:id="update_btn" layoutX="213.0" layoutY="349.0" onAction="#Update_Btn" text="Update" />
+      <Label fx:id="status_id" layoutX="18.0" layoutY="306.0" prefHeight="26.0" prefWidth="254.0" text="Label" textFill="#d70f0f">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <JFXSpinner fx:id="loader_id" layoutX="107.0" layoutY="175.0" visible="false" />
+   </children>
+</AnchorPane>

@@ -27,6 +27,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.apache.http.HttpResponse;
@@ -288,5 +289,21 @@ public class SideDrawerController implements Initializable {
         });
     }
 
+
+    public void viewTopicofInterest(ActionEvent actionEvent){
+        FXMLLoader loader=new FXMLLoader(getClass().getResource("ChooseTOI.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Scene scene = new Scene(root,600,400);
+        Stage primaryStage = new Stage();
+        primaryStage.initModality(Modality.APPLICATION_MODAL);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Topic of Interest Page");
+        primaryStage.showAndWait();
+    }
 
 }

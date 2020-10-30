@@ -186,7 +186,7 @@ public class StreamerHubController implements Initializable {
         this.timeWorker = new ScheduledThreadPoolExecutor(5);
 
         try {
-            this.multicastGroup=InetAddress.getByName("230.0.0.0");
+            this.multicastGroup = InetAddress.getByName("230.0.0.0");
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -395,6 +395,7 @@ public class StreamerHubController implements Initializable {
 //                    rtp_packet.printheader();
 //                    System.out.println("Send audio frame #" + audionb);
 //                }
+
                 RTPpacket rtp_packet = new RTPpacket(MPA_TYPE, audionb, (int)(System.currentTimeMillis()-initTime), audioData, audioBytesRead);
 
                     //get to total length of the full rtp packet to send
