@@ -220,6 +220,7 @@ public class StreamerHubController implements Initializable {
     }
 
     public void startStream(){
+        //TODO:Send notifications
         isStreaming=true;
         imagenb=0;
         audionb=0;
@@ -232,6 +233,7 @@ public class StreamerHubController implements Initializable {
         isStreaming=false;
         if(videoToggle.isSelected())videoToggle.fire();
         if(desktopToggle.isSelected())desktopToggle.fire();
+        if(audioToggle.isSelected())audioToggle.fire();
         stopVideoGrabber();
         encodeWorker.shutdown();
         encodeAudioWorker.shutdown();

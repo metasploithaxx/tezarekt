@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="255.0" prefWidth="578.0" style="-fx-background-color: #444444;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StreamModeSelectionDialogController">
+   <children>
+      <Label layoutX="49.0" layoutY="65.0" text="Which method to use for streaming?" textFill="WHITE">
+         <font>
+            <Font name="Alata Regular" size="29.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="unicast_opt" layoutX="89.0" layoutY="157.0" mnemonicParsing="false" onAction="#unicast" prefHeight="35.0" prefWidth="100.0" style="-fx-border-color: #999999; -fx-border-radius: 10;" text="Unicasting" textFill="WHITE">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="16.0" />
+         </font>
+      </JFXButton>
+      <JFXButton fx:id="multicast_opt" layoutX="328.0" layoutY="157.0" mnemonicParsing="false" onAction="#multicast" prefHeight="35.0" prefWidth="130.0" style="-fx-border-color: #999999; -fx-border-radius: 10;" text="Multicasting" textFill="WHITE">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="16.0" />
+         </font>
+      </JFXButton>
+      <Label layoutX="89.0" layoutY="201.0" prefHeight="35.0" prefWidth="162.0" text="Slower and intensive but works for public streaming" textFill="#4fb6f1" wrapText="true">
+         <font>
+            <Font name="Alata Regular" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="328.0" layoutY="201.0" prefHeight="35.0" prefWidth="162.0" text="Faster and efficient but works only on LAN" textFill="#4fb6f1" wrapText="true">
+         <font>
+            <Font name="Alata Regular" size="12.0" />
+         </font>
+      </Label>
+      <JFXButton layoutX="522.0" layoutY="14.0" mnemonicParsing="false" onAction="#exit" prefHeight="35.0" prefWidth="42.0" style="-fx-border-color: #999999; -fx-border-radius: 10;" text="X" textFill="WHITE">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="16.0" />
+         </font>
+      </JFXButton>
+   </children>
+</AnchorPane>

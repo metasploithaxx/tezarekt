@@ -28,10 +28,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import javafx.util.Duration;
@@ -96,7 +93,7 @@ public class MainPageController implements Initializable {
 
     public ImageView image_view_id;
 
-    private JFXButton profile_btn;
+    private JFXButton profile_btn,startStreamBtn;
 
     public JFXTextArea bio_id;
 
@@ -132,6 +129,7 @@ public class MainPageController implements Initializable {
                                     notify=new Notification(time,jsonArray.getJSONObject(i).getString("msg"),jsonArray.getJSONObject(i).getInt("index"));
                                     list.add(notify);
                                 }
+
                                 notification_id.setItems(list);
                                 notification_id.setCellFactory(new Callback<ListView<Notification>, ListCell<Notification>>() {
                                     @Override
@@ -271,6 +269,7 @@ public class MainPageController implements Initializable {
             drawer_id.setSidePane(toolbar);
             SideDrawerController sdc = loader.getController();
             profile_btn =sdc.getProfile_page();
+            startStreamBtn=sdc.getStart_stream();
             search_uname.setOnKeyPressed(new EventHandler<KeyEvent>() {
                 @Override
                 public void handle(KeyEvent event) {
@@ -291,6 +290,19 @@ public class MainPageController implements Initializable {
                 @Override
                 public void handle(ActionEvent event) {
                     FXMLLoader loader1=new FXMLLoader((getClass().getResource("Profile.fxml")));
+                    Parent rt= null;
+                    try {
+                        rt = loader1.load();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    content.getChildren().setAll(rt);
+                }
+            });
+            startStreamBtn.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    FXMLLoader loader1=new FXMLLoader((getClass().getResource("StreamerHub.fxml")));
                     Parent rt= null;
                     try {
                         rt = loader1.load();

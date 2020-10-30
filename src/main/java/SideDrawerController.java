@@ -61,7 +61,7 @@ public class SideDrawerController implements Initializable {
     @FXML
     private JFXSpinner load_id;
     @FXML
-    private JFXButton profile_page;
+    private JFXButton profile_page,start_stream;
     @FXML
     private Label username_id;
     @FXML
@@ -86,6 +86,9 @@ public class SideDrawerController implements Initializable {
     }
     public JFXButton getProfile_page(){
         return profile_page;
+    }
+    public JFXButton getStart_stream() {
+        return start_stream;
     }
     public void ProfilePic1(ActionEvent actionEvent) throws IOException {
         Parent root= FXMLLoader.load(getClass().getResource("ProfileImage.fxml"));
@@ -284,4 +287,6 @@ public class SideDrawerController implements Initializable {
             }
         });
     }
+
+
 }
