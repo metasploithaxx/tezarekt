@@ -30,6 +30,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import org.apache.http.HttpResponse;
@@ -89,9 +91,11 @@ public class MainPageController implements Initializable {
     private JFXComboBox<Notification> notification_id;
 
 
-    public Label uname_id, fname_id, lname_id, cost_id,online_status;
+    public Label uname_id, name_id, cost_id,online_status;
 
     public ImageView image_view_id;
+
+    private Circle onlineCircle;
 
     private JFXButton profile_btn,startStreamBtn;
 
@@ -410,11 +414,11 @@ public class MainPageController implements Initializable {
                                             viewUserProfileController= loaderView.getController();
                                             bio_id = viewUserProfileController.getBio_id();
                                             uname_id = viewUserProfileController.getUname_id();
-                                            fname_id = viewUserProfileController.getFname_id();
-                                            lname_id = viewUserProfileController.getLname_id();
+                                            name_id = viewUserProfileController.getName_id();
                                             cost_id = viewUserProfileController.getCost_id();
                                             image_view_id = viewUserProfileController.getImage_view_id();
                                             online_status = viewUserProfileController.getOnline_status();
+                                            onlineCircle=viewUserProfileController.getOnline_circle();
 
                                         } catch (IOException e) {
                                             e.printStackTrace();
@@ -424,20 +428,21 @@ public class MainPageController implements Initializable {
                                         }
 
                                         uname_id.setText(myResponse.getString("uname"));
-                                        fname_id.setText(myResponse.getString("fname"));
-                                        lname_id.setText(myResponse.getString("lname"));
+                                        name_id.setText(myResponse.getString("fname")+" "+myResponse.getString("lname"));
                                         cost_id.setText(myResponse.getString("subsrate"));
                                         bio_id.setText(myResponse.getString("bio"));
 
                                         if(!myResponse.getString("isonline").equals("null")){
                                             if (myResponse.getBoolean("isonline") == true) {
                                                 online_status.setText("User is Online");
+                                                onlineCircle.setFill(Color.GREEN);
                                             } else {
                                                 String time = myResponse.getString("lastseen");
                                                 Instant timestamp = Instant.parse(time);
                                                 ZonedDateTime indiaTime = timestamp.atZone(ZoneId.of("Asia/Kolkata"));
                                                 String date = indiaTime.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
                                                 String timeshow = indiaTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+                                                onlineCircle.setFill(Color.RED);
                                                 online_status.setText("Last Seen \nDate :- " + date + "\n time :- " + timeshow);
                                             }
                                         }

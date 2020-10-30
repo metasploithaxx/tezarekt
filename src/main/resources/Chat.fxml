@@ -36,8 +36,8 @@
                </AnchorPane>
             </content>
          </Tab>
-         <tabs>
-            <Tab fx:id="Subschat_Tab" text="Subscriber Chat">
+
+         <Tab fx:id="Subschat_Tab" text="Subscriber Chat">
                <content>
                   <AnchorPane prefWidth="250.0">
                      <children>
@@ -80,7 +80,7 @@
                </content>
             </Tab>
 
-         </tabs>
+
       </JFXTabPane>
    </children>
 </VBox>

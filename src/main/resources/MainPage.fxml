@@ -29,7 +29,7 @@
 
          </effect></JFXDrawer>
       <JFXSpinner fx:id="load_id" layoutX="499.0" layoutY="374.0" visible="false" />
-<<<<<<< HEAD
+
       <AnchorPane fx:id="content" layoutX="228.0" layoutY="53.0" prefHeight="695.0" prefWidth="823.0" />
       <JFXButton layoutX="992.0" layoutY="11.0" onAction="#onExit" style="-fx-border-color: #ac1313;" text="Exit" textFill="#ac1313" />
       <AnchorPane fx:id="onlineUsers" layoutX="-1.0" layoutY="70.0" prefHeight="674.0" prefWidth="216.0" />
@@ -41,17 +41,10 @@
          </image>
       </ImageView>
       <JFXComboBox fx:id="notification_id" layoutX="864.0" layoutY="12.0" maxWidth="50.0" prefWidth="50.0" />
-=======
-      <AnchorPane fx:id="content" layoutX="228.0" layoutY="53.0" prefHeight="654.0" prefWidth="766.0" />
-      <JFXButton layoutX="943.0" layoutY="11.0" onAction="#onExit" style="-fx-border-color: #ac1313;" text="Exit" textFill="#ac1313" />
-      <AnchorPane fx:id="onlineUsers" layoutX="-1.0" layoutY="70.0" prefHeight="342.0" prefWidth="216.0" />
-      <JFXButton fx:id="search_btn" layoutX="746.0" layoutY="12.0" onAction="#OnSearch" text="Search" />
-      <Label fx:id="status_id" layoutX="228.0" layoutY="40.0" prefHeight="26.0" prefWidth="534.0" />
-      <JFXComboBox fx:id="notification_id" layoutX="811.0" layoutY="12.0" maxWidth="50.0" prefWidth="50.0" />
-      <Label alignment="CENTER" layoutX="6.0" layoutY="415.0" prefHeight="18.0" prefWidth="216.0" text="Subscriber" />
-      <Separator layoutX="5.0" layoutY="411.0" prefHeight="3.0" prefWidth="216.0" />
-      <AnchorPane fx:id="subscriber_pane" layoutX="1.0" layoutY="433.0" prefHeight="313.0" prefWidth="216.0" />
->>>>>>> a339f704c7bbc88042d4d198172a07b00e6216de
+       <Label alignment="CENTER" layoutX="6.0" layoutY="415.0" prefHeight="18.0" prefWidth="216.0" text="Subscriber" />
+       <Separator layoutX="5.0" layoutY="411.0" prefHeight="3.0" prefWidth="216.0" />
+       <AnchorPane fx:id="subscriber_pane" layoutX="1.0" layoutY="433.0" prefHeight="313.0" prefWidth="216.0" />
+
 
    </children>
 </AnchorPane>

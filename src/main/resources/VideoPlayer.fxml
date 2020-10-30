@@ -2,14 +2,17 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXToggleButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" prefHeight="572.0" prefWidth="670.0" style="-fx-background-color: #444444;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClientVideoController">
+<AnchorPane fx:id="rootPane" prefHeight="599.0" prefWidth="645.0" style="-fx-background-color: #444444;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClientVideoController">
    <children>
-      <Pane layoutX="8.0" layoutY="494.0" prefHeight="74.0" prefWidth="649.0" style="-fx-border-color: #4267B2; -fx-border-radius: 25;">
+      <Pane layoutX="-4.0" layoutY="525.0" prefHeight="74.0" prefWidth="649.0" style="-fx-border-color: #4267B2; -fx-border-radius: 25;">
          <children>
             <JFXButton fx:id="playPauseBtn" contentDisplay="GRAPHIC_ONLY" layoutX="287.0" layoutY="9.0" onAction="#playPause" prefHeight="52.0" prefWidth="75.0" style="-fx-background-color: #4267B2;" text="Button">
                <graphic>
@@ -32,11 +35,28 @@
             <JFXToggleButton fx:id="audioToggle" contentDisplay="GRAPHIC_ONLY" layoutX="113.0" layoutY="7.0" prefHeight="60.0" prefWidth="48.0" />
          </children>
       </Pane>
-      <ImageView fx:id="video" fitHeight="480.0" fitWidth="640.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="loading" fitHeight="150.0" fitWidth="157.0" layoutX="258.0" layoutY="183.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@photo/gems.png" />
-         </image>
-      </ImageView>
+      <Pane layoutX="1.0" layoutY="45.0" prefHeight="480.0" prefWidth="640.0" style="-fx-border-color: #4267B2; -fx-background-color: #222222;">
+         <children>
+            <ImageView fx:id="video" fitHeight="480.0" fitWidth="640.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-color: #4267B2;" />
+            <ImageView fx:id="loading" fitHeight="150.0" fitWidth="157.0" layoutX="245.0" layoutY="165.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@photo/gems.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="status_id" alignment="CENTER" contentDisplay="CENTER" layoutX="173.0" layoutY="362.0" text="Label" textFill="WHITE" visible="false">
+               <font>
+                  <Font name="Alata Regular" size="17.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <JFXButton layoutX="586.0" layoutY="10.0" mnemonicParsing="false" onAction="#exit" prefHeight="35.0" prefWidth="55.0" style="-fx-border-color: #999999; -fx-border-radius: 10;" text="X" textFill="WHITE">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="16.0" />
+         </font>
+      </JFXButton>
    </children>
+   <effect>
+      <DropShadow />
+   </effect>
 </AnchorPane>

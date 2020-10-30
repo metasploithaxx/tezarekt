@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.http.HttpResponse;
@@ -23,8 +24,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
@@ -39,7 +38,7 @@ public class ViewUserProfileController implements Initializable {
     public PasswordField pwd_id;
     public JFXButton proceed_btn;
     @FXML
-    private Label online_status,uname_id, fname_id, lname_id,status_id,subcount_id,cost_id;
+    private Label online_status,uname_id, name_id,status_id,subcount_id,cost_id;
     @FXML
     private JFXTextArea bio_id;
     @FXML
@@ -48,6 +47,8 @@ public class ViewUserProfileController implements Initializable {
     private JFXButton subscribe_btn;
     @FXML
     private JFXSpinner subs_spinner_id;
+    @FXML
+    private Circle online_circle;
 
     private Stage primaryStage=null;
     @Override
@@ -110,11 +111,8 @@ public class ViewUserProfileController implements Initializable {
     public Label getUname_id(){
         return uname_id;
     }
-    public Label getFname_id(){
-        return fname_id;
-    }
-    public Label getLname_id(){
-        return lname_id;
+    public Label getName_id(){
+        return name_id;
     }
     public Label getCost_id(){
         return cost_id;
@@ -124,6 +122,9 @@ public class ViewUserProfileController implements Initializable {
     }
     public Label getOnline_status(){
         return online_status;
+    }
+    public Circle getOnline_circle() {
+        return online_circle;
     }
 
     public void SubsCount(){
@@ -302,4 +303,6 @@ public class ViewUserProfileController implements Initializable {
 
 
     }
+
+
 }
