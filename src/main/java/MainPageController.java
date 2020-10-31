@@ -316,6 +316,8 @@ public class MainPageController implements Initializable {
                     Parent rt= null;
                     try {
                         rt = loader1.load();
+                        ProfileController pc=loader1.getController();
+                        pc.setImage_id(sdc.getImage());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

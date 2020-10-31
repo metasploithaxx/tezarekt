@@ -19,6 +19,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -49,7 +50,7 @@ public class ViewUserProfileController implements Initializable {
     @FXML
     private Circle image_view_id;
     @FXML
-    private JFXButton subscribe_btn;
+    private JFXButton subscribe_btn,viewStreamBtn;
     @FXML
     private JFXSpinner subs_spinner_id;
     @FXML
@@ -65,8 +66,10 @@ public class ViewUserProfileController implements Initializable {
     }
 
     public void isSubscribe(){
-        if(uname_id.getText().equals(LoginController.curr_username))
+        if(uname_id.getText().equals(LoginController.curr_username)) {
             subscribe_btn.setVisible(false);
+            viewStreamBtn.setVisible(false);
+        }
         subs_spinner_id.setVisible(true);
         subscribe_btn.setDisable(true);
         new Thread(){
@@ -312,6 +315,16 @@ public class ViewUserProfileController implements Initializable {
         primaryStage.showAndWait();
 
 
+    }
+
+    public void showStream() throws IOException{
+        Parent root= FXMLLoader.load(getClass().getResource("VideoPlayer.fxml"));
+        Scene scene = new Scene(root);
+        Stage primaryStage = new Stage(StageStyle.UNDECORATED);
+        primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
+        scene.getStylesheets().add(getClass().getResource("css/stylesheet.css").toString());
+        primaryStage.show();
     }
 
 

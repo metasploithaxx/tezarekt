@@ -1,35 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXSpinner?>
 <?import com.jfoenix.controls.JFXTextArea?>
-<?import javafx.scene.control.CheckBox?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ProfileController">
+<AnchorPane fx:id="rootPane" prefHeight="695.0" prefWidth="823.0" style="-fx-background-color: #444444;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ProfileController">
    <children>
-      <Label layoutX="268.0" layoutY="14.0" prefHeight="18.0" prefWidth="63.0" text="User Profile" />
-      <TextField fx:id="username_id" editable="false" layoutX="34.0" layoutY="70.0" />
-      <Label layoutX="34.0" layoutY="53.0" text="Username" />
-      <Label layoutX="34.0" layoutY="108.0" text="Firstname" />
-      <Label layoutX="200.0" layoutY="109.0" text="Lastname" />
-      <Label layoutX="351.0" layoutY="53.0" text="Intro..." />
-      <TextField fx:id="firstname_id" layoutX="34.0" layoutY="125.0" />
-      <TextField fx:id="lastname_id" layoutX="196.0" layoutY="125.0" />
-      <Label layoutX="35.0" layoutY="218.0" prefHeight="18.0" prefWidth="99.0" text="Instagram Id" />
-      <TextField fx:id="instagram_id" layoutX="34.0" layoutY="235.0" />
-      <CheckBox fx:id="instagram_check" layoutX="34.0" layoutY="261.0" mnemonicParsing="false" text="visible only for Subsciber" />
-      <TextField fx:id="twitter_id" layoutX="34.0" layoutY="310.0" />
-      <Label layoutX="35.0" layoutY="291.0" prefHeight="18.0" prefWidth="99.0" text="Twitter Id" />
-      <CheckBox fx:id="twitter_check" layoutX="34.0" layoutY="336.0" mnemonicParsing="false" text="visible only for Subsciber" />
-      <Label fx:id="followers_id" layoutX="218.0" layoutY="361.0" prefHeight="18.0" prefWidth="142.0" text="No. of Followers are:-" />
-      <Label fx:id="status_id" layoutX="360.0" layoutY="323.0" prefHeight="18.0" prefWidth="202.0" />
-      <JFXTextArea fx:id="intro_id" layoutX="351.0" layoutY="77.0" prefHeight="239.0" prefWidth="242.0" promptText="Brief intro..." />
-      <JFXButton fx:id="update_btn" disable="true" layoutX="527.0" layoutY="341.0" onAction="#UpdateData" ripplerFill="#272acf" text="UPDATE" />
+      <JFXButton fx:id="update_btn" disable="true" layoutX="83.0" layoutY="482.0" onAction="#UpdateData" ripplerFill="#272acf" text="Update" textFill="#dddddd">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="19.0" />
+         </font></JFXButton>
       <JFXSpinner fx:id="loader_id" layoutX="264.0" layoutY="172.0" visible="false" />
-      <TextField fx:id="subsrate_id" layoutX="34.0" layoutY="184.0" stylesheets="@css/stylesheet.css" />
-      <Label layoutX="34.0" layoutY="163.0" text="Subscription Rate" />
+      <Label layoutX="213.0" layoutY="320.0" text="Subscription Rate:" textFill="#dddddd">
+         <font>
+            <Font name="Alata Regular" size="17.0" />
+         </font></Label>
+      <JFXTextField fx:id="firstname_id" layoutX="360.0" layoutY="62.0" promptText="  First Name" style="-fx-border-width: 1; -fx-border-color: #999999; -fx-border-radius: 5; -fx-prompt-text-fill: #cccccc; -fx-text-fill: #ffffff;">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="16.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="lastname_id" layoutX="360.0" layoutY="123.0" promptText="  Last Name" style="-fx-border-width: 1; -fx-border-color: #999999; -fx-border-radius: 5; -fx-prompt-text-fill: #cccccc; -fx-text-fill: #ffffff;">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="16.0" />
+         </font>
+      </JFXTextField>
+      <Label fx:id="username_id" layoutX="90.0" layoutY="263.0" text="Username" textFill="#dddddd">
+         <font>
+            <Font name="Alata Regular" size="15.0" />
+         </font>
+      </Label>
+      <JFXTextField fx:id="subsrate_id" layoutX="360.0" layoutY="315.0" promptText=" Subscription Rate" style="-fx-border-width: 1; -fx-border-color: #999999; -fx-border-radius: 5; -fx-prompt-text-fill: #cccccc; -fx-text-fill: #ffffff;">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="16.0" />
+         </font>
+      </JFXTextField>
+      <Label layoutX="242.0" layoutY="262.0" text="Instagram ID:" textFill="#dddddd">
+         <font>
+            <Font name="Alata Regular" size="17.0" />
+         </font>
+      </Label>
+      <Label layoutX="269.0" layoutY="202.0" text="Twitter ID:" textFill="#dddddd">
+         <font>
+            <Font name="Alata Regular" size="17.0" />
+         </font>
+      </Label>
+      <Circle fx:id="image_id" fill="DODGERBLUE" layoutX="125.0" layoutY="146.0" onMouseClicked="#changePhoto" radius="100.0" stroke="BLACK" strokeType="INSIDE" />
+      <Label layoutX="261.0" layoutY="67.0" text="First Name:" textFill="#dddddd">
+         <font>
+            <Font name="Alata Regular" size="17.0" />
+         </font>
+      </Label>
+      <Label layoutX="261.0" layoutY="128.0" text="Last Name:" textFill="#dddddd">
+         <font>
+            <Font name="Alata Regular" size="17.0" />
+         </font>
+      </Label>
+      <JFXTextArea fx:id="intro_id" layoutX="360.0" layoutY="368.0" prefHeight="267.0" prefWidth="252.0" promptText="Tell us something about yourself..." style="-fx-border-width: 1; -fx-border-color: #999999; -fx-border-radius: 5; -fx-prompt-text-fill: #cccccc; -fx-text-fill: #ffffff;">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="16.0" />
+         </font>
+      </JFXTextArea>
+      <Label layoutX="319.0" layoutY="374.0" text="Bio:" textFill="#dddddd">
+         <font>
+            <Font name="Alata Regular" size="17.0" />
+         </font>
+      </Label>
+      <Pane layoutX="353.0" layoutY="186.0" prefHeight="57.0" prefWidth="419.0" style="-fx-border-color: #dddddd; -fx-border-radius: 10;">
+         <children>
+            <JFXTextField fx:id="twitter_id" layoutX="14.0" layoutY="9.0" promptText=" Twitter ID" style="-fx-border-width: 1; -fx-border-color: #999999; -fx-border-radius: 5; -fx-prompt-text-fill: #cccccc; -fx-text-fill: #ffffff;">
+               <font>
+                  <Font name="CoolveticaRg-Regular" size="16.0" />
+               </font>
+            </JFXTextField>
+            <JFXCheckBox fx:id="instagram_check" layoutX="210.0" layoutY="15.0" mnemonicParsing="false" text="visible only for Subsciber" textFill="#dddddd">
+               <font>
+                  <Font name="Alata Regular" size="15.0" />
+               </font>
+            </JFXCheckBox>
+         </children>
+      </Pane>
+      <Pane layoutX="353.0" layoutY="246.0" prefHeight="57.0" prefWidth="419.0" style="-fx-border-color: #dddddd; -fx-border-radius: 10;">
+         <children>
+            <JFXTextField fx:id="instagram_id" layoutX="14.0" layoutY="11.0" promptText=" Instagram ID" style="-fx-border-width: 1; -fx-border-color: #999999; -fx-border-radius: 5; -fx-prompt-text-fill: #cccccc; -fx-text-fill: #ffffff;">
+               <font>
+                  <Font name="CoolveticaRg-Regular" size="16.0" />
+               </font>
+            </JFXTextField>
+            <JFXCheckBox fx:id="twitter_check" layoutX="210.0" layoutY="17.0" mnemonicParsing="false" text="visible only for Subsciber" textFill="#dddddd">
+               <font>
+                  <Font name="Alata Regular" size="15.0" />
+               </font>
+            </JFXCheckBox>
+         </children>
+      </Pane>
    </children>
 </AnchorPane>

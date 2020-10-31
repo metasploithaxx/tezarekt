@@ -69,6 +69,7 @@ public class SideDrawerController implements Initializable {
     private Label username_id;
     @FXML
     private JFXToggleButton toggle_id;
+    private Image image;
     @FXML
     private boolean ProfilePic() throws ClassNotFoundException {
 
@@ -306,6 +307,10 @@ public class SideDrawerController implements Initializable {
         primaryStage.setScene(scene);
         primaryStage.setTitle("Topic of Interest Page");
         primaryStage.showAndWait();
+    }
+
+    public javafx.scene.paint.Paint getImage(){
+        return image_id.getFill();
     }
 
 }
