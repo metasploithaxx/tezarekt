@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="695.0" prefWidth="823.0" style="-fx-background-color: #444444;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="WelcomePageController">
+   <children>
+      <ImageView fitHeight="322.0" fitWidth="823.0" pickOnBounds="true">
+         <image>
+            <Image url="@photo/bglogin.jpg" />
+         </image>
+      </ImageView>
+      <Label fx:id="user_id" layoutX="53.0" layoutY="44.0" prefHeight="92.0" prefWidth="623.0" text="Hi, User" textFill="#dddddd">
+         <font>
+            <Font name="Alata Regular" size="55.0" />
+         </font>
+      </Label>
+      <Label layoutX="53.0" layoutY="125.0" text="Welcome to Tezarekt" textFill="#dddddd">
+         <font>
+            <Font name="Alata Regular" size="42.0" />
+         </font>
+      </Label>
+      <Label layoutX="53.0" layoutY="209.0" text="Start streaming or view your favourite channel's streams" textFill="#dddddd">
+         <font>
+            <Font name="Alata Regular" size="24.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="streaming_btn" layoutX="293.0" layoutY="455.0" text="Start Streaming" textFill="#dddddd">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="29.0" />
+         </font>
+      </JFXButton>
+   </children>
+</AnchorPane>

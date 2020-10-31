@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXSpinner?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="313.0" prefWidth="215.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SubscriberListController">
+   <children>
+      <AnchorPane prefHeight="313.0" prefWidth="214.0" style="-fx-background-color: #333333;">
+         <children>
+            <JFXListView fx:id="Subscriberlist" layoutX="1.0" prefHeight="313.0" prefWidth="215.0" style="-fx-background-color: #333333; -fx-background-insets: 0; -fx-padding: 0;" />
+            <JFXSpinner fx:id="loader_id" layoutX="84.0" layoutY="150.0" visible="false" />
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>

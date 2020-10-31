@@ -8,3 +8,65 @@
     -fx-font-family : "serief";
     -fx-background1 : rgb(218,232,240);
 }
+.jfx-combo-box .arrow{
+    -fx-background-color: transparent;
+    -fx-background-position: center;
+}
+.jfx-combo-box .arrow-button{
+    -fx-background-color: transparent;
+    -fx-background-position: center;
+}
+
+.jfx-snackbar-content {
+    -fx-background-color: rgb(29,98,245);
+}
+.jfx-snackbar-toast {
+    -fx-text-fill: WHITE;
+    -fx-font-size: 20;
+    -fx-font-family: Alata;
+}
+
+.jfx-tab-pane .tab-label {
+    -fx-text-fill: #dddddd;
+    -fx-font-weight: normal;
+    -fx-font-family: Alata;
+}
+
+.jfx-tab-pane .tab-header-background { -fx-background-color: rgb(29, 98, 245); }
+
+.jfx-hamburger StackPane {
+    -fx-background-color: #dddddd;
+}
+
+.list-view {
+    -fx-background-color: #333333;
+}
+
+.list-view .list-cell:hover {
+    -fx-background-color: #434343;
+}
+
+.list-view .list-cell:selected {
+    -fx-background-color: #434343;
+}
+
+.list-view .list-cell {
+    -fx-background-color: #232323;
+    -fx-text-fill: white;
+}
+
+.list-view .label {
+    -fx-text-fill: #dddddd;
+}
+
+.jfx-rippler {
+    -jfx-rippler-fill: rgb(29, 98, 245);
+}
+
+.drawer-button{
+    -fx-background-color:#222222;
+    -fx-text-fill: #dddddd;
+    -fx-font-family: "Coolvetica Rg";
+    -fx-font-size: 17px;
+    -fx-border-color: #222222;
+}

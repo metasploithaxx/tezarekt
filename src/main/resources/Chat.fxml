@@ -3,24 +3,84 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXSpinner?>
+<?import com.jfoenix.controls.JFXTabPane?>
 <?import com.jfoenix.controls.JFXTextArea?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="675.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ChatController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="250.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ChatController">
    <children>
-      <AnchorPane prefHeight="677.0" prefWidth="250.0">
-         <children>
-            <JFXListView fx:id="chatList" layoutY="-1.0" prefHeight="630.0" prefWidth="250.0" />
-            <HBox layoutY="627.0" prefHeight="40.0" prefWidth="250.0">
-               <children>
-                  <JFXTextArea fx:id="textarea_id" prefHeight="40.0" prefWidth="193.0" promptText="Type here.." />
-                  <JFXButton fx:id="send_btn" buttonType="RAISED" onAction="#send" prefHeight="40.0" prefWidth="62.0" ripplerFill="#272acf" text="Send" />
-               </children>
-            </HBox>
-            <JFXSpinner fx:id="progress_id" layoutX="100.0" layoutY="289.0" visible="false" />
-         </children>
-      </AnchorPane>
+      <JFXTabPane fx:id="Tabpane" prefWidth="80.0">
+         <Tab fx:id="Allchat_Tab" text="Open Chat">
+            <content>
+               <AnchorPane prefWidth="250.0">
+                  <children>
+                     <JFXListView fx:id="AllchatList" layoutY="-1.0" prefHeight="630.0" prefWidth="250.0" />
+                     <HBox layoutY="627.0" prefHeight="40.0" prefWidth="250.0">
+                        <children>
+                           <JFXTextArea fx:id="Alltextarea_id" prefHeight="40.0" prefWidth="193.0" promptText="Type here.." />
+                           <JFXButton fx:id="Allsend_btn" buttonType="RAISED" onAction="#sendAll" prefHeight="40.0" prefWidth="62.0" ripplerFill="#272acf" text="Send" />
+                        </children>
+                     </HBox>
+                     <JFXSpinner fx:id="Allprogress_id" layoutX="100.0" layoutY="289.0" visible="false" />
+                     <Label fx:id="statusAll_id" layoutX="11.0" layoutY="258.0" prefHeight="66.0" prefWidth="226.0" textFill="#c21414">
+                        <font>
+                           <Font size="18.0" />
+                        </font>
+                     </Label>
+                  </children>
+               </AnchorPane>
+            </content>
+         </Tab>
+
+         <Tab fx:id="Subschat_Tab" text="Subscriber Chat">
+               <content>
+                  <AnchorPane prefWidth="250.0">
+                     <children>
+                        <JFXListView fx:id="SubsChatList" layoutY="-1.0" prefHeight="630.0" prefWidth="250.0" />
+                        <HBox layoutY="627.0" prefHeight="40.0" prefWidth="250.0">
+                           <children>
+                              <JFXTextArea fx:id="Substextarea_id" prefHeight="40.0" prefWidth="193.0" promptText="Type here.." />
+                              <JFXButton fx:id="Subssend_btn" buttonType="RAISED" onAction="#SendSubs" prefHeight="40.0" prefWidth="62.0" ripplerFill="#272acf" text="Send" />
+                           </children>
+                        </HBox>
+                        <JFXSpinner fx:id="Subsprogress_id" layoutX="100.0" layoutY="289.0" visible="false" />
+                        <Label fx:id="statusSubs_id" layoutX="11.0" layoutY="258.0" prefHeight="66.0" prefWidth="226.0" textFill="#c21414">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Private Chat">
+               <content>
+                  <AnchorPane prefWidth="250.0">
+                     <children>
+                        <JFXListView fx:id="PrivatechatList" layoutY="-1.0" prefHeight="630.0" prefWidth="250.0" />
+                        <HBox layoutY="627.0" prefHeight="40.0" prefWidth="250.0">
+                           <children>
+                              <JFXTextArea fx:id="Privatetextarea_id" prefHeight="40.0" prefWidth="193.0" promptText="Type here.." />
+                              <JFXButton fx:id="Privatesend_btn" buttonType="RAISED" onAction="#SendPrivate" prefHeight="40.0" prefWidth="62.0" ripplerFill="#272acf" text="Send" />
+                           </children>
+                        </HBox>
+                        <JFXSpinner fx:id="Privateprogress_id" layoutX="100.0" layoutY="289.0" visible="false" />
+                        <Label fx:id="statusPrivate_id" layoutX="11.0" layoutY="258.0" prefHeight="66.0" prefWidth="226.0" textFill="#c21414">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+
+
+      </JFXTabPane>
    </children>
 </VBox>

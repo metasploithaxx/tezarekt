@@ -1,13 +1,18 @@
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jfoenix.controls.JFXSpinner;
+import com.jfoenix.controls.JFXTextArea;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
@@ -29,7 +34,9 @@ import java.util.logging.Logger;
 
 public class RegisterController {
     @FXML
-    private TextField username_id,password_id,confirmpd_id,firstname_id,lastname_id,briefinfo_id;
+    private TextField username_id,password_id,confirmpd_id,firstname_id,lastname_id;
+    @FXML
+    private JFXTextArea briefinfo_id;
     @FXML
     private Label status_id;
     @FXML
@@ -58,7 +65,7 @@ public class RegisterController {
 
                 CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
                 client.start();
-                HttpPost request = new HttpPost("http://[::1]:3000/register");
+                HttpPost request = new HttpPost(Main.Connectingurl+"/register");
                 request.setEntity(entity);
                 request.setHeader("Content-Type", "application/json; charset=UTF-8");
                 Future<HttpResponse> future = client.execute(request, null);
@@ -79,6 +86,17 @@ public class RegisterController {
                     if (task.get().getStatusLine().getStatusCode() == 200) {
                         status_id.setText("Successfully Registered");
                         status_id.setTextFill(Color.GREEN);
+                        Stage stage = (Stage) status_id.getScene().getWindow();
+
+                        Parent root= FXMLLoader.load(getClass().getResource("Login.fxml"));
+                        Scene scene = new Scene(root,500,325);
+                        scene.getStylesheets().add(getClass().getResource("css/stylesheet.css").toString());
+                        Stage primaryStage = new Stage();
+                        primaryStage.setScene(scene);
+                        primaryStage.setTitle("Login page");
+                        primaryStage.show();
+                        stage.close();
+
                     } else {
 
                         System.out.println(myResponse.getString("detail"));
@@ -103,6 +121,10 @@ public class RegisterController {
                 status_id.setText("Confirm Password and Password don't match");
                 status_id.setTextFill(Color.RED);
             }
+            else if(username_id.getText().equals("Global")){
+                status_id.setText("Can't set Global as a Username");
+                status_id.setTextFill(Color.RED);
+            }
             else{
                 server_reg();
             }
@@ -111,5 +133,8 @@ public class RegisterController {
             status_id.setText("Fill all the Details");
             status_id.setTextFill(Color.RED);
         }
+    }
+    public void exit(){
+        ((Stage)status_id.getScene().getWindow()).close();
     }
 }

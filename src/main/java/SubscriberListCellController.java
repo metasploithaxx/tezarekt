@@ -13,31 +13,30 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import pojo.Chat;
+import pojo.OnlineUser;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-public class ChatCellController extends JFXListCell<Chat> {
-    @FXML
-    Label name,msg,date_id,time_id;
+public class SubscriberListCellController extends JFXListCell<OnlineUser> {
+
+    private FXMLLoader loader;
     @FXML
     VBox rootPane;
     @FXML
-    private Circle image_id;
-    private FXMLLoader loader;
+    Label uname_id;
+    @FXML
+    Circle image_id;
 
     @Override
-    protected void updateItem(Chat item,boolean empty){
+    protected void updateItem(OnlineUser item,boolean empty){
         super.updateItem(item,empty);
         if(empty||item==null){
             setText(null);
@@ -45,7 +44,7 @@ public class ChatCellController extends JFXListCell<Chat> {
         }
         else{
             if (loader == null) {
-                loader = new FXMLLoader(getClass().getResource("ChatCell.fxml"));
+                loader = new FXMLLoader(getClass().getResource("SubscriberListCell.fxml"));
                 loader.setController(this);
 
                 try {
@@ -63,12 +62,9 @@ public class ChatCellController extends JFXListCell<Chat> {
                             image_id.setEffect(null);
                         }
                     });
-
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
             new Thread(){
                 Image image=null;
@@ -78,7 +74,7 @@ public class ChatCellController extends JFXListCell<Chat> {
                     try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
                         MongoDatabase database = mongoClient.getDatabase("Photos");
                         GridFSBucket gridBucket = GridFSBuckets.create(database);
-                        GridFSDownloadStream gdifs = gridBucket.openDownloadStream(item.getSender());
+                        GridFSDownloadStream gdifs = gridBucket.openDownloadStream(item.getUname());
                         byte[] data = gdifs.readAllBytes();
                         ByteArrayInputStream input = new ByteArrayInputStream(data);
                         BufferedImage image1 = ImageIO.read(input);
@@ -90,25 +86,13 @@ public class ChatCellController extends JFXListCell<Chat> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            if(image!=null){
+                            if(image!=null)
                                 image_id.setFill(new ImagePattern(image));
-                            }
                         }
                     });
                 }
             }.start();
-                if(item.getSender().equals(LoginController.curr_username)){
-                    name.setText("You("+LoginController.curr_username+")");
-                    rootPane.setStyle("-fx-background-color:#bec5fa;");
-                }
-                else {
-                    name.setText(item.getSender());
-                    rootPane.setStyle("-fx-background-color:#FFFF;");
-                }
-                    msg.setText(item.getMsg());
-                    date_id.setText(item.getDate());
-                    time_id.setText(item.getTime());
-                    rootPane.setPrefWidth(msg.getPrefWidth());
+            uname_id.setText(item.getUname());
             setText(null);
             setGraphic(rootPane);
         }

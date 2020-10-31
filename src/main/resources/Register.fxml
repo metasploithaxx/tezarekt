@@ -1,29 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXSpinner?>
-<?import javafx.scene.control.Button?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RegisterController">
+<AnchorPane prefHeight="605.0" prefWidth="1167.0" style="-fx-background-color: #444444;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RegisterController">
    <children>
-      <TextField fx:id="firstname_id" layoutX="71.0" layoutY="67.0" promptText="First Name" />
-      <TextField fx:id="lastname_id" layoutX="71.0" layoutY="103.0" promptText="Last Name" />
-      <TextField fx:id="username_id" layoutX="71.0" layoutY="155.0" promptText="Username" />
-      <PasswordField fx:id="password_id" layoutX="71.0" layoutY="236.0" promptText="Password" />
-      <PasswordField fx:id="confirmpd_id" layoutX="71.0" layoutY="270.0" promptText="Confirm Password" />
-      <Label layoutX="404.0" layoutY="31.0" text="Brief Description" />
-      <TextField fx:id="briefinfo_id" layoutX="322.0" layoutY="63.0" prefHeight="267.0" prefWidth="252.0" promptText="Brief intro about yourself" />
-      <Label layoutX="71.0" layoutY="181.0" prefHeight="26.0" prefWidth="150.0" text="Your Username should be unique and it is used to identify you distinctly from others." wrapText="true">
+      <JFXTextField fx:id="firstname_id" layoutX="71.0" layoutY="23.0" promptText="  First Name" style="-fx-border-width: 1; -fx-border-color: #999999; -fx-border-radius: 5; -fx-prompt-text-fill: #cccccc; -fx-text-fill: #ffffff;">
          <font>
-            <Font size="8.0" />
+            <Font name="CoolveticaRg-Regular" size="16.0" />
+         </font></JFXTextField>
+      <JFXTextField fx:id="lastname_id" layoutX="71.0" layoutY="69.0" promptText="  Last Name" style="-fx-border-width: 1; -fx-border-color: #999999; -fx-border-radius: 5; -fx-prompt-text-fill: #cccccc; -fx-text-fill: #ffffff;">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="16.0" />
+         </font></JFXTextField>
+      <JFXTextField fx:id="username_id" layoutX="71.0" layoutY="119.0" promptText="  Username" style="-fx-border-width: 1; -fx-border-color: #999999; -fx-border-radius: 5; -fx-prompt-text-fill: #cccccc; -fx-text-fill: #ffffff;">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="16.0" />
+         </font></JFXTextField>
+      <JFXPasswordField fx:id="password_id" layoutX="69.0" layoutY="194.0" promptText="  Password" style="-fx-border-width: 1; -fx-border-color: #999999; -fx-border-radius: 5; -fx-prompt-text-fill: #cccccc; -fx-text-fill: #ffffff;">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="16.0" />
+         </font></JFXPasswordField>
+      <JFXPasswordField fx:id="confirmpd_id" layoutX="71.0" layoutY="235.0" promptText="  Confirm Password" style="-fx-border-width: 1; -fx-border-color: #999999; -fx-border-radius: 5; -fx-prompt-text-fill: #cccccc; -fx-text-fill: #ffffff;">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="16.0" />
+         </font></JFXPasswordField>
+      <JFXTextArea fx:id="briefinfo_id" layoutX="69.0" layoutY="279.0" prefHeight="267.0" prefWidth="252.0" promptText="Tell us something about yourself..." style="-fx-border-width: 1; -fx-border-color: #999999; -fx-border-radius: 5; -fx-prompt-text-fill: #cccccc; -fx-text-fill: #ffffff;">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="16.0" />
+         </font></JFXTextArea>
+      <Label layoutX="71.0" layoutY="156.0" prefHeight="34.0" prefWidth="179.0" text="Your Username should be unique and it is used to identify you distinctly from others." textFill="WHITE" wrapText="true">
+         <font>
+            <Font size="9.0" />
          </font>
       </Label>
-      <Button fx:id="register_btn" layoutX="514.0" layoutY="345.0" mnemonicParsing="false" onAction="#Register" text="Register" />
-      <Label fx:id="status_id" layoutX="66.0" layoutY="336.0" prefHeight="34.0" prefWidth="438.0" />
+      <JFXButton fx:id="register_btn" layoutX="71.0" layoutY="560.0" mnemonicParsing="false" onAction="#Register" style="-fx-border-color: #999999; -fx-border-radius: 10;" text="Register" textFill="WHITE">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="16.0" />
+         </font></JFXButton>
+      <Label fx:id="status_id" layoutX="175.0" layoutY="560.0" prefHeight="34.0" prefWidth="147.0" />
       <JFXSpinner fx:id="loader_id" layoutX="297.0" layoutY="156.0" visible="false" />
+      <ImageView fitHeight="615.0" fitWidth="846.0" layoutX="362.0" pickOnBounds="true">
+         <image>
+            <Image url="@photo/bglogin.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="464.0" layoutY="119.0" prefHeight="160.0" prefWidth="662.0" text="Welcome to TEZAREKT" textFill="WHITE">
+         <font>
+            <Font name="Alata Regular" size="63.0" />
+         </font>
+      </Label>
+      <Label layoutX="471.0" layoutY="295.0" prefHeight="135.0" prefWidth="455.0" text="Create an account" textFill="WHITE">
+         <font>
+            <Font name="Alata Regular" size="40.0" />
+         </font>
+      </Label>
+      <Label layoutX="471.0" layoutY="194.0" prefHeight="135.0" prefWidth="569.0" text="Your friendly neighbourhood streaming platform" textFill="WHITE">
+         <font>
+            <Font name="Alata Regular" size="24.0" />
+         </font>
+      </Label>
+      <JFXButton layoutX="1140.0" layoutY="23.0" mnemonicParsing="false" onAction="#exit" prefHeight="35.0" prefWidth="42.0" style="-fx-border-color: #999999; -fx-border-radius: 10;" text="X" textFill="WHITE">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="16.0" />
+         </font>
+      </JFXButton>
    </children>
 </AnchorPane>
