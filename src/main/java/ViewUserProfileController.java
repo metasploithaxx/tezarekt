@@ -1,3 +1,4 @@
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jfoenix.controls.*;
 import javafx.application.Platform;
@@ -170,6 +171,42 @@ public class ViewUserProfileController implements Initializable {
 
     }
 
+    public void Notif(String s)
+    {
+        new Thread(){
+            Future<HttpResponse> future=null;
+            @Override
+            public void run() {
+                super.run();
+
+                var values_Notify = new HashMap<String, String>() {{
+                    put("owner",uname_id.getText());
+                    put("msg",LoginController.curr_username+s);
+                }};
+
+                var objectMapper = new ObjectMapper();
+                String payloadNotify=null;
+
+                try {
+                    payloadNotify = objectMapper.writeValueAsString(values_Notify);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+
+                StringEntity entity1 = new StringEntity(payloadNotify,ContentType.APPLICATION_JSON);
+
+                CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                client.start();
+
+                HttpPost requestNotify = new HttpPost(Main.Connectingurl+"/setNotification");
+                requestNotify.setEntity(entity1);
+                requestNotify.setHeader("Content-Type", "application/json; charset=UTF-8");
+                Future<HttpResponse> futureNotify = client.execute(requestNotify, null);
+                while (!futureNotify.isDone());
+            }
+        }.start();
+    }
+
     public void initProceed()
     {
 
@@ -212,7 +249,12 @@ public class ViewUserProfileController implements Initializable {
                         String jsonString = EntityUtils.toString(task.get().getEntity());
                         System.out.println(jsonString);
                         if (task.get().getStatusLine().getStatusCode() == 200) {
+
                             status_id.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout(jsonString)));
+                            if(subscribe_btn.getText().equals("Subscribe"))
+                                Notif(" has Subscribed you");
+                            else
+                                Notif(" has Unsubscribed you");
                         } else {
                             status_id.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout(jsonString)));
                         }
