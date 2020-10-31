@@ -11,8 +11,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.http.HttpResponse;
@@ -23,8 +27,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
@@ -39,20 +41,27 @@ public class ViewUserProfileController implements Initializable {
     public PasswordField pwd_id;
     public JFXButton proceed_btn;
     @FXML
-    private Label online_status,uname_id, fname_id, lname_id,status_id,subcount_id,cost_id;
+    private AnchorPane rootPane;
+    @FXML
+    private Label online_status,uname_id, name_id,subcount_id,about_id;
     @FXML
     private JFXTextArea bio_id;
     @FXML
-    private ImageView image_view_id;
+    private Circle image_view_id;
     @FXML
     private JFXButton subscribe_btn;
     @FXML
     private JFXSpinner subs_spinner_id;
-
+    @FXML
+    private Circle online_circle;
+    private String cost;
+    private JFXSnackbar status_id;
     private Stage primaryStage=null;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         subscribe_btn.setDisable(true);
+        image_view_id.setFill(new ImagePattern(new Image(getClass().getResource("photo/noimage.jpg").toString())));
+        status_id=new JFXSnackbar(rootPane);
     }
 
     public void isSubscribe(){
@@ -110,20 +119,23 @@ public class ViewUserProfileController implements Initializable {
     public Label getUname_id(){
         return uname_id;
     }
-    public Label getFname_id(){
-        return fname_id;
+    public Label getName_id(){
+        return name_id;
     }
-    public Label getLname_id(){
-        return lname_id;
+//    public Label getCost_id(){
+//        return cost_id;
+//    }
+    public void setCost(String s){
+        cost=s;
     }
-    public Label getCost_id(){
-        return cost_id;
-    }
-    public ImageView getImage_view_id(){
+    public Circle getImage_view_id(){
         return image_view_id;
     }
     public Label getOnline_status(){
         return online_status;
+    }
+    public Circle getOnline_circle() {
+        return online_circle;
     }
 
     public void SubsCount(){
@@ -144,7 +156,8 @@ public class ViewUserProfileController implements Initializable {
                         try {
                             String jsonString = EntityUtils.toString(future.get().getEntity());
                             if (future.get().getStatusLine().getStatusCode() == 200){
-                                subcount_id.setText(jsonString);
+                                subcount_id.setText(jsonString+" subscribers");
+                                about_id.setText("About "+uname_id.getText());
                             }
                         } catch (IOException | ExecutionException | InterruptedException e) {
                             e.printStackTrace();
@@ -199,11 +212,9 @@ public class ViewUserProfileController implements Initializable {
                         String jsonString = EntityUtils.toString(task.get().getEntity());
                         System.out.println(jsonString);
                         if (task.get().getStatusLine().getStatusCode() == 200) {
-                            status_id.setText(jsonString);
-                            status_id.setTextFill(Color.GREEN);
+                            status_id.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout(jsonString)));
                         } else {
-                            status_id.setText(jsonString);
-                            status_id.setTextFill(Color.RED);
+                            status_id.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout(jsonString)));
                         }
                         isSubscribe();
                     } catch (IOException | InterruptedException | ExecutionException e) {
@@ -236,7 +247,7 @@ public class ViewUserProfileController implements Initializable {
         String fg=subscribe_btn.getText().equals("Subscribe") ? "true" : "false";
 
         if(fg=="true")
-            status_subs.setText("Are you sure you want to Subcribe to "+uname_id.getText()+"\nThis will cost you : "+cost_id.getText());
+            status_subs.setText("Are you sure you want to Subcribe to "+uname_id.getText()+"\nThis will cost you : "+cost);
         else
             status_subs.setText("Are you sure you want to Unsubcribe to "+uname_id.getText()+"\nYou will not get any refund");
 
@@ -302,4 +313,6 @@ public class ViewUserProfileController implements Initializable {
 
 
     }
+
+
 }

@@ -9,28 +9,31 @@
 
 <VBox fx:id="rootPane" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="225.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox prefHeight="25.0" prefWidth="225.0">
+      <HBox prefHeight="25.0" prefWidth="225.0" style="-fx-background-color: #444444;">
          <children>
-            <Circle fx:id="image_id" fill="#2e353c" radius="19.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fx:id="image_id" fill="#8499ae" radius="19.0" stroke="BLACK" strokeType="INSIDE" />
             <Separator opacity="0.0" orientation="VERTICAL" prefHeight="38.0" prefWidth="15.0" />
-            <Label fx:id="name" prefHeight="26.0" prefWidth="146.0" text="Label">
+            <Label fx:id="name" prefHeight="26.0" prefWidth="146.0" text="Label" textFill="#dddddd">
                <font>
-                  <Font name="System Bold Italic" size="14.0" />
+                  <Font name="Alata Regular" size="15.0" />
                </font></Label>
          </children>
       </HBox>
-      <HBox maxHeight="1.7976931348623157E308" prefWidth="225.0">
+      <HBox maxHeight="1.7976931348623157E308" prefWidth="225.0" style="-fx-background-color: #444444;">
          <children>
-            <Label fx:id="msg" maxHeight="1.7976931348623157E308" prefWidth="220.0" wrapText="true" HBox.hgrow="ALWAYS" />
-            <VBox prefWidth="100.0">
+            <Label fx:id="msg" maxHeight="1.7976931348623157E308" prefWidth="220.0" textFill="#dddddd" wrapText="true" HBox.hgrow="ALWAYS">
+               <font>
+                  <Font name="Alata Regular" size="14.0" />
+               </font></Label>
+            <VBox prefHeight="34.0" prefWidth="117.0">
                <children>
-                  <Label fx:id="date_id" prefHeight="8.0" prefWidth="82.0" text="6/10/2020">
+                  <Label fx:id="date_id" prefHeight="16.0" prefWidth="72.0" text="29-Oct-2020" textFill="#eeeeee">
                      <font>
-                        <Font size="10.0" />
+                        <Font name="CoolveticaRg-Regular" size="11.0" />
                      </font></Label>
-                  <Label fx:id="time_id" prefHeight="18.0" prefWidth="82.0" text="03:10 PM">
+                  <Label fx:id="time_id" prefHeight="18.0" prefWidth="67.0" text="03:10 PM" textFill="#eeeeee">
                      <font>
-                        <Font size="10.0" />
+                        <Font name="CoolveticaRg-Regular" size="12.0" />
                      </font></Label>
                </children>
             </VBox>

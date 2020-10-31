@@ -27,6 +27,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -58,11 +60,11 @@ import java.util.prefs.Preferences;
 
 public class SideDrawerController implements Initializable {
     @FXML
-    private ImageView image_id;
+    private Circle image_id;
     @FXML
     private JFXSpinner load_id;
     @FXML
-    private JFXButton profile_page;
+    private JFXButton profile_page,start_stream;
     @FXML
     private Label username_id;
     @FXML
@@ -87,6 +89,9 @@ public class SideDrawerController implements Initializable {
     }
     public JFXButton getProfile_page(){
         return profile_page;
+    }
+    public JFXButton getStart_stream() {
+        return start_stream;
     }
     public void ProfilePic1(ActionEvent actionEvent) throws IOException {
         Parent root= FXMLLoader.load(getClass().getResource("ProfileImage.fxml"));
@@ -127,7 +132,7 @@ public class SideDrawerController implements Initializable {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        image_id.setImage(image);
+                        image_id.setFill(new ImagePattern(image));
                         load_id.setVisible(false);
 
                         try {
@@ -276,7 +281,7 @@ public class SideDrawerController implements Initializable {
         Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
         mongoLogger.setLevel(Level.SEVERE);
         username_id.setText("Hello "+LoginController.curr_username);
-        username_id.setTextFill(Color.BLUEVIOLET);
+//        username_id.setTextFill(Color.BLUEVIOLET);
         init();
         toggle_id.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -285,6 +290,7 @@ public class SideDrawerController implements Initializable {
             }
         });
     }
+
 
     public void viewTopicofInterest(ActionEvent actionEvent){
         FXMLLoader loader=new FXMLLoader(getClass().getResource("ChooseTOI.fxml"));
@@ -301,4 +307,5 @@ public class SideDrawerController implements Initializable {
         primaryStage.setTitle("Topic of Interest Page");
         primaryStage.showAndWait();
     }
+
 }

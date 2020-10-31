@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import stream.RTCPpacket;
 import stream.RTPpacket;
@@ -38,18 +39,19 @@ public class ClientVideoController implements Initializable {
     public ImageView playPauseImg;
     public ImageView loading;
     public JFXToggleButton audioToggle;
+    public JFXButton playPauseBtn;
+
     //GUI
     //----
     @FXML
-    ImageView video;
-
+    private ImageView video;
     private JFXSnackbar snackbar;
 
 
     //RTP variables:
     //----------------
     DatagramPacket rcvdp;            //UDP packet received from the server
-    DatagramSocket multicastAudioSocket,multicastVideoSocket;        //socket to be used to send and receive UDP packets
+    MulticastSocket multicastAudioSocket,multicastVideoSocket;        //socket to be used to send and receive UDP packets
 
     Timeline videoTimer; //timer used to receive data from the UDP socket
     protected ScheduledExecutorService timeWorker;
@@ -71,6 +73,8 @@ public class ClientVideoController implements Initializable {
 
     private RotateTransition rt;
 
+    private int videoNullCount=0,audioNullCount=0;
+
     @Override
     public void initialize(URL url, ResourceBundle rb){
         try {
@@ -90,12 +94,12 @@ public class ClientVideoController implements Initializable {
             multicastVideoSocket=new MulticastSocket(StreamerHubController.VIDEO_PORT);
             multicastAudioSocket=new MulticastSocket(StreamerHubController.AUDIO_PORT);
             multicastGroup=InetAddress.getByName("230.0.0.0");  //230.0.0.0 is our multicast server
-//            multicastVideoSocket.joinGroup(multicastGroup);
-//            multicastAudioSocket.joinGroup(multicastGroup);
+            multicastVideoSocket.joinGroup(multicastGroup);
+            multicastAudioSocket.joinGroup(multicastGroup);
             multicastVideoSocket.setSoTimeout(5);
             multicastAudioSocket.setSoTimeout(5);
-//            multicastVideoSocket.setTimeToLive(0);
-//            multicastAudioSocket.setTimeToLive(0);
+            multicastVideoSocket.setTimeToLive(0);
+            multicastAudioSocket.setTimeToLive(0);
             //create the frame synchronizer
             dimension=new Dimension(640,480);
 
@@ -149,6 +153,30 @@ public class ClientVideoController implements Initializable {
         currStream=0;
     }
 
+    public void exit(){
+        ((Stage)playPauseBtn.getScene().getWindow()).close();
+    }
+
+    public void stopAll(){
+        loading.setVisible(true);
+        stopSync();
+        videoTimer.stop();
+        stopAudio();
+        timeWorker.shutdown();
+        try {
+            multicastAudioSocket.leaveGroup(multicastGroup);
+            multicastVideoSocket.leaveGroup(multicastGroup);
+            multicastAudioSocket.close();
+            multicastVideoSocket.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        iStreamCoder.close();
+        iAudioStreamCoder.close();
+        audioToggle.setDisable(true);
+        playPauseBtn.setDisable(true);
+    }
+
 
 
     /*
@@ -168,18 +196,13 @@ public class ClientVideoController implements Initializable {
             }
             rcvdp = new DatagramPacket(buf, buf.length);
 
-//            try {
-//                multicastVideoSocket.receive(rcvdp);
+
                 loading.setVisible(false);
-//                videoTimer.play();
-//                if(playingAudio)
-//                    startAudio();
+
                 playPauseImg.setImage(new Image(getClass().getResource("photo/pause.png").toString()));
                 playing=1;
             System.err.println("PLAYED");
-//            } catch (Exception e) {
-//                System.out.println("Streaming is over");
-//            }
+
 
         }
         else{
@@ -203,7 +226,7 @@ public class ClientVideoController implements Initializable {
     }
 
     public void stopAudio(){
-        audioGrabFuture.cancel(false);
+        audioGrabFuture.cancel(true);
     }
 
     public void startSync(){
@@ -223,7 +246,7 @@ public class ClientVideoController implements Initializable {
     //Handler for timer
     //------------------------------------
     class videoFrameListener implements EventHandler<ActionEvent>  {
-        private int nullCount=0;
+
 
         @Override
         public void handle(ActionEvent e){
@@ -234,8 +257,6 @@ public class ClientVideoController implements Initializable {
             try {
                 //receive the DP from the socket, save time for stats
                 multicastVideoSocket.receive(rcvdp);
-
-                nullCount=0;
 
                 //create an stream.RTPpacket object from the DP
                 RTPpacket rtp_packet = new RTPpacket(rcvdp.getData(), rcvdp.getLength());
@@ -275,18 +296,15 @@ public class ClientVideoController implements Initializable {
 
             }
             catch (InterruptedIOException iioe) {
-                nullCount++;
+                videoNullCount++;
                 System.out.println("No video to read");
-//                if(nullCount==50) {
-//                    snackbar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Streaming ended or was interrupted")));
-//                    System.exit(0);
-////                stopBtn.fire();  TODO: Handle end of stream
+
 //                }
             }
             catch (IOException ioe) {
                 System.out.println("Exception caught: "+ioe);
                 snackbar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Streamer is unavailable at this moment")));
-//                stopBtn.fire();   TODO: Handle end of stream
+                stopAll();
             }
         }
 
@@ -382,82 +400,24 @@ public class ClientVideoController implements Initializable {
 
                     //get an AudioSample object from the payload bitstream
                     if(playingAudio)
-//                        decodeAudioWorker.execute(new DecodeAudioTask(payload,payload_length));
                         soundLine.write(payload, 0, payload_length);
-//                    decodeAndPlay(payload, payload_length);
-//                    fsynch.addFrame(image, seqNb);
-//                    videoBuffer.add(image);
-//                    bufEnd++;
-//                    if (bufEnd - bufStart + 1 > bufferSize) {
-//                        videoBuffer.remove(0);
-//                        bufStart++;
-//                    }
+
 
                 }
 
             }
             catch (InterruptedIOException iioe) {
                 System.out.println("No audio to read");
+                audioNullCount++;
 
             }
             catch (IOException ioe) {
                 System.out.println("Exception caught: "+ioe);
                 snackbar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Streamer is unavailable at this moment")));
-//                stopBtn.fire();   TODO: Handle end of stream
+                stopAll();
             }
             catch (Exception e){
                 e.printStackTrace();
-            }
-        }
-
-        private class DecodeAudioTask implements Runnable{
-            private final byte[] audioData;
-            private final int audioBytesRead;
-
-            public DecodeAudioTask(byte[] audioData, int audioBytesRead) {
-                super();
-                this.audioData = audioData;
-                this.audioBytesRead = audioBytesRead;
-            }
-
-            @Override
-            public void run() {
-                IPacket iPacket = IPacket.make(IBuffer.make(null, audioData, 0, audioBytesRead));
-
-                IAudioSamples samples = IAudioSamples.make(1024, 1);
-
-                /*
-                 * A packet can actually contain multiple sets of samples (or frames of samples
-                 * in audio-decoding speak).  So, we may need to call decode audio multiple
-                 * times at different offsets in the packet's data.  We capture that here.
-                 */
-                int offset = 0;
-
-                /*
-                 * Keep going until we've processed all data
-                 */
-                while(offset < iPacket.getSize()) {
-                    int bytesDecoded = iAudioStreamCoder.decodeAudio(samples, iPacket, offset);
-                    if (bytesDecoded < 0)
-                        throw new RuntimeException("got error decoding audio in stream");
-
-                    offset += bytesDecoded;
-
-                    /*
-                     * Some decoder will consume data in a packet, but will not be able to construct
-                     * a full set of samples yet.  Therefore you should always check if you
-                     * got a complete set of samples from the decoder
-                     */
-                    if (samples.isComplete()) {
-                        byte[] rawBytes = samples.getData().getByteArray(0, samples.getSize());
-                        try {
-                            soundLine.write(rawBytes, 0, rawBytes.length);
-                        }catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }
             }
         }
     }
@@ -472,6 +432,10 @@ public class ClientVideoController implements Initializable {
 
         @Override
         public void run() {
+            if(audioNullCount==100||videoNullCount==50){
+                snackbar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Streaming hasn't started or has already ended")));
+                stopAll();
+            }
             if(currTime<lastTime){
                 videoTimer.pause();
                 stopAudio();

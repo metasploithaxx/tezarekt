@@ -28,11 +28,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import org.apache.http.HttpResponse;
@@ -92,11 +92,13 @@ public class MainPageController implements Initializable {
     private JFXComboBox<Notification> notification_id;
 
 
-    public Label uname_id, fname_id, lname_id, cost_id,online_status;
+    public Label uname_id, name_id,online_status;
 
-    public ImageView image_view_id;
+    public Circle image_view_id;
 
-    private JFXButton profile_btn;
+    private Circle onlineCircle;
+
+    private JFXButton profile_btn,startStreamBtn;
 
     public JFXTextArea bio_id;
 
@@ -132,6 +134,7 @@ public class MainPageController implements Initializable {
                                     notify=new Notification(time,jsonArray.getJSONObject(i).getString("msg"),jsonArray.getJSONObject(i).getInt("index"));
                                     list.add(notify);
                                 }
+
                                 notification_id.setItems(list);
                                 notification_id.setCellFactory(new Callback<ListView<Notification>, ListCell<Notification>>() {
                                     @Override
@@ -280,6 +283,15 @@ public class MainPageController implements Initializable {
             drawer_id.setSidePane(toolbar);
             SideDrawerController sdc = loader.getController();
             profile_btn =sdc.getProfile_page();
+            startStreamBtn=sdc.getStart_stream();
+
+            FXMLLoader loaderWelcomePage = new FXMLLoader(getClass().getResource("WelcomePage.fxml"));
+            Parent welcomePage=loaderWelcomePage.load();
+            WelcomePageController welcomePageController = loaderWelcomePage.getController();
+            welcomePageController.setUser_id(LoginController.curr_username);
+            JFXButton stream_btn=welcomePageController.getStreamBtn();
+            content.getChildren().setAll(welcomePage);
+
             search_uname.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
                 @Override
@@ -308,6 +320,25 @@ public class MainPageController implements Initializable {
                         e.printStackTrace();
                     }
                     content.getChildren().setAll(rt);
+                }
+            });
+            startStreamBtn.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    FXMLLoader loader1=new FXMLLoader((getClass().getResource("StreamerHub.fxml")));
+                    Parent rt= null;
+                    try {
+                        rt = loader1.load();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    content.getChildren().setAll(rt);
+                }
+            });
+            stream_btn.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    startStreamBtn.fire();
                 }
             });
             HamburgerBasicCloseTransition meth = new HamburgerBasicCloseTransition(hamburger_id);
@@ -398,35 +429,37 @@ public class MainPageController implements Initializable {
                                             viewUserProfileController= loaderView.getController();
                                             bio_id = viewUserProfileController.getBio_id();
                                             uname_id = viewUserProfileController.getUname_id();
-                                            fname_id = viewUserProfileController.getFname_id();
-                                            lname_id = viewUserProfileController.getLname_id();
-                                            cost_id = viewUserProfileController.getCost_id();
+                                            name_id = viewUserProfileController.getName_id();
+//                                            cost_id = viewUserProfileController.getCost_id();
                                             image_view_id = viewUserProfileController.getImage_view_id();
                                             online_status = viewUserProfileController.getOnline_status();
+                                            onlineCircle=viewUserProfileController.getOnline_circle();
 
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
                                         if(image!=null) {
-                                            image_view_id.setImage(image);
+                                            image_view_id.setFill(new ImagePattern(image));
                                         }
 
                                         uname_id.setText(myResponse.getString("uname"));
-                                        fname_id.setText(myResponse.getString("fname"));
-                                        lname_id.setText(myResponse.getString("lname"));
-                                        cost_id.setText(myResponse.getString("subsrate"));
+                                        name_id.setText(myResponse.getString("fname")+" "+myResponse.getString("lname"));
+//                                        cost_id.setText(myResponse.getString("subsrate"));
+                                        viewUserProfileController.setCost(myResponse.getString("subsrate"));
                                         bio_id.setText(myResponse.getString("bio"));
 
                                         if(!myResponse.getString("isonline").equals("null")){
-                                            if (myResponse.getBoolean("isonline") == true) {
+                                            if (myResponse.getBoolean("isonline")) {
                                                 online_status.setText("User is Online");
+                                                onlineCircle.setFill(Color.GREEN);
                                             } else {
                                                 String time = myResponse.getString("lastseen");
                                                 Instant timestamp = Instant.parse(time);
                                                 ZonedDateTime indiaTime = timestamp.atZone(ZoneId.of("Asia/Kolkata"));
                                                 String date = indiaTime.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
                                                 String timeshow = indiaTime.format(DateTimeFormatter.ofPattern("HH:mm"));
-                                                online_status.setText("Last Seen \nDate :- " + date + "\n time :- " + timeshow);
+                                                onlineCircle.setFill(Color.RED);
+                                                online_status.setText("Last Seen on "+date+" at: "+timeshow);
                                             }
                                         }
                                         content.getChildren().setAll(rtview);

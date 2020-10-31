@@ -6,6 +6,7 @@ import javafx.animation.RotateTransition;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
@@ -127,12 +128,27 @@ public class StreamerHubController implements Initializable {
 
             }
             else if(newValue&&desktopToggle.isSelected()){
-                webcam.open();
-
+                try {
+                    webcam.open();
+                }
+                catch (Exception e){
+                    Alert a=new Alert(Alert.AlertType.ERROR);
+                    a.setContentText("Could not open webcam");
+                    videoToggle.fire();
+                    a.show();
+                }
                 videoStatus=3;
             }
             else if(newValue){
-                webcam.open();
+                try {
+                    webcam.open();
+                }
+                catch (Exception e){
+                    Alert a=new Alert(Alert.AlertType.ERROR);
+                    a.setContentText("Could not open webcam");
+                    videoToggle.fire();
+                    a.show();
+                }
                 rt.stop();
                 loading.setRotate(0);
                 display.setVisible(true);
@@ -195,8 +211,7 @@ public class StreamerHubController implements Initializable {
     }
 
     private void startVideoGrabber(){
-        display.setLayoutX(14.0);
-        display.setLayoutY(14.0);
+
         imageGrabTaskFuture=timeWorker.scheduleWithFixedDelay(new ImageGrabTask(),
                 0,
                 FRAME_PERIOD,
@@ -220,6 +235,7 @@ public class StreamerHubController implements Initializable {
     }
 
     public void startStream(){
+        //TODO:Send notifications
         isStreaming=true;
         imagenb=0;
         audionb=0;
@@ -232,6 +248,7 @@ public class StreamerHubController implements Initializable {
         isStreaming=false;
         if(videoToggle.isSelected())videoToggle.fire();
         if(desktopToggle.isSelected())desktopToggle.fire();
+        if(audioToggle.isSelected())audioToggle.fire();
         stopVideoGrabber();
         encodeWorker.shutdown();
         encodeAudioWorker.shutdown();

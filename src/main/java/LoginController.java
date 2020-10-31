@@ -117,12 +117,13 @@ public class LoginController implements Initializable {
                             stage.close();
 
                         } catch (IOException e) {
-                            System.out.println(e.getMessage());
+                            e.printStackTrace();
                         }
                         Scene scene = new Scene(root, 1050, 760);
                         scene.getStylesheets().add(getClass().getResource("css/stylesheet.css").toString());
-                        Stage primaryStage = new Stage();
+                        Stage primaryStage = new Stage(StageStyle.UNDECORATED);
                         primaryStage.setScene(scene);
+                        primaryStage.setResizable(false);
                         primaryStage.setTitle("Home page");
                         primaryStage.show();
                     } else {
