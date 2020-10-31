@@ -120,6 +120,13 @@ public class SideDrawerController implements Initializable {
                     ByteArrayInputStream input = new ByteArrayInputStream(data);
                     BufferedImage image1 = ImageIO.read(input);
                     image = SwingFXUtils.toFXImage(image1, null);
+
+                }
+                catch (Exception e){
+                    image=null;
+                    System.out.println(e.getMessage());
+                }
+                try{
                     CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
                     client.start();
                     HttpGet request = new HttpGet(Main.Connectingurl+"/getStatus/"+LoginController.curr_username);
@@ -132,7 +139,9 @@ public class SideDrawerController implements Initializable {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        image_id.setFill(new ImagePattern(image));
+                        if(image!=null) {
+                            image_id.setFill(new ImagePattern(image));
+                        }
                         load_id.setVisible(false);
 
                         try {
@@ -142,7 +151,7 @@ public class SideDrawerController implements Initializable {
                                     toggle_id.setSelected(true);
                                     toggle_id.setText("Online");
 
-                                    toggle_id.setTextFill(Color.GREEN);
+                                    toggle_id.setTextFill(Color.LIGHTGREEN);
                                 }
                                 else{
                                     toggle_id.setText("Offline");
@@ -152,7 +161,7 @@ public class SideDrawerController implements Initializable {
 
                             }
                         } catch (IOException | ExecutionException | InterruptedException e) {
-                            e.printStackTrace();
+                            System.out.println(e.getMessage());
                         }
                     }
                 });

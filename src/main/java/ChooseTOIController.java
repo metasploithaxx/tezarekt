@@ -46,13 +46,17 @@ public class ChooseTOIController implements Initializable {
             @Override
             public void run() {
                 super.run();
-                CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
-                client.start();
-                HttpGet request = new HttpGet(Main.Connectingurl + "/getToi/"+ LoginController.curr_username);
+                try {
+                    CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                    client.start();
+                    HttpGet request = new HttpGet(Main.Connectingurl + "/getToi/" + LoginController.curr_username);
 
-                future = client.execute(request, null);
-                while (!future.isDone()) ;
-
+                    future = client.execute(request, null);
+                    while (!future.isDone()) ;
+                }
+                catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
