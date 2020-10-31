@@ -1,16 +1,24 @@
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXSpinner;
-import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.*;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -31,24 +39,29 @@ import java.util.concurrent.Future;
 
 public class ProfileController implements Initializable {
     @FXML
-    private TextField username_id,firstname_id,lastname_id,instagram_id,twitter_id,subsrate_id;
+    private TextField firstname_id,lastname_id,instagram_id,twitter_id,subsrate_id;
+    @FXML
+    private Label username_id;
     @FXML
     private JFXTextArea intro_id;
     @FXML
     private JFXButton update_btn;
-    @FXML
-    private Label followers_id,status_id;
+
+    private JFXSnackbar status_id;
     @FXML
     private CheckBox instagram_check,twitter_check;
     @FXML
     private JFXSpinner loader_id;
+    @FXML
+    private Circle image_id;
+    @FXML
+    private AnchorPane rootPane;
 
 
     public void UpdateData(ActionEvent actionEvent){
 
         if(! (username_id.getText().length()>0 && firstname_id.getText().length()>0 && lastname_id.getText().length()>0 && subsrate_id.getText().length()>0 )){
-            status_id.setText("Fill all Details");
-            status_id.setTextFill(Color.RED);
+            status_id.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Fill all Details")));
             return ;
         }
         loader_id.setVisible(true);
@@ -91,14 +104,13 @@ public class ProfileController implements Initializable {
             if(task.isDone()) {
                 try {
                     String jsonString = EntityUtils.toString(task.get().getEntity());
-                    status_id.setText(jsonString);
+                    status_id.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout(jsonString)));
                 } catch (InterruptedException | ExecutionException | IOException e) {
                     e.printStackTrace();
                 }
             }
             else{
-                status_id.setText("UnSuccesfull Attempt");
-                status_id.setTextFill(Color.RED);
+                status_id.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Unsuccessful attempt")));
             }
         });
     }
@@ -108,6 +120,7 @@ public class ProfileController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         update_btn.setDisable(true);
         loader_id.setVisible(true);
+        status_id=new JFXSnackbar(rootPane);
         Task<HttpResponse> task =new Task<>() {
             @Override
             protected HttpResponse call() throws Exception {
@@ -129,8 +142,7 @@ public class ProfileController implements Initializable {
                     String jsonString = EntityUtils.toString(task.get().getEntity());
                     JSONObject myResponse = new JSONObject(jsonString);
                     if (task.get().getStatusLine().getStatusCode() == 200) {
-                        status_id.setText("Successfully Loaded");
-                        status_id.setTextFill(Color.GREEN);
+                        status_id.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Successfully Loaded")));
                         username_id.setText(myResponse.getString("uname"));
                         firstname_id.setText(myResponse.getString("fname"));
                         lastname_id.setText(myResponse.getString("lname"));
@@ -164,16 +176,14 @@ public class ProfileController implements Initializable {
                     } else {
 
                         System.out.println(myResponse.getString("detail"));
-                        status_id.setText("statusCode- "+myResponse.getString("detail"));
-                        status_id.setTextFill(Color.RED);
+                        status_id.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("statusCode- "+myResponse.getString("detail"))));
                     }
                 } catch (InterruptedException | ExecutionException | IOException | JSONException e) {
                     e.printStackTrace();
                 }
             }
             else{
-                status_id.setText("Unsuccesfull Attempt");
-                status_id.setTextFill(Color.RED);
+                status_id.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Unsuccessful attempt")));
             }
         });
 
@@ -197,5 +207,18 @@ public class ProfileController implements Initializable {
         });
         update_btn.setDisable(true);
 
+    }
+
+    public void setImage_id(Paint image) {
+        this.image_id.setFill(image);
+    }
+
+    public void changePhoto() throws IOException{
+        Parent root= FXMLLoader.load(getClass().getResource("ProfileImage.fxml"));
+        Scene scene = new Scene(root);
+        Stage primaryStage = new Stage(StageStyle.UNDECORATED);
+        primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
+        primaryStage.show();
     }
 }

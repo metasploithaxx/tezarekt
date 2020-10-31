@@ -22,8 +22,14 @@
                      <JFXListView fx:id="AllchatList" layoutY="-1.0" prefHeight="630.0" prefWidth="250.0" />
                      <HBox layoutY="627.0" prefHeight="40.0" prefWidth="250.0">
                         <children>
-                           <JFXTextArea fx:id="Alltextarea_id" prefHeight="40.0" prefWidth="193.0" promptText="Type here.." />
-                           <JFXButton fx:id="Allsend_btn" buttonType="RAISED" onAction="#sendAll" prefHeight="40.0" prefWidth="62.0" ripplerFill="#272acf" text="Send" />
+                           <JFXTextArea fx:id="Alltextarea_id" prefHeight="40.0" prefWidth="193.0" promptText="Type here.." style="-fx-background-color: #555555; -fx-prompt-text-fill: #eeeeee; -fx-text-fill: WHITE;">
+                              <font>
+                                 <Font name="Alata Regular" size="13.0" />
+                              </font></JFXTextArea>
+                           <JFXButton fx:id="Allsend_btn" buttonType="RAISED" onAction="#sendAll" prefHeight="40.0" prefWidth="62.0" ripplerFill="#272acf" text="Send">
+                              <font>
+                                 <Font name="CoolveticaRg-Regular" size="15.0" />
+                              </font></JFXButton>
                         </children>
                      </HBox>
                      <JFXSpinner fx:id="Allprogress_id" layoutX="100.0" layoutY="289.0" visible="false" />

@@ -68,7 +68,7 @@
             <Font name="Alata Regular" size="24.0" />
          </font>
       </Label>
-      <JFXButton layoutX="1140.0" layoutY="23.0" mnemonicParsing="false" onAction="#exit" prefHeight="35.0" prefWidth="42.0" style="-fx-border-color: #999999; -fx-border-radius: 10;" text="X" textFill="WHITE">
+      <JFXButton layoutX="1140.0" layoutY="23.0" mnemonicParsing="false" onAction="#exit" prefHeight="35.0" prefWidth="42.0" style="-fx-border-color: #999999; -fx-border-radius: 10; -fx-background-color: RED; -fx-background-radius: 10;" text="X" textFill="WHITE">
          <font>
             <Font name="CoolveticaRg-Regular" size="16.0" />
          </font>
