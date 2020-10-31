@@ -23,7 +23,7 @@
          </font></TextField>
       <Separator layoutX="5.0" layoutY="49.0" prefHeight="3.0" prefWidth="1038.0" />
       <Separator layoutX="222.0" layoutY="52.0" orientation="VERTICAL" prefHeight="692.0" prefWidth="6.0" />
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="5.0" layoutY="51.0" prefHeight="18.0" prefWidth="216.0" text="Online Users" textFill="#dddddd">
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="5.0" layoutY="51.0" prefHeight="18.0" prefWidth="216.0" text="Recommended Users" textFill="#dddddd">
          <font>
             <Font name="Alata Regular" size="15.0" />
          </font></Label>
@@ -38,13 +38,13 @@
          <effect>
 
          </effect></JFXDrawer>
-      <JFXSpinner fx:id="load_id" layoutX="499.0" layoutY="374.0" visible="false" />
 
-      <AnchorPane fx:id="content" layoutX="228.0" layoutY="53.0" prefHeight="695.0" prefWidth="823.0" />
+      <AnchorPane fx:id="content" layoutX="228.0" layoutY="50.0" prefHeight="695.0" prefWidth="826.0" />
       <JFXButton layoutX="1005.0" layoutY="12.0" onAction="#onExit" prefHeight="26.0" prefWidth="32.0" style="-fx-background-color: RED;" text="X" textFill="WHITE">
          <font>
             <Font name="System Bold" size="13.0" />
          </font></JFXButton>
+      <JFXSpinner fx:id="load_id" layoutX="641.0" layoutY="396.0" visible="false" />
       <AnchorPane fx:id="onlineUsers" layoutX="-1.0" layoutY="70.0" prefHeight="674.0" prefWidth="216.0" />
       <JFXButton fx:id="search_btn" layoutX="743.0" layoutY="9.0" onAction="#OnSearch" text="Search" textFill="#dddddd">
          <font>

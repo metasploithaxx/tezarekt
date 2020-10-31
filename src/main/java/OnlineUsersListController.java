@@ -195,7 +195,7 @@ public class OnlineUsersListController implements Initializable {
                 super.run();
                 CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
                 client.start();
-                HttpGet request = new HttpGet(Main.Connectingurl+"/onlineUsers");
+                HttpGet request = new HttpGet(Main.Connectingurl+"/getrecommendedusers/"+LoginController.curr_username);
                 Future<HttpResponse> future = client.execute(request, null);
                 HttpResponse res = null;
                 while(!future.isDone());
@@ -214,7 +214,7 @@ public class OnlineUsersListController implements Initializable {
                     for(int i=0;i< ResponseList.length();i++) {
                         OnlineUser users = null;
                         try {
-                            users = new OnlineUser(ResponseList.getJSONObject(i).getString("uname"));
+                            users = new OnlineUser(ResponseList.getString(i));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
