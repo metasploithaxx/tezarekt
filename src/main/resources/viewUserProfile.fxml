@@ -7,51 +7,58 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.effect.Glow?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="695.0" prefWidth="823.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ViewUserProfileController">
+<AnchorPane fx:id="rootPane" prefHeight="695.0" prefWidth="823.0" style="-fx-background-color: #444444;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ViewUserProfileController">
    <children>
-      <ImageView fx:id="image_view_id" fitHeight="140.0" fitWidth="125.0" layoutX="41.0" layoutY="150.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@photo/noimage.jpg" />
-         </image></ImageView>
-      <Label fx:id="uname_id" alignment="TOP_LEFT" layoutX="222.0" layoutY="174.0" text="UserId is ....">
+      <Label fx:id="uname_id" alignment="TOP_LEFT" layoutX="222.0" layoutY="174.0" prefHeight="37.0" prefWidth="175.0" text="UserId is ...." textFill="#dddddd">
          <font>
-            <Font name="Bodoni MT Bold Italic" size="18.0" />
+            <Font name="Alata Regular" size="25.0" />
          </font></Label>
-      <Label fx:id="name_id" layoutX="335.0" layoutY="177.0" text="Name.." />
-      <JFXButton fx:id="subscribe_btn" layoutX="613.0" layoutY="173.0" onAction="#Subscribe" text="...">
+      <Label fx:id="name_id" alignment="CENTER" contentDisplay="CENTER" layoutX="51.0" layoutY="292.0" prefHeight="16.0" prefWidth="123.0" text="Name.." textFill="#dddddd">
+         <font>
+            <Font name="Alata Regular" size="14.0" />
+         </font></Label>
+      <JFXButton fx:id="subscribe_btn" layoutX="613.0" layoutY="173.0" onAction="#Subscribe" text="Subscribe" textFill="#dddddd">
          <graphic>
             <JFXSpinner fx:id="subs_spinner_id" prefHeight="20.0" prefWidth="20.0" snapToPixel="false">
                <effect>
                   <Glow />
                </effect>
             </JFXSpinner>
-         </graphic></JFXButton>
-      <Label fx:id="status_id" layoutX="384.0" layoutY="651.0" prefHeight="30.0" text="status">
+         </graphic>
          <font>
-            <Font size="18.0" />
+            <Font name="CoolveticaRg-Regular" size="14.0" />
+         </font></JFXButton>
+      <Label fx:id="subcount_id" layoutX="222.0" layoutY="212.0" text="xy subscribers" textFill="#dddddd">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="17.0" />
          </font>
       </Label>
-      <Label fx:id="subcount_id" layoutX="228.0" layoutY="212.0" text="subs">
+      <Label fx:id="online_status" alignment="TOP_LEFT" layoutX="242.0" layoutY="250.0" prefHeight="38.0" prefWidth="175.0" text="Last seen on dd-mm-yyyy at hh:mm" textFill="#dddddd" wrapText="true">
          <font>
-            <Font size="16.0" />
-         </font>
-      </Label>
-      <Label fx:id="online_status" layoutX="243.0" layoutY="250.0" prefWidth="175.0" text=" " />
-      <Label fx:id="cost_id" layoutX="613.0" layoutY="209.0" prefHeight="25.0" prefWidth="74.0" text="Label" />
-      <Circle fx:id="online_circle" fill="RED" layoutX="221.0" layoutY="258.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+            <Font name="CoolveticaRg-Regular" size="12.0" />
+         </font></Label>
+      <Circle fx:id="online_circle" fill="RED" layoutX="229.0" layoutY="258.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
       <JFXTabPane layoutX="8.0" layoutY="329.0" prefHeight="316.0" prefWidth="813.0">
          <tabs>
             <Tab text="About">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <JFXTextArea fx:id="bio_id" editable="false" layoutX="104.0" layoutY="45.0" prefHeight="158.0" prefWidth="606.0" />
+                        <JFXTextArea fx:id="bio_id" editable="false" layoutX="104.0" layoutY="90.0" prefHeight="158.0" prefWidth="606.0" style="-fx-text-fill: #dddddd; -fx-background-color: #414141;" text="Lorem Ipsum Dovahkiin Fus ro dah">
+                           <font>
+                              <Font name="CoolveticaRg-Regular" size="17.0" />
+                           </font></JFXTextArea>
+                        <Label fx:id="about_id" layoutX="104.0" layoutY="44.0" text="About User" textFill="#dddddd">
+                           <font>
+                              <Font name="Alata Regular" size="26.0" />
+                           </font>
+                        </Label>
                      </children>
                   </AnchorPane>
               </content>
@@ -63,10 +70,15 @@
             </Tab>
          </tabs>
       </JFXTabPane>
-      <Label layoutX="275.0" layoutY="212.0" prefHeight="20.0" prefWidth="83.0" text="subscribers">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
+      <Circle fx:id="image_view_id" fill="#b6c2cd" layoutX="112.0" layoutY="209.0" radius="83.0" strokeType="INSIDE">
+         <stroke>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop color="#c39eb4" />
+                  <Stop color="WHITE" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </stroke>
+      </Circle>
    </children>
 </AnchorPane>

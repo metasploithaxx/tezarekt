@@ -30,6 +30,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.util.Callback;
@@ -91,9 +92,9 @@ public class MainPageController implements Initializable {
     private JFXComboBox<Notification> notification_id;
 
 
-    public Label uname_id, name_id, cost_id,online_status;
+    public Label uname_id, name_id,online_status;
 
-    public ImageView image_view_id;
+    public Circle image_view_id;
 
     private Circle onlineCircle;
 
@@ -283,6 +284,14 @@ public class MainPageController implements Initializable {
             SideDrawerController sdc = loader.getController();
             profile_btn =sdc.getProfile_page();
             startStreamBtn=sdc.getStart_stream();
+
+            FXMLLoader loaderWelcomePage = new FXMLLoader(getClass().getResource("WelcomePage.fxml"));
+            Parent welcomePage=loaderWelcomePage.load();
+            WelcomePageController welcomePageController = loaderWelcomePage.getController();
+            welcomePageController.setUser_id(LoginController.curr_username);
+            JFXButton stream_btn=welcomePageController.getStreamBtn();
+            content.getChildren().setAll(welcomePage);
+
             search_uname.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
                 @Override
@@ -324,6 +333,12 @@ public class MainPageController implements Initializable {
                         e.printStackTrace();
                     }
                     content.getChildren().setAll(rt);
+                }
+            });
+            stream_btn.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    startStreamBtn.fire();
                 }
             });
             HamburgerBasicCloseTransition meth = new HamburgerBasicCloseTransition(hamburger_id);
@@ -415,7 +430,7 @@ public class MainPageController implements Initializable {
                                             bio_id = viewUserProfileController.getBio_id();
                                             uname_id = viewUserProfileController.getUname_id();
                                             name_id = viewUserProfileController.getName_id();
-                                            cost_id = viewUserProfileController.getCost_id();
+//                                            cost_id = viewUserProfileController.getCost_id();
                                             image_view_id = viewUserProfileController.getImage_view_id();
                                             online_status = viewUserProfileController.getOnline_status();
                                             onlineCircle=viewUserProfileController.getOnline_circle();
@@ -424,16 +439,17 @@ public class MainPageController implements Initializable {
                                             e.printStackTrace();
                                         }
                                         if(image!=null) {
-                                            image_view_id.setImage(image);
+                                            image_view_id.setFill(new ImagePattern(image));
                                         }
 
                                         uname_id.setText(myResponse.getString("uname"));
                                         name_id.setText(myResponse.getString("fname")+" "+myResponse.getString("lname"));
-                                        cost_id.setText(myResponse.getString("subsrate"));
+//                                        cost_id.setText(myResponse.getString("subsrate"));
+                                        viewUserProfileController.setCost(myResponse.getString("subsrate"));
                                         bio_id.setText(myResponse.getString("bio"));
 
                                         if(!myResponse.getString("isonline").equals("null")){
-                                            if (myResponse.getBoolean("isonline") == true) {
+                                            if (myResponse.getBoolean("isonline")) {
                                                 online_status.setText("User is Online");
                                                 onlineCircle.setFill(Color.GREEN);
                                             } else {
@@ -443,7 +459,7 @@ public class MainPageController implements Initializable {
                                                 String date = indiaTime.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
                                                 String timeshow = indiaTime.format(DateTimeFormatter.ofPattern("HH:mm"));
                                                 onlineCircle.setFill(Color.RED);
-                                                online_status.setText("Last Seen \nDate :- " + date + "\n time :- " + timeshow);
+                                                online_status.setText("Last Seen on "+date+" at: "+timeshow);
                                             }
                                         }
                                         content.getChildren().setAll(rtview);

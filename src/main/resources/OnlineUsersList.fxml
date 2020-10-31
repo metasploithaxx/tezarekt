@@ -7,9 +7,9 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="342.0" prefWidth="215.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="OnlineUsersListController">
    <children>
-      <AnchorPane prefHeight="342.0" prefWidth="215.0">
+      <AnchorPane prefHeight="342.0" prefWidth="215.0" style="-fx-background-color: #333333;">
          <children>
-            <JFXListView fx:id="onlineuserslist" layoutX="1.0" prefHeight="342.0" prefWidth="215.0" />
+            <JFXListView fx:id="onlineuserslist" layoutX="1.0" prefHeight="342.0" prefWidth="215.0" style="-fx-background-color: #333333;" />
             <JFXSpinner fx:id="loader_id" layoutX="84.0" layoutY="150.0" visible="false" />
          </children>
       </AnchorPane>

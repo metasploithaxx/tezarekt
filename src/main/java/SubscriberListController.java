@@ -23,6 +23,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import org.apache.http.HttpResponse;
@@ -56,7 +57,7 @@ public class SubscriberListController implements Initializable {
 
     public Label online_status,uname_id, fname_id, lname_id, cost_id;
 
-    public ImageView image_view_id;
+    public Circle image_view_id;
 
     private JFXButton profile_btn;
 
@@ -134,7 +135,7 @@ public class SubscriberListController implements Initializable {
                                 bio_id = viewUserProfileController.getBio_id();
                                 uname_id = viewUserProfileController.getUname_id();
                                 fname_id = viewUserProfileController.getName_id();
-                                cost_id = viewUserProfileController.getCost_id();
+//                                cost_id = viewUserProfileController.getCost_id();
                                 image_view_id = viewUserProfileController.getImage_view_id();
                                 online_status = viewUserProfileController.getOnline_status();
                                 onlineCircle= viewUserProfileController.getOnline_circle();
@@ -152,8 +153,9 @@ public class SubscriberListController implements Initializable {
                                     uname_id.setText(myResponse.getString("uname"));
                                     fname_id.setText(myResponse.getString("fname")+" "+myResponse.getString("lname"));
                                     bio_id.setText(myResponse.getString("bio"));
-                                    cost_id.setText(myResponse.getString("subsrate"));
-                                    image_view_id.setImage(image);
+//                                    cost_id.setText(myResponse.getString("subsrate"));
+                                    viewUserProfileController.setCost(myResponse.getString("subsrate"));
+                                    image_view_id.setFill(new ImagePattern(image));
                                     if(myResponse.getBoolean("isonline")){
                                         online_status.setText("User is Online");
                                         onlineCircle.setFill(Color.GREEN);
@@ -164,7 +166,7 @@ public class SubscriberListController implements Initializable {
                                         ZonedDateTime indiaTime = timestamp.atZone(ZoneId.of("Asia/Kolkata"));
                                         String date = indiaTime.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
                                         String timeshow = indiaTime.format(DateTimeFormatter.ofPattern("HH:mm"));
-                                        online_status.setText("Last Seen \nDate :- "+date+"\n time :- "+timeshow);
+                                        online_status.setText("Last Seen on "+date+" at: "+timeshow);
                                         onlineCircle.setFill(Color.RED);
                                     }
                                     content.getChildren().setAll(rtview);
