@@ -111,11 +111,6 @@ public class OnlineUsersListController implements Initializable {
                         ByteArrayInputStream input = new ByteArrayInputStream(data);
                         BufferedImage image1 = ImageIO.read(input);
                         image= SwingFXUtils.toFXImage(image1, null);
-
-
-
-
-
                     }
                     catch (Exception e){
                         System.out.println(e.getMessage());
@@ -162,7 +157,6 @@ public class OnlineUsersListController implements Initializable {
                                     bio_id.setText(myResponse.getString("bio"));
 //                                    cost_id.setText(myResponse.getString("subsrate"));
                                     viewUserProfileController.setCost(myResponse.getString("subsrate"));
-                                    image_view_id.setFill(new ImagePattern(image));
                                     ins_id.setText("Instagram Id : "+myResponse.getString("instaid"));
                                     tw_id.setText("Twitter Id : "+myResponse.getString("twitterid"));
                                     rate_id.setText("Subscription Rate : $"+myResponse.getString("subsrate"));

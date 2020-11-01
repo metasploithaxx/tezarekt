@@ -69,26 +69,7 @@ public class ViewUserProfileController implements Initializable {
     public String insta,twitter;
 
     public void isSubscribe(){
-        if(uname_id.getText().equals(LoginController.curr_username))
-        {
-            subscribe_btn.setVisible(false);
-            if(uname_id.getText().equals(LoginController.curr_username)) {
-                subscribe_btn.setVisible(false);
-                viewStreamBtn.setVisible(false);
-            }
-        }
-        else
-        {
-            bal_id.setVisible(false);
-            if(subscribe_btn.getText().equals("Subscribe") && insta.equals("false"))
-            {
-                ins_id.setVisible(false);
-            }
-            if(subscribe_btn.getText().equals("Subscribe") && twitter.equals("false"))
-            {
-                tw_id.setVisible(false);
-            }
-        }
+
         subs_spinner_id.setVisible(true);
         subscribe_btn.setDisable(true);
         new Thread(){
@@ -128,6 +109,26 @@ public class ViewUserProfileController implements Initializable {
                             e.printStackTrace();
                         } finally {
                             subs_spinner_id.setVisible(false);
+                            if(uname_id.getText().equals(LoginController.curr_username))
+                            {
+                                subscribe_btn.setVisible(false);
+                                if(uname_id.getText().equals(LoginController.curr_username)) {
+                                    subscribe_btn.setVisible(false);
+                                    viewStreamBtn.setVisible(false);
+                                }
+                            }
+                            else
+                            {
+                                bal_id.setVisible(false);
+                                if(subscribe_btn.getText().equals("Subscribe") && insta.equals("false"))
+                                {
+                                    ins_id.setVisible(false);
+                                }
+                                if(subscribe_btn.getText().equals("Subscribe") && twitter.equals("false"))
+                                {
+                                    tw_id.setVisible(false);
+                                }
+                            }
                         }
                     }
                 });
