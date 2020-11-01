@@ -1,6 +1,8 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jfoenix.controls.*;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -28,6 +30,10 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import pojo.OnlineUser;
+import pojo.Schedule;
 
 import java.io.IOException;
 import java.net.URL;
@@ -55,14 +61,20 @@ public class ViewUserProfileController implements Initializable {
     private JFXSpinner subs_spinner_id;
     @FXML
     private Circle online_circle;
+    @FXML
+    private JFXListView<Schedule> scheduleList;
     private String cost;
     private JFXSnackbar status_id;
     private Stage primaryStage=null;
+    private boolean isStreaming;
+    private int audioPort,videoPort;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         subscribe_btn.setDisable(true);
+        viewStreamBtn.setDisable(true);
         image_view_id.setFill(new ImagePattern(new Image(getClass().getResource("photo/noimage.jpg").toString())));
         status_id=new JFXSnackbar(rootPane);
+        scheduleList.setCellFactory(schedule -> new ScheduleListCellController());
     }
 
     public void isSubscribe(){
@@ -70,6 +82,8 @@ public class ViewUserProfileController implements Initializable {
             subscribe_btn.setVisible(false);
             viewStreamBtn.setVisible(false);
         }
+        if(isStreaming)
+            viewStreamBtn.setDisable(false);
         subs_spinner_id.setVisible(true);
         subscribe_btn.setDisable(true);
         new Thread(){
@@ -78,6 +92,7 @@ public class ViewUserProfileController implements Initializable {
             public void run() {
                 super.run();
                 SubsCount();
+                getSchedule();
                 CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
                 client.start();
                 HttpGet request = new HttpGet(Main.Connectingurl+"/isSubscribed/"+uname_id.getText()+"/"+LoginController.curr_username);
@@ -171,6 +186,62 @@ public class ViewUserProfileController implements Initializable {
         }.start();
 
 
+    }
+
+    public void getSchedule(){
+        new Thread(){
+            Future<HttpResponse> future=null;
+            @Override
+            public void run() {
+                super.run();
+                ObservableList<Schedule> list= FXCollections.observableArrayList();
+                CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                client.start();
+                HttpGet request = new HttpGet(Main.Connectingurl + "/schedule/" + uname_id.getText());
+                future = client.execute(request, null);
+                HttpResponse res = null;
+                while (!future.isDone()) ;
+                try {
+                    res = future.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+                String jsonList = null;
+                try {
+                    jsonList = EntityUtils.toString(res.getEntity());
+                    JSONArray ResponseList = null;
+                    ResponseList = new JSONArray(jsonList);
+
+                    for (int i = 0; i < ResponseList.length(); i++) {
+                        Schedule schedule = null;
+                        try {
+                            schedule = new Schedule(ResponseList.getJSONObject(i).getString("date"), ResponseList.getJSONObject(i).getString("time"), ResponseList.getJSONObject(i).getString("description"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        list.add(schedule);
+                    }
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    String jsonString = EntityUtils.toString(future.get().getEntity());
+                                    if (future.get().getStatusLine().getStatusCode() == 200) {
+                                        System.out.println(list.get(0).getDescription());
+                                        scheduleList.setItems(list);
+
+                                    }
+                                } catch (IOException | ExecutionException | InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
     }
 
     public void initProceed()
@@ -318,7 +389,11 @@ public class ViewUserProfileController implements Initializable {
     }
 
     public void showStream() throws IOException{
-        Parent root= FXMLLoader.load(getClass().getResource("VideoPlayer.fxml"));
+        FXMLLoader loader=new FXMLLoader(getClass().getResource("VideoPlayer.fxml"));
+        Parent root= loader.load();
+        ClientVideoController cvc=loader.getController();
+        cvc.setAudioPort(audioPort);
+        cvc.setVideoPort(videoPort);
         Scene scene = new Scene(root);
         Stage primaryStage = new Stage(StageStyle.UNDECORATED);
         primaryStage.setScene(scene);
@@ -328,4 +403,15 @@ public class ViewUserProfileController implements Initializable {
     }
 
 
+    public void setStreaming(boolean streaming) {
+        isStreaming = streaming;
+    }
+
+    public void setAudioPort(int audioPort) {
+        this.audioPort = audioPort;
+    }
+
+    public void setVideoPort(int videoPort) {
+        this.videoPort = videoPort;
+    }
 }

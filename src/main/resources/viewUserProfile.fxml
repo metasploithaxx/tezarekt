@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXSpinner?>
 <?import com.jfoenix.controls.JFXTabPane?>
 <?import com.jfoenix.controls.JFXTextArea?>
@@ -65,7 +66,15 @@
             </Tab>
             <Tab text="Schedule">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <JFXListView fx:id="scheduleList" layoutX="24.0" layoutY="82.0" nodeOrientation="LEFT_TO_RIGHT" orientation="HORIZONTAL" prefHeight="184.0" prefWidth="756.0" style="-fx-background-color: #414141; -fx-background-radius: 20;" />
+                        <Label layoutX="55.0" layoutY="14.0" text="Schedule" textFill="#dddddd">
+                           <font>
+                              <Font name="Alata Regular" size="26.0" />
+                           </font>
+                        </Label>
+                     </children></AnchorPane>
               </content>
             </Tab>
          </tabs>

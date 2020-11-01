@@ -449,6 +449,9 @@ public class MainPageController implements Initializable {
 //                                        cost_id.setText(myResponse.getString("subsrate"));
                                         viewUserProfileController.setCost(myResponse.getString("subsrate"));
                                         bio_id.setText(myResponse.getString("bio"));
+                                        viewUserProfileController.setStreaming(myResponse.getBoolean("isstreaming"));
+                                        viewUserProfileController.setAudioPort(myResponse.getInt("audioport"));
+                                        viewUserProfileController.setVideoPort(myResponse.getInt("videoport"));
 
                                         if(!myResponse.getString("isonline").equals("null")){
                                             if (myResponse.getBoolean("isonline")) {

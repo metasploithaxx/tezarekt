@@ -155,6 +155,9 @@ public class SubscriberListController implements Initializable {
                                     bio_id.setText(myResponse.getString("bio"));
 //                                    cost_id.setText(myResponse.getString("subsrate"));
                                     viewUserProfileController.setCost(myResponse.getString("subsrate"));
+                                    viewUserProfileController.setStreaming(myResponse.getBoolean("isstreaming"));
+                                    viewUserProfileController.setAudioPort(myResponse.getInt("audioport"));
+                                    viewUserProfileController.setVideoPort(myResponse.getInt("videoport"));
                                     image_view_id.setFill(new ImagePattern(image));
                                     if(myResponse.getBoolean("isonline")){
                                         online_status.setText("User is Online");

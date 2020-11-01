@@ -14,10 +14,10 @@ public class Main2 extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        Parent root= FXMLLoader.load(getClass().getResource("VideoPlayer.fxml"));
+        Parent root= FXMLLoader.load(getClass().getResource("ScheduleStreamDialog.fxml"));
 
         Scene scene = new Scene(root);
-
+        scene.getStylesheets().add(getClass().getResource("css/stylesheet.css").toString());
         primaryStage.setScene(scene);
         primaryStage.setTitle("Video");
         primaryStage.show();

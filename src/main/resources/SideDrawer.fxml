@@ -22,7 +22,7 @@
                </font>
             </JFXToggleButton>
             <JFXSpinner fx:id="load_id" layoutX="60.0" layoutY="175.0" visible="false" />
-            <JFXButton fx:id="log_in_as_viewer" layoutX="-1.0" layoutY="276.0" prefHeight="35.0" prefWidth="222.0" styleClass="drawer-button" text="Log in as Viewer" textFill="#dddddd">
+            <JFXButton layoutX="-1.0" layoutY="276.0" onAction="#scheduleStream" prefHeight="35.0" prefWidth="222.0" styleClass="drawer-button" text="Schedule stream" textFill="#dddddd">
                <font>
                   <Font name="CoolveticaRg-Regular" size="17.0" />
                </font></JFXButton>
@@ -47,7 +47,7 @@
                   <Image url="@photo/bglogin.jpg" />
                </image>
             </ImageView>
-            <Label layoutX="55.0" layoutY="14.0" text="Tezarekt" textFill="#dddddd">
+            <Label layoutX="45.0" layoutY="14.0" text="TEZAREKT" textFill="#dddddd">
                <font>
                   <Font name="Alata Regular" size="29.0" />
                </font>

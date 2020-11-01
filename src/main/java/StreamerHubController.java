@@ -1,15 +1,30 @@
+import at.favre.lib.crypto.bcrypt.BCrypt;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.sarxos.webcam.Webcam;
 import com.jfoenix.controls.JFXToggleButton;
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
+import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 import stream.H264StreamEncoder;
 import stream.RTPpacket;
 import stream.Server;
@@ -22,6 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.*;
 import java.nio.ByteBuffer;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.concurrent.*;
 
@@ -52,8 +68,10 @@ public class StreamerHubController implements Initializable {
 
     public static final int FRAME_PERIOD=1000/60;
     public static final int AUDIO_FRAME_PERIOD=11;
-    public static final int AUDIO_PORT=10005;
-    public static final int VIDEO_PORT=10006;
+    public static int AUDIO_PORT=10005;
+    public static int VIDEO_PORT=10006;
+    public static final int MIN_PORT_NUMBER=10000;
+    public static final int MAX_PORT_NUMBER=65535;
     public static final int MJPEG_TYPE = 26; //RTP payload type for MJPEG video
     public static final int MPA_TYPE = 14; //RTP payload type for MPA audio
     private int imagenb;
@@ -235,14 +253,68 @@ public class StreamerHubController implements Initializable {
     }
 
     public void startStream(){
-        //TODO:Send notifications
-        isStreaming=true;
-        imagenb=0;
-        audionb=0;
-        initTime=System.currentTimeMillis();
-        this.encodeWorker = Executors.newSingleThreadExecutor();
-        this.encodeAudioWorker= Executors.newSingleThreadExecutor();
-        startVideoGrabber();
+        while(!available(AUDIO_PORT)){
+            AUDIO_PORT++;
+        }
+        while(!available(VIDEO_PORT)){
+            VIDEO_PORT++;
+        }
+        Task<HttpResponse> task =new Task<>() {
+            @Override
+            protected HttpResponse call() throws Exception {
+                var values = new HashMap<String, String>() {{
+                    put("owner", LoginController.curr_username);
+                    put("audioport", Integer.toString(AUDIO_PORT));
+                    put("videoport", Integer.toString(VIDEO_PORT));
+                }};
+
+                var objectMapper = new ObjectMapper();
+                String payload =
+                        objectMapper.writeValueAsString(values);
+
+                StringEntity entity = new StringEntity(payload,
+                        ContentType.APPLICATION_JSON);
+
+                CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                client.start();
+                HttpPost request = new HttpPost(Main.Connectingurl+"/subscriberNotification");
+                request.setEntity(entity);
+                request.setHeader("Content-Type", "application/json; charset=UTF-8");
+                Future<HttpResponse> future = client.execute(request, null);
+
+                while(!future.isDone());
+                return future.get();
+            }
+        };
+        Thread th=new Thread(task);
+        th.start();
+        task.setOnSucceeded(res->{
+
+            if(task.isDone()) {
+                try {
+
+                    if (task.get().getStatusLine().getStatusCode() == 200) {
+                        isStreaming=true;
+                        imagenb=0;
+                        audionb=0;
+                        initTime=System.currentTimeMillis();
+                        this.encodeWorker = Executors.newSingleThreadExecutor();
+                        this.encodeAudioWorker= Executors.newSingleThreadExecutor();
+                        startVideoGrabber();
+
+                    } else {
+
+                        System.err.println("Error");
+                    }
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+            else{
+                System.err.println("Error");
+            }
+        });
+
     }
     public void stopStream(){
         isStreaming=false;
@@ -252,6 +324,78 @@ public class StreamerHubController implements Initializable {
         stopVideoGrabber();
         encodeWorker.shutdown();
         encodeAudioWorker.shutdown();
+
+        Task<HttpResponse> task =new Task<>() {
+            @Override
+            protected HttpResponse call() throws Exception {
+
+
+                CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                client.start();
+                HttpPut request = new HttpPut(Main.Connectingurl+"/streamEnd/"+LoginController.curr_username);
+                Future<HttpResponse> future = client.execute(request, null);
+
+                while(!future.isDone());
+                return future.get();
+            }
+        };
+        Thread th=new Thread(task);
+        th.start();
+        task.setOnSucceeded(res->{
+
+            if(task.isDone()) {
+                try {
+
+                    if (task.get().getStatusLine().getStatusCode() == 200) {
+                        System.out.println("Stream ended");
+
+                    } else {
+
+                        System.err.println("Error");
+                    }
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+            else{
+                System.err.println("Error");
+            }
+        });
+    }
+    /**
+            * Checks to see if a specific port is available.
+ *
+         * @param port the port to check for availability
+ */
+    public static boolean available(int port) {
+        if (port < MIN_PORT_NUMBER || port > MAX_PORT_NUMBER) {
+            throw new IllegalArgumentException("Invalid start port: " + port);
+        }
+
+        ServerSocket ss = null;
+        DatagramSocket ds = null;
+        try {
+            ss = new ServerSocket(port);
+            ss.setReuseAddress(true);
+            ds = new DatagramSocket(port);
+            ds.setReuseAddress(true);
+            return true;
+        } catch (IOException e) {
+        } finally {
+            if (ds != null) {
+                ds.close();
+            }
+
+            if (ss != null) {
+                try {
+                    ss.close();
+                } catch (IOException e) {
+                    /* should not be thrown */
+                }
+            }
+        }
+
+        return false;
     }
     private class ImageGrabTask implements Runnable{
 

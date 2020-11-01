@@ -87,14 +87,6 @@ public class RegisterController {
                         status_id.setText("Successfully Registered");
                         status_id.setTextFill(Color.GREEN);
                         Stage stage = (Stage) status_id.getScene().getWindow();
-
-                        Parent root= FXMLLoader.load(getClass().getResource("Login.fxml"));
-                        Scene scene = new Scene(root,500,325);
-                        scene.getStylesheets().add(getClass().getResource("css/stylesheet.css").toString());
-                        Stage primaryStage = new Stage();
-                        primaryStage.setScene(scene);
-                        primaryStage.setTitle("Login page");
-                        primaryStage.show();
                         stage.close();
 
                     } else {

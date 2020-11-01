@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="240.0" style="-fx-background-color: #444444;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane prefHeight="70.0" prefWidth="200.0">
+         <children>
+            <Label fx:id="dateLabel" layoutX="24.0" layoutY="14.0" prefHeight="25.0" prefWidth="108.0" text="Date" textFill="#dddddd">
+               <font>
+                  <Font name="Alata Regular" size="17.0" />
+               </font>
+            </Label>
+            <Label fx:id="timeLabel" layoutX="24.0" layoutY="35.0" prefHeight="25.0" prefWidth="108.0" text="Time" textFill="#dddddd">
+               <font>
+                  <Font name="Alata Regular" size="17.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <Separator prefWidth="200.0" />
+      <AnchorPane prefHeight="97.0" prefWidth="221.0">
+         <children>
+            <Label fx:id="descLabel" alignment="TOP_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="73.0" prefWidth="220.0" text="Description" textFill="#dddddd" wrapText="true">
+               <font>
+                  <Font name="Alata Regular" size="15.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>

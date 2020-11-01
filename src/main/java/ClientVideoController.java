@@ -14,8 +14,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Duration;
 import stream.RTCPpacket;
 import stream.RTPpacket;
@@ -47,6 +49,8 @@ public class ClientVideoController implements Initializable {
     private ImageView video;
     private JFXSnackbar snackbar;
 
+    final Delta dragDelta=new Delta();
+
 
     //RTP variables:
     //----------------
@@ -73,7 +77,10 @@ public class ClientVideoController implements Initializable {
 
     private RotateTransition rt;
 
+    private boolean stopped=true;
+
     private int videoNullCount=0,audioNullCount=0;
+    private int videoPort,audioPort;
 
     @Override
     public void initialize(URL url, ResourceBundle rb){
@@ -91,15 +98,7 @@ public class ClientVideoController implements Initializable {
             snackbar = new JFXSnackbar(rootPane);
 
             buf = new byte[63800];
-            multicastVideoSocket=new MulticastSocket(StreamerHubController.VIDEO_PORT);
-            multicastAudioSocket=new MulticastSocket(StreamerHubController.AUDIO_PORT);
-            multicastGroup=InetAddress.getByName("230.0.0.0");  //230.0.0.0 is our multicast server
-            multicastVideoSocket.joinGroup(multicastGroup);
-            multicastAudioSocket.joinGroup(multicastGroup);
-            multicastVideoSocket.setSoTimeout(5);
-            multicastAudioSocket.setSoTimeout(5);
-            multicastVideoSocket.setTimeToLive(0);
-            multicastAudioSocket.setTimeToLive(0);
+
             //create the frame synchronizer
             dimension=new Dimension(640,480);
 
@@ -154,10 +153,13 @@ public class ClientVideoController implements Initializable {
     }
 
     public void exit(){
+        if(!stopped)
+            stopAll();
         ((Stage)playPauseBtn.getScene().getWindow()).close();
     }
 
     public void stopAll(){
+        stopped=true;
         loading.setVisible(true);
         stopSync();
         videoTimer.stop();
@@ -189,10 +191,24 @@ public class ClientVideoController implements Initializable {
     public void playPause(){
         if(playing==0) {
             if(!startedPlaying){
+                try {
+                    multicastVideoSocket = new MulticastSocket(videoPort);
+                    multicastAudioSocket = new MulticastSocket(audioPort);
+                    multicastGroup = InetAddress.getByName("230.0.0.0");  //230.0.0.0 is our multicast server
+                    multicastVideoSocket.joinGroup(multicastGroup);
+                    multicastAudioSocket.joinGroup(multicastGroup);
+                    multicastVideoSocket.setSoTimeout(5);
+                    multicastAudioSocket.setSoTimeout(5);
+                    multicastVideoSocket.setTimeToLive(0);
+                    multicastAudioSocket.setTimeToLive(0);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 videoTimer.play();
                 startAudio();
                 startSync();
                 startedPlaying=true;
+                stopped=false;
             }
             rcvdp = new DatagramPacket(buf, buf.length);
 
@@ -241,6 +257,26 @@ public class ClientVideoController implements Initializable {
         syncer.cancel(true);
     }
 
+    public void mousePressed(MouseEvent mouseEvent){
+        Stage stage=(Stage)rootPane.getScene().getWindow();
+        dragDelta.x = stage.getX() - mouseEvent.getScreenX();
+        dragDelta.y = stage.getY() - mouseEvent.getScreenY();
+    }
+
+    public void mouseDragged(MouseEvent mouseEvent){
+        Stage stage=(Stage)rootPane.getScene().getWindow();
+        stage.setX(mouseEvent.getScreenX() + dragDelta.x);
+        stage.setY(mouseEvent.getScreenY() + dragDelta.y);
+    }
+
+    public void setVideoPort(int videoPort) {
+        this.videoPort = videoPort;
+    }
+
+    public void setAudioPort(int audioPort) {
+        this.audioPort = audioPort;
+    }
+
 
     //------------------------------------
     //Handler for timer
@@ -257,7 +293,7 @@ public class ClientVideoController implements Initializable {
             try {
                 //receive the DP from the socket, save time for stats
                 multicastVideoSocket.receive(rcvdp);
-
+                videoNullCount=0;
                 //create an stream.RTPpacket object from the DP
                 RTPpacket rtp_packet = new RTPpacket(rcvdp.getData(), rcvdp.getLength());
                 int seqNb = rtp_packet.getsequencenumber();
@@ -367,7 +403,7 @@ public class ClientVideoController implements Initializable {
             try {
                 //receive the DP from the socket, save time for stats
                 multicastAudioSocket.receive(rcvdp);
-
+                audioNullCount=0;
                 //create an stream.RTPpacket object from the DP
                 RTPpacket rtp_packet = new RTPpacket(rcvdp.getData(), rcvdp.getLength());
                 int seqNb = rtp_packet.getsequencenumber();
@@ -432,10 +468,10 @@ public class ClientVideoController implements Initializable {
 
         @Override
         public void run() {
-            if(audioNullCount==100||videoNullCount==50){
-                snackbar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Streaming hasn't started or has already ended")));
-                stopAll();
-            }
+//            if(audioNullCount==100||videoNullCount==50){
+//                snackbar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Streaming hasn't started or has already ended")));
+//                stopAll();
+//            }
             if(currTime<lastTime){
                 videoTimer.pause();
                 stopAudio();
@@ -474,4 +510,7 @@ public class ClientVideoController implements Initializable {
             }
         }
     }
+
 }
+
+class Delta { double x, y; }

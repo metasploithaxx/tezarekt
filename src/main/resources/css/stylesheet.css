@@ -70,3 +70,17 @@
     -fx-font-size: 17px;
     -fx-border-color: #222222;
 }
+
+.jfx-date-picker .jfx-text-field{
+    -jfx-unfocus-color: BLUE;
+    -fx-text-fill: #dddddd;
+    -fx-font-family: "Coolvetica Rg";
+    -fx-font-size: 17px;
+}
+
+.jfx-time-picker .jfx-text-field{
+    -jfx-unfocus-color: BLUE;
+    -fx-text-fill: #dddddd;
+    -fx-font-family: "Coolvetica Rg";
+    -fx-font-size: 17px;
+}

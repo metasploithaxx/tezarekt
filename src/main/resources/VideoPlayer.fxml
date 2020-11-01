@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" prefHeight="500.0" prefWidth="645.0" style="-fx-background-color: #444444;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClientVideoController">
+<AnchorPane fx:id="rootPane" onMouseDragged="#mouseDragged" onMousePressed="#mousePressed" prefHeight="500.0" prefWidth="645.0" style="-fx-background-color: #444444;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClientVideoController">
    <children>
       <Pane layoutX="-4.0" layoutY="525.0" prefHeight="74.0" prefWidth="649.0" style="-fx-border-color: #4267B2; -fx-border-radius: 25;">
          <children>

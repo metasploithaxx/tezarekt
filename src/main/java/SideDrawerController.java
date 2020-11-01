@@ -322,4 +322,14 @@ public class SideDrawerController implements Initializable {
         return image_id.getFill();
     }
 
+    public void scheduleStream() throws IOException{
+        Parent root= FXMLLoader.load(getClass().getResource("ScheduleStreamDialog.fxml"));
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("css/stylesheet.css").toString());
+        Stage primaryStage = new Stage();
+        primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
+        primaryStage.showAndWait();
+    }
+
 }
