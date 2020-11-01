@@ -84,6 +84,8 @@ public class ViewUserProfileController implements Initializable {
 
         subs_spinner_id.setVisible(true);
         subscribe_btn.setDisable(true);
+        if(isStreaming)
+            viewStreamBtn.setDisable(false);
         new Thread(){
             Future<HttpResponse> future = null;
             @Override

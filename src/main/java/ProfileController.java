@@ -216,7 +216,7 @@ public class ProfileController implements Initializable {
     public void changePhoto() throws IOException{
         Parent root= FXMLLoader.load(getClass().getResource("ProfileImage.fxml"));
         Scene scene = new Scene(root);
-        Stage primaryStage = new Stage(StageStyle.UNDECORATED);
+        Stage primaryStage = new Stage();
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
