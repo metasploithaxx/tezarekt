@@ -20,6 +20,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -44,7 +45,7 @@ public class ViewUserProfileController implements Initializable {
     @FXML
     private AnchorPane rootPane;
     @FXML
-    private Label online_status,uname_id, name_id,subcount_id,about_id;
+    private Label online_status,uname_id, name_id,subcount_id,about_id,ins_id,subrate_id,tw_id,bal_id;
     @FXML
     private JFXTextArea bio_id;
     @FXML
@@ -65,9 +66,25 @@ public class ViewUserProfileController implements Initializable {
         status_id=new JFXSnackbar(rootPane);
     }
 
+    public String insta,twitter;
+
     public void isSubscribe(){
         if(uname_id.getText().equals(LoginController.curr_username))
+        {
             subscribe_btn.setVisible(false);
+        }
+        else
+        {
+            bal_id.setVisible(false);
+            if(subscribe_btn.getText().equals("Subscribe") && insta.equals("false"))
+            {
+                ins_id.setVisible(false);
+            }
+            if(subscribe_btn.getText().equals("Subscribe") && twitter.equals("false"))
+            {
+                tw_id.setVisible(false);
+            }
+        }
         subs_spinner_id.setVisible(true);
         subscribe_btn.setDisable(true);
         new Thread(){
@@ -123,9 +140,19 @@ public class ViewUserProfileController implements Initializable {
     public Label getName_id(){
         return name_id;
     }
-//    public Label getCost_id(){
-//        return cost_id;
-//    }
+    public Label getBal_id() {
+        return bal_id;
+    }
+    public Label getTw_id() {
+        return tw_id;
+    }
+    public Label getIns_id() {
+        return ins_id;
+    }
+    public Label getSubrate_id() {
+        return subrate_id;
+    }
+
     public void setCost(String s){
         cost=s;
     }
@@ -279,6 +306,7 @@ public class ViewUserProfileController implements Initializable {
         primaryStage.initModality(Modality.APPLICATION_MODAL);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Confirmation Page");
+        primaryStage.initStyle(StageStyle.UNDECORATED);
 
 
         SubscribeConfirmationController Sbcc = loader.getController();
@@ -337,7 +365,9 @@ public class ViewUserProfileController implements Initializable {
                                     System.out.println("$$$");
                                 }
                                 else{
-                                    System.out.println("Wrong password");
+                                    status_id.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Wrong Password")));
+                                    subs_spinner_id.setVisible(false);
+                                    primaryStage.close();
                                 }
 
                             } catch (InterruptedException | ExecutionException | IOException e) {
