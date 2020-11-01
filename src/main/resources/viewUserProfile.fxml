@@ -16,35 +16,35 @@
 
 <AnchorPane fx:id="rootPane" prefHeight="695.0" prefWidth="823.0" style="-fx-background-color: #444444;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ViewUserProfileController">
    <children>
-      <Label fx:id="uname_id" alignment="TOP_LEFT" layoutX="222.0" layoutY="174.0" prefHeight="37.0" prefWidth="175.0" text="UserId is ...." textFill="#dddddd">
+      <Label fx:id="uname_id" alignment="TOP_LEFT" layoutX="240.0" layoutY="87.0" prefHeight="37.0" prefWidth="175.0" text="UserId is ...." textFill="#dddddd">
          <font>
             <Font name="Alata Regular" size="25.0" />
          </font></Label>
-      <Label fx:id="name_id" alignment="CENTER" contentDisplay="CENTER" layoutX="51.0" layoutY="292.0" prefHeight="16.0" prefWidth="123.0" text="Name.." textFill="#dddddd">
+      <Label fx:id="name_id" alignment="CENTER" contentDisplay="CENTER" layoutX="52.0" layoutY="265.0" prefHeight="16.0" prefWidth="123.0" text="Name.." textFill="#dddddd">
          <font>
             <Font name="Alata Regular" size="14.0" />
          </font></Label>
-      <JFXButton fx:id="subscribe_btn" layoutX="613.0" layoutY="173.0" onAction="#Subscribe" text="Subscribe" textFill="#dddddd">
+      <JFXButton fx:id="subscribe_btn" layoutX="554.0" layoutY="114.0" onAction="#Subscribe" prefHeight="37.0" prefWidth="137.0" text="Subscribe" textFill="#dddddd">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="14.0" />
+         </font>
          <graphic>
             <JFXSpinner fx:id="subs_spinner_id" prefHeight="20.0" prefWidth="20.0" snapToPixel="false">
                <effect>
                   <Glow />
                </effect>
             </JFXSpinner>
-         </graphic>
-         <font>
-            <Font name="CoolveticaRg-Regular" size="14.0" />
-         </font></JFXButton>
-      <Label fx:id="subcount_id" layoutX="222.0" layoutY="212.0" text="xy subscribers" textFill="#dddddd">
+         </graphic></JFXButton>
+      <Label fx:id="subcount_id" layoutX="240.0" layoutY="129.0" text="xy subscribers" textFill="#dddddd">
          <font>
             <Font name="CoolveticaRg-Regular" size="17.0" />
          </font>
       </Label>
-      <Label fx:id="online_status" alignment="TOP_LEFT" layoutX="242.0" layoutY="250.0" prefHeight="38.0" prefWidth="175.0" text="Last seen on dd-mm-yyyy at hh:mm" textFill="#dddddd" wrapText="true">
+      <Label fx:id="online_status" alignment="TOP_LEFT" layoutX="240.0" layoutY="165.0" prefHeight="38.0" prefWidth="175.0" text="Last seen on dd-mm-yyyy at hh:mm" textFill="#dddddd" wrapText="true">
          <font>
             <Font name="CoolveticaRg-Regular" size="12.0" />
          </font></Label>
-      <Circle fx:id="online_circle" fill="RED" layoutX="229.0" layoutY="258.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="online_circle" fill="RED" layoutX="227.0" layoutY="184.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
       <JFXTabPane layoutX="8.0" layoutY="329.0" prefHeight="316.0" prefWidth="813.0">
          <tabs>
             <Tab text="About">
@@ -79,7 +79,7 @@
             </Tab>
          </tabs>
       </JFXTabPane>
-      <Circle fx:id="image_view_id" fill="#b6c2cd" layoutX="112.0" layoutY="209.0" radius="83.0" strokeType="INSIDE">
+      <Circle fx:id="image_view_id" fill="#b6c2cd" layoutX="113.0" layoutY="155.0" radius="83.0" strokeType="INSIDE">
          <stroke>
             <LinearGradient endX="1.0" endY="1.0">
                <stops>
@@ -89,6 +89,26 @@
             </LinearGradient>
          </stroke>
       </Circle>
+      <Label fx:id="subrate_id" layoutX="240.0" layoutY="212.0" prefHeight="26.0" prefWidth="220.0" text="Subscription rate" textFill="#dddddd">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="ins_id" layoutX="240.0" layoutY="246.0" prefHeight="26.0" prefWidth="220.0" text="insta" textFill="#dddddd">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="tw_id" layoutX="240.0" layoutY="272.0" prefHeight="26.0" prefWidth="220.0" text="twitter" textFill="#dddddd">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="bal_id" layoutX="543.0" layoutY="228.0" prefHeight="37.0" prefWidth="175.0" text="Balance " textFill="#dddddd">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="17.0" />
+         </font>
+      </Label>
       <JFXButton fx:id="viewStreamBtn" layoutX="613.0" layoutY="220.0" onAction="#showStream" prefHeight="48.0" prefWidth="135.0" style="-fx-background-radius: 10;" text="View Stream" textFill="#dddddd">
          <font>
             <Font name="CoolveticaRg-Regular" size="19.0" />

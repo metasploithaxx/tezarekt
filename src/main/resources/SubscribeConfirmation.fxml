@@ -6,15 +6,17 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="347.0" prefWidth="552.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SubscribeConfirmationController">
+<AnchorPane prefHeight="347.0" prefWidth="552.0" style="-fx-background-color: #444444;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SubscribeConfirmationController">
    <children>
-      <Label fx:id="lable_id" alignment="CENTER" layoutX="61.0" layoutY="63.0" prefHeight="100.0" prefWidth="430.0">
+      <Label fx:id="lable_id" alignment="CENTER" layoutX="61.0" layoutY="63.0" prefHeight="100.0" prefWidth="430.0" textFill="#dddddd">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <JFXPasswordField fx:id="pwd_id" alignment="CENTER" layoutX="158.0" layoutY="191.0" prefHeight="40.0" prefWidth="237.0" promptText="Enter your password" />
-      <JFXButton fx:id="button_id" layoutX="216.0" layoutY="265.0" prefHeight="40.0" prefWidth="122.0" text="Proceed" />
+      <JFXPasswordField fx:id="pwd_id" alignment="CENTER" focusColor="#2998e5" layoutX="158.0" layoutY="191.0" prefHeight="40.0" prefWidth="237.0" promptText="Enter your password" style="-fx-text-fill: #ffffff; -fx-prompt-text-fill: #cccccc;" unFocusColor="#dddddd" />
+      <JFXButton fx:id="button_id" buttonType="RAISED" layoutX="216.0" layoutY="265.0" prefHeight="40.0" prefWidth="122.0" style="-fx-background-color: #2998f5;" text="Proceed" textFill="WHITE">
+         <font>
+            <Font size="13.0" />
+         </font></JFXButton>
    </children>
 </AnchorPane>

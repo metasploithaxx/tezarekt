@@ -1,3 +1,4 @@
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jfoenix.controls.*;
 import javafx.application.Platform;
@@ -50,7 +51,7 @@ public class ViewUserProfileController implements Initializable {
     @FXML
     private AnchorPane rootPane;
     @FXML
-    private Label online_status,uname_id, name_id,subcount_id,about_id;
+    private Label online_status,uname_id, name_id,subcount_id,about_id,ins_id,subrate_id,tw_id,bal_id;
     @FXML
     private JFXTextArea bio_id;
     @FXML
@@ -77,13 +78,10 @@ public class ViewUserProfileController implements Initializable {
         scheduleList.setCellFactory(schedule -> new ScheduleListCellController());
     }
 
+    public String insta,twitter;
+
     public void isSubscribe(){
-        if(uname_id.getText().equals(LoginController.curr_username)) {
-            subscribe_btn.setVisible(false);
-            viewStreamBtn.setVisible(false);
-        }
-        if(isStreaming)
-            viewStreamBtn.setDisable(false);
+
         subs_spinner_id.setVisible(true);
         subscribe_btn.setDisable(true);
         new Thread(){
@@ -124,6 +122,26 @@ public class ViewUserProfileController implements Initializable {
                             e.printStackTrace();
                         } finally {
                             subs_spinner_id.setVisible(false);
+                            if(uname_id.getText().equals(LoginController.curr_username))
+                            {
+                                subscribe_btn.setVisible(false);
+                                if(uname_id.getText().equals(LoginController.curr_username)) {
+                                    subscribe_btn.setVisible(false);
+                                    viewStreamBtn.setVisible(false);
+                                }
+                            }
+                            else
+                            {
+                                bal_id.setVisible(false);
+                                if(subscribe_btn.getText().equals("Subscribe") && insta.equals("false"))
+                                {
+                                    ins_id.setVisible(false);
+                                }
+                                if(subscribe_btn.getText().equals("Subscribe") && twitter.equals("false"))
+                                {
+                                    tw_id.setVisible(false);
+                                }
+                            }
                         }
                     }
                 });
@@ -140,9 +158,19 @@ public class ViewUserProfileController implements Initializable {
     public Label getName_id(){
         return name_id;
     }
-//    public Label getCost_id(){
-//        return cost_id;
-//    }
+    public Label getBal_id() {
+        return bal_id;
+    }
+    public Label getTw_id() {
+        return tw_id;
+    }
+    public Label getIns_id() {
+        return ins_id;
+    }
+    public Label getSubrate_id() {
+        return subrate_id;
+    }
+
     public void setCost(String s){
         cost=s;
     }
@@ -188,12 +216,16 @@ public class ViewUserProfileController implements Initializable {
 
     }
 
+
     public void getSchedule(){
+
+
         new Thread(){
             Future<HttpResponse> future=null;
             @Override
             public void run() {
                 super.run();
+
                 ObservableList<Schedule> list= FXCollections.observableArrayList();
                 CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
                 client.start();
@@ -210,6 +242,7 @@ public class ViewUserProfileController implements Initializable {
                 try {
                     jsonList = EntityUtils.toString(res.getEntity());
                     JSONArray ResponseList = null;
+
                     ResponseList = new JSONArray(jsonList);
 
                     for (int i = 0; i < ResponseList.length(); i++) {
@@ -238,8 +271,39 @@ public class ViewUserProfileController implements Initializable {
                         });
 
                 } catch (Exception e) {
+                    System.out.println("No schedule");
+                }
+
+            }
+        }.start();
+    }
+
+    public void Notif(String s)
+    {
+        new Thread(){
+            Future<HttpResponse> future=null;
+            @Override
+            public void run() {
+                super.run();
+                var values_Notify = new HashMap<String, String>() {{
+                    put("owner",uname_id.getText());
+                    put("msg",LoginController.curr_username+s);
+                }};
+                var objectMapper = new ObjectMapper();
+                String payloadNotify=null;
+                try {
+                    payloadNotify = objectMapper.writeValueAsString(values_Notify);
+                } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
+                StringEntity entity1 = new StringEntity(payloadNotify,ContentType.APPLICATION_JSON);
+                CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                client.start();
+                HttpPost requestNotify = new HttpPost(Main.Connectingurl+"/setNotification");
+                requestNotify.setEntity(entity1);
+                requestNotify.setHeader("Content-Type", "application/json; charset=UTF-8");
+                Future<HttpResponse> futureNotify = client.execute(requestNotify, null);
+                while (!futureNotify.isDone());
             }
         }.start();
     }
@@ -286,7 +350,12 @@ public class ViewUserProfileController implements Initializable {
                         String jsonString = EntityUtils.toString(task.get().getEntity());
                         System.out.println(jsonString);
                         if (task.get().getStatusLine().getStatusCode() == 200) {
+
                             status_id.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout(jsonString)));
+                            if(subscribe_btn.getText().equals("Subscribe"))
+                                Notif(" has Subscribed you");
+                            else
+                                Notif(" has Unsubscribed you");
                         } else {
                             status_id.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout(jsonString)));
                         }
@@ -311,6 +380,7 @@ public class ViewUserProfileController implements Initializable {
         primaryStage.initModality(Modality.APPLICATION_MODAL);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Confirmation Page");
+        primaryStage.initStyle(StageStyle.UNDECORATED);
 
 
         SubscribeConfirmationController Sbcc = loader.getController();
@@ -369,7 +439,9 @@ public class ViewUserProfileController implements Initializable {
                                     System.out.println("$$$");
                                 }
                                 else{
-                                    System.out.println("Wrong password");
+                                    status_id.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Wrong Password")));
+                                    subs_spinner_id.setVisible(false);
+                                    primaryStage.close();
                                 }
 
                             } catch (InterruptedException | ExecutionException | IOException e) {

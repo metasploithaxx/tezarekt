@@ -8,17 +8,17 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ProfileImageController">
+<AnchorPane prefHeight="418.0" prefWidth="561.0" style="-fx-background-color: #444444;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ProfileImageController">
    <children>
-      <ImageView fx:id="image_id" fitHeight="150.0" fitWidth="192.0" layoutX="200.0" layoutY="14.0" onMouseClicked="#UploadPic" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="image_id" fitHeight="150.0" fitWidth="192.0" layoutX="208.0" layoutY="25.0" onMouseClicked="#UploadPic" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@photo/noimage.jpg" />
          </image>
       </ImageView>
-      <JFXTextField fx:id="text_id" editable="false" layoutX="32.0" layoutY="200.0" prefHeight="26.0" prefWidth="402.0" />
-      <JFXButton fx:id="choose_btn" layoutX="435.0" layoutY="200.0" onAction="#ChooseFile" ripplerFill="#3a2ba1" text="Choose File" />
-      <Label fx:id="status_id" layoutX="165.0" layoutY="254.0" prefHeight="35.0" prefWidth="209.0" />
+      <JFXTextField fx:id="text_id" editable="false" focusColor="#b7c9ff" layoutX="32.0" layoutY="200.0" prefHeight="26.0" prefWidth="412.0" unFocusColor="#b5b5b5" />
+      <JFXButton fx:id="choose_btn" layoutX="454.0" layoutY="196.0" onAction="#ChooseFile" prefHeight="35.0" prefWidth="85.0" ripplerFill="WHITE" style="-fx-background-color: #2998f5;" text="Choose File" textFill="WHITE" />
+      <Label fx:id="status_id" alignment="CENTER" layoutX="165.0" layoutY="254.0" prefHeight="35.0" prefWidth="209.0" textAlignment="CENTER" textFill="#dddddd" />
       <JFXSpinner fx:id="load_id" layoutX="250.0" layoutY="175.0" visible="false" />
-      <JFXButton fx:id="setpic_btn" disable="true" layoutX="422.0" layoutY="352.0" onAction="#UploadPic" ripplerFill="#2525c7" text="Set as Profile Pic" />
+      <JFXButton fx:id="setpic_btn" disable="true" layoutX="345.0" layoutY="323.0" onAction="#UploadPic" prefHeight="43.0" prefWidth="145.0" ripplerFill="#2525c7" style="-fx-background-color: #2998f5;" text="Set as Profile Pic" textFill="WHITE" />
    </children>
 </AnchorPane>

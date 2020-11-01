@@ -57,7 +57,7 @@ public class OnlineUsersListController implements Initializable {
 
     public JFXListView<OnlineUser> onlineuserslist;
 
-    public Label online_status,uname_id, fname_id, lname_id, cost_id;
+    public Label online_status,uname_id, fname_id,tw_id,ins_id,rate_id,bal_id;
 
     public Circle image_view_id;
 
@@ -111,11 +111,6 @@ public class OnlineUsersListController implements Initializable {
                         ByteArrayInputStream input = new ByteArrayInputStream(data);
                         BufferedImage image1 = ImageIO.read(input);
                         image= SwingFXUtils.toFXImage(image1, null);
-
-
-
-
-
                     }
                     catch (Exception e){
                         System.out.println(e.getMessage());
@@ -142,6 +137,10 @@ public class OnlineUsersListController implements Initializable {
                                 image_view_id = viewUserProfileController.getImage_view_id();
                                 online_status = viewUserProfileController.getOnline_status();
                                 onlineCircle= viewUserProfileController.getOnline_circle();
+                                tw_id = viewUserProfileController.getTw_id();
+                                ins_id = viewUserProfileController.getIns_id();
+                                rate_id =viewUserProfileController.getSubrate_id();
+                                bal_id=viewUserProfileController.getBal_id();
 
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -161,6 +160,16 @@ public class OnlineUsersListController implements Initializable {
                                     viewUserProfileController.setVideoPort(myResponse.getInt("videoport"));
 //                                    cost_id.setText(myResponse.getString("subsrate"));
                                     viewUserProfileController.setCost(myResponse.getString("subsrate"));
+                                    ins_id.setText("Instagram Id : "+myResponse.getString("instaid"));
+                                    tw_id.setText("Twitter Id : "+myResponse.getString("twitterid"));
+                                    rate_id.setText("Subscription Rate : $"+myResponse.getString("subsrate"));
+                                    bal_id.setText("My Balance : $"+myResponse.getString("balance"));
+                                    viewUserProfileController.insta=myResponse.getString("isinstaidpublic");
+                                    viewUserProfileController.twitter=myResponse.getString("istwitteridpublic");
+
+
+
+
                                     if(image!=null){
                                         image_view_id.setFill(new ImagePattern(image));
                                     }
