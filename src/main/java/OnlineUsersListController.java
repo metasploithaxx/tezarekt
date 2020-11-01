@@ -72,7 +72,8 @@ public class OnlineUsersListController implements Initializable {
     @FXML
     private JFXSpinner loader_id;
     Parent rtview = null;
-    public static int Online_count=0;
+    public  ObservableList<OnlineUser> online_list= FXCollections.observableArrayList();;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loader_id.setVisible(true);
@@ -101,6 +102,7 @@ public class OnlineUsersListController implements Initializable {
                 @Override
                 public void run() {
                     super.run();
+                    try{
                     try (MongoClient mongoClient = MongoClients.create(Main.MongodbId)) {
                         MongoDatabase database = mongoClient.getDatabase("Photos");
                         GridFSBucket gridBucket = GridFSBuckets.create(database);
@@ -110,19 +112,21 @@ public class OnlineUsersListController implements Initializable {
                         BufferedImage image1 = ImageIO.read(input);
                         image= SwingFXUtils.toFXImage(image1, null);
 
-                        CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
-                        client.start();
-                        HttpGet request = new HttpGet(Main.Connectingurl + "/profile/user/"+ uname);
 
-                        future = client.execute(request, null);
-                        while (!future.isDone()) ;
 
 
 
                     }
                     catch (Exception e){
                         System.out.println(e.getMessage());
+                        image=null;
                     }
+                        CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
+                        client.start();
+                        HttpGet request = new HttpGet(Main.Connectingurl + "/profile/user/"+ uname);
+
+                        future = client.execute(request, null);
+                        while (!future.isDone()) ;
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
@@ -168,18 +172,23 @@ public class OnlineUsersListController implements Initializable {
 
 
 
-                                    if(myResponse.getBoolean("isonline")){
-                                        online_status.setText("User is Online");
-                                        onlineCircle.setFill(Color.GREEN);
+
+                                    if(image!=null){
+                                        image_view_id.setFill(new ImagePattern(image));
                                     }
-                                    else{
-                                        String time = myResponse.getString("lastseen");
-                                        Instant timestamp = Instant.parse(time);
-                                        ZonedDateTime indiaTime = timestamp.atZone(ZoneId.of("Asia/Kolkata"));
-                                        String date = indiaTime.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
-                                        String timeshow = indiaTime.format(DateTimeFormatter.ofPattern("HH:mm"));
-                                        online_status.setText("Last Seen on "+date+" at: "+timeshow);
-                                        onlineCircle.setFill(Color.RED);
+                                    if(!myResponse.getString("isonline").equals("null")) {
+                                        if (myResponse.getBoolean("isonline")) {
+                                            online_status.setText("User is Online");
+                                            onlineCircle.setFill(Color.GREEN);
+                                        } else {
+                                            String time = myResponse.getString("lastseen");
+                                            Instant timestamp = Instant.parse(time);
+                                            ZonedDateTime indiaTime = timestamp.atZone(ZoneId.of("Asia/Kolkata"));
+                                            String date = indiaTime.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
+                                            String timeshow = indiaTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+                                            online_status.setText("Last Seen on " + date + " at: " + timeshow);
+                                            onlineCircle.setFill(Color.RED);
+                                        }
                                     }
                                     content.getChildren().setAll(rtview);
                                     MainPageController.displayedUname_id=uname_id.getText();
@@ -189,14 +198,21 @@ public class OnlineUsersListController implements Initializable {
                                     System.out.println(future.get().getStatusLine());
                                 }
 
-                            } catch ( InterruptedException | ExecutionException | JSONException e) {
+                            } catch ( InterruptedException | ExecutionException | JSONException | IOException e) {
                                 e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                            } finally {
+                                mainPageLoader.setVisible(false);
                             }
-                            mainPageLoader.setVisible(false);
+
+
                         }
                     });
+                }
+                    catch (Exception e){
+                        System.out.println(e.getMessage());
+                        mainPageLoader.setVisible(false);
+                    }
+
                 }
             }.start();
         }
@@ -206,9 +222,10 @@ public class OnlineUsersListController implements Initializable {
             @Override
             public void run() {
                 super.run();
+                ObservableList<OnlineUser> list= FXCollections.observableArrayList();
                 CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
                 client.start();
-                HttpGet request = new HttpGet(Main.Connectingurl+"/onlineUsers");
+                HttpGet request = new HttpGet(Main.Connectingurl+"/getrecommendedusers/"+LoginController.curr_username);
                 Future<HttpResponse> future = client.execute(request, null);
                 HttpResponse res = null;
                 while(!future.isDone());
@@ -217,7 +234,7 @@ public class OnlineUsersListController implements Initializable {
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
-                ObservableList<OnlineUser> list= FXCollections.observableArrayList();
+
                 String jsonList = null;
                 try {
                     jsonList = EntityUtils.toString(res.getEntity());
@@ -227,7 +244,7 @@ public class OnlineUsersListController implements Initializable {
                     for(int i=0;i< ResponseList.length();i++) {
                         OnlineUser users = null;
                         try {
-                            users = new OnlineUser(ResponseList.getJSONObject(i).getString("uname"));
+                            users = new OnlineUser(ResponseList.getString(i));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -236,7 +253,7 @@ public class OnlineUsersListController implements Initializable {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            if(list.size()!=Online_count) {
+                            if(!list.equals(online_list)) {
                                 onlineuserslist.setItems(list);
                                 onlineuserslist.setCellFactory(userListView -> {
                                     OnlineUsersListCellController onlineUsersListCellController = new OnlineUsersListCellController();
@@ -250,7 +267,7 @@ public class OnlineUsersListController implements Initializable {
                                     });
                                     return onlineUsersListCellController;
                                 });
-                                Online_count = list.size();
+                                online_list = list;
                             }
                         }
                     });

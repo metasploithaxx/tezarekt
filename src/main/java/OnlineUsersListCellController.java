@@ -13,7 +13,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -25,6 +24,9 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.lang.ref.SoftReference;
+import java.util.HashMap;
+import java.util.Map;
 
 public class OnlineUsersListCellController extends JFXListCell<OnlineUser> {
     private FXMLLoader loader;
@@ -34,6 +36,35 @@ public class OnlineUsersListCellController extends JFXListCell<OnlineUser> {
     Label uname_id;
     @FXML
     Circle image_id;
+
+
+    public OnlineUsersListCellController(Map<Image, Object> cache) {
+        if (cache == null) {
+            throw new IllegalArgumentException();
+        }
+        this.cache = cache;
+    }
+
+    /**
+     * constructor using the default cache
+     */
+    public OnlineUsersListCellController() {
+        this(getDefaultCache());
+    }
+
+    private final Map<Image, Object> cache;
+
+    private static Map<Image, Object> defaultCache;
+
+    public static Map<Image, Object> getDefaultCache() {
+        if (defaultCache == null) {
+            defaultCache = new HashMap<Image, Object>();
+        }
+        return defaultCache;
+    }
+
+    public static String search = "";
+    private boolean loaded = false;
 
     @Override
     protected void updateItem(OnlineUser item,boolean empty){
@@ -86,6 +117,7 @@ public class OnlineUsersListCellController extends JFXListCell<OnlineUser> {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
+
                                 if(image!=null)
                                     image_id.setFill(new ImagePattern(image));
                             }
@@ -98,6 +130,8 @@ public class OnlineUsersListCellController extends JFXListCell<OnlineUser> {
             }
             else
                 uname_id.setText(item.getUname());
+
+                
             setText(null);
             setGraphic(rootPane);
             }

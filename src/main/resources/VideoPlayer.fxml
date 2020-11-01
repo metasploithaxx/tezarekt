@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" prefHeight="599.0" prefWidth="645.0" style="-fx-background-color: #444444;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClientVideoController">
+<AnchorPane fx:id="rootPane" prefHeight="500.0" prefWidth="645.0" style="-fx-background-color: #444444;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClientVideoController">
    <children>
       <Pane layoutX="-4.0" layoutY="525.0" prefHeight="74.0" prefWidth="649.0" style="-fx-border-color: #4267B2; -fx-border-radius: 25;">
          <children>
@@ -50,7 +50,7 @@
             </Label>
          </children>
       </Pane>
-      <JFXButton layoutX="586.0" layoutY="10.0" mnemonicParsing="false" onAction="#exit" prefHeight="35.0" prefWidth="55.0" style="-fx-border-color: #999999; -fx-border-radius: 10;" text="X" textFill="WHITE">
+      <JFXButton layoutX="576.0" layoutY="10.0" mnemonicParsing="false" onAction="#exit" prefHeight="35.0" prefWidth="55.0" style="-fx-border-color: #999999; -fx-border-radius: 10; -fx-background-color: RED; -fx-background-radius: 10;" text="X" textFill="WHITE">
          <font>
             <Font name="CoolveticaRg-Regular" size="16.0" />
          </font>

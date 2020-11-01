@@ -100,5 +100,10 @@
             <Font name="CoolveticaRg-Regular" size="17.0" />
          </font>
       </Label>
+      <JFXButton fx:id="viewStreamBtn" layoutX="613.0" layoutY="220.0" onAction="#showStream" prefHeight="48.0" prefWidth="135.0" style="-fx-background-radius: 10;" text="View Stream" textFill="#dddddd">
+         <font>
+            <Font name="CoolveticaRg-Regular" size="19.0" />
+         </font>
+      </JFXButton>
    </children>
 </AnchorPane>
