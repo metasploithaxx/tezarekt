@@ -128,6 +128,7 @@ public class LoginController implements Initializable {
                         primaryStage.show();
                     } else {
                         String jsonString = EntityUtils.toString(task.get().getEntity());
+                        System.out.println(jsonString);
                         loginState.setText("Please try again");
                         status_id.setText(jsonString);
                         status_id.setTextFill(Color.RED);
