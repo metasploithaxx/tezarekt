@@ -28,6 +28,30 @@ Tezarekt is like a __Twitch__ where you can live stream your PC screen as well a
 + <a href="https://drive.google.com/file/d/1amZtgFyBFAiDvs3r1qwDbgFW3lEHSPU0/view?usp=sharing">Download It</a>.
 + Make sure you have specifically `Java 11` version installed in your system as default.
 + Follow Readme file inside it to run on your system.
+## Screen records
+
+<p>
+  <figure>
+  <img src="https://github.com/metasploithaxx/tezarekt/blob/main/tearekt-screen-records/autocomplete.gif" alt="drawing" width="800" height="400"/>
+    <figcaption>Autocomplete</figcaption>
+  </figure>  
+  <figure>
+  <img src="https://github.com/metasploithaxx/tezarekt/blob/main/tearekt-screen-records/chats.gif" alt="drawing" width="800" height="400"/>
+    <figcaption>Chats</figcaption>
+  </figure> 
+  <figure>
+  <img src="https://github.com/metasploithaxx/tezarekt/blob/main/tearekt-screen-records/notifications.gif" alt="drawing" width="800" height="400"/>
+    <figcaption>Notifications</figcaption>
+  </figure> 
+  <figure>
+  <img src="https://github.com/metasploithaxx/tezarekt/blob/main/tearekt-screen-records/scheduling.gif" alt="drawing" width="800" height="400"/>
+    <figcaption>Stream Scheduling</figcaption>
+  </figure> 
+  <figure>
+  <img src="https://github.com/metasploithaxx/tezarekt/blob/main/tearekt-screen-records/subs.gif" alt="drawing" width="800" height="400"/>
+    <figcaption>Subscribing channels</figcaption>
+  </figure> 
+</p>  
 ## Contributor's:-
 * <a href="https://github.com/arc29">Aritra Chatterjee</a>
 * <a href="https://github.com/thisismanishkumar">Manish Kumar</a>
