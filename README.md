@@ -49,6 +49,12 @@ Tezarekt is like a __Twitch__ where you can live stream your PC screen as well a
   <figcaption>Subscribing channels</figcaption>
   <img src="https://github.com/metasploithaxx/tezarekt/blob/main/tearekt-screen-records/subs.gif" alt="drawing" width="800" height="400"/>
   </figure> 
+  
+  <figure>
+  <figcaption>live show</figcaption>
+  <img src="https://github.com/metasploithaxx/tezarekt/blob/main/tearekt-screen-records/ezgif.com-gif-maker.gif" alt="drawing" width="800" height="400"/>
+  </figure> 
+  
 </p>  
 
 ## Contributor's:-
